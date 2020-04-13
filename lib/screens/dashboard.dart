@@ -15,7 +15,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black54,
-      appBar: AppBar(title: Text('Profile')),
+      appBar: AppBar(
+        title: Text('Profile'),
+        backgroundColor: Colors.red[800],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,13 +136,40 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'VITask',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Container(
+                    child: Image.asset(
+                      'images/blue.png',
+                      width: 150,
+                      height: 100,
+                    ),
+                  ),
+                ],
+              ),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.red[800],
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              title: Text(
+                'Attendance',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -148,7 +178,66 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               },
             ),
             ListTile(
-              title: Text('Item 2'),
+              title: Text(
+                'Time Table',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Marks',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Academic History',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Moodle',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...

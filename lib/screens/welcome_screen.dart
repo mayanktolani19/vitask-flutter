@@ -17,9 +17,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: ExactAssetImage("images/side.jpg"), fit: BoxFit.cover),
+        ),
+        padding: EdgeInsets.all(20),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,9 +77,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       url =
                           'https://vitask.me/authenticate?username=$regNo&password=$password';
                       ProfileAPI profile_api = ProfileAPI(url);
-                      var profileData = await profile_api.getProfileData();
-                      print(profileData['Name']);
-                      print(profileData['Branch']);
+                      var profileData = "Mayank";
+                      //profile_api.getProfileData();
+//                      print(profileData['Name']);
+//                      print(profileData['Branch']);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
