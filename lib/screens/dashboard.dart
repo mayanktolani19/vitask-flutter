@@ -24,10 +24,15 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            margin: EdgeInsetsDirectional.only(
-              top: 20,
-            ),
             decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 2.0,
+                  spreadRadius: 0.0,
+                  offset: Offset(2.0, 2.0), // shadow direction: bottom right
+                )
+              ],
               gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
@@ -43,15 +48,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
             ),
             child: Column(
               children: <Widget>[
-                Text(
-                  'Welcome',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
+                Texts('Welcome', 30),
               ],
             ),
           ),
@@ -78,15 +75,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                   margin: EdgeInsets.all(15),
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        'Attendance',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
+                      Texts('Attendance', 30),
                     ],
                   ),
                 ),
@@ -113,15 +102,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                   margin: EdgeInsets.all(15),
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        'Time Table',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
+                      Texts('Time Table', 30),
                     ],
                   ),
                 ),
@@ -136,40 +117,28 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    'VITask',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Texts('VITask', 35),
+                    Container(
+                      child: Image.asset(
+                        'images/blue.png',
+                        width: 150,
+                        height: 100,
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: Image.asset(
-                      'images/blue.png',
-                      width: 150,
-                      height: 100,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               decoration: BoxDecoration(
-                color: Colors.red[800],
+                image: DecorationImage(
+                    image: ExactAssetImage("images/side.jpg"),
+                    fit: BoxFit.cover),
               ),
             ),
             ListTile(
-              title: Text(
-                'Attendance',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+              title: Texts('Attendance', 20),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -178,15 +147,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               },
             ),
             ListTile(
-              title: Text(
-                'Time Table',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+              title: Texts('Time Table', 20),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -195,15 +156,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               },
             ),
             ListTile(
-              title: Text(
-                'Marks',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+              title: Texts('Marks', 20),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -212,15 +165,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               },
             ),
             ListTile(
-              title: Text(
-                'Academic History',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+              title: Texts('Academic History', 20),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -229,15 +174,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               },
             ),
             ListTile(
-              title: Text(
-                'Moodle',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+              title: Texts('Moodle', 20),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -250,59 +187,22 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
       ),
     );
   }
+}
 
-  Widget dashboard(context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 200,
-              child: PageView(
-                controller: PageController(viewportFraction: 0.8),
-                scrollDirection: Axis.horizontal,
-                pageSnapping: true,
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    color: Colors.redAccent,
-                    width: 100,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    color: Colors.blueAccent,
-                    width: 100,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    color: Colors.greenAccent,
-                    width: 100,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Transactions",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text("Macbook"),
-                    subtitle: Text("Apple"),
-                    trailing: Text("-2900"),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(height: 16);
-                },
-                itemCount: 10)
-          ],
-        ),
+class Texts extends StatelessWidget {
+  String text;
+  double fontSize;
+  Texts(this.text, this.fontSize);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$text',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.italic,
       ),
     );
   }
