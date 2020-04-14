@@ -1,6 +1,6 @@
-# vitask
+# VITask
 
-A new Flutter application.
+VITask flutter application made by using the APIs provided by <a href=https://vitask.me></a>
 
 ## Getting Started
 
