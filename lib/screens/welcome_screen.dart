@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vitask/apis/profile.dart';
+import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dashboard.dart';
@@ -72,15 +72,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   borderRadius: BorderRadius.circular(30.0),
                   child: MaterialButton(
                     onPressed: () async {
-                      regNo = '18BLC1082';
-                      password = 'St.franciscollege1';
                       url =
                           'https://vitask.me/authenticate?username=$regNo&password=$password';
-                      ProfileAPI profile_api = ProfileAPI(url);
-                      var profileData = "Mayank";
-                      //profile_api.getProfileData();
-//                      print(profileData['Name']);
-//                      print(profileData['Branch']);
+                      API profile = API(url);
+                      Map<String, dynamic> profileData =
+                          await profile.getAPIData();
+                      print(profileData['APItoken']);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
