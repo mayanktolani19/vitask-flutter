@@ -25,8 +25,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         backgroundColor: Colors.red[800],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(

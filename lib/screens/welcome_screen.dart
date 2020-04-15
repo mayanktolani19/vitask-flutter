@@ -72,6 +72,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   borderRadius: BorderRadius.circular(30.0),
                   child: MaterialButton(
                     onPressed: () async {
+//                      regNo = '18BLC1082';
+//                      password = 'St.franciscollege1';
                       url =
                           'https://vitask.me/authenticate?username=$regNo&password=$password';
                       API profile = API(url);
