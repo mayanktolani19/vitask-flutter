@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 //                      regNo = '18BLC1082';
 //                      password = 'St.franciscollege1';
                       url =
-                          'https://vitask.me/authenticate?username=18BLC1095&password=Durjanatoz2000';
+                          'https://vitask.me/authenticate?username=$regNo&password=$password';
                       API profile = API(url);
                       Map<String, dynamic> profileData =
                           await profile.getAPIData();
