@@ -21,8 +21,14 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     return Scaffold(
       backgroundColor: Colors.black54,
       appBar: AppBar(
-        title: Text('Profile'),
-        backgroundColor: Colors.red[800],
+        titleSpacing: 61,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
+        title: Text('Academic History'),
+        backgroundColor: Color.fromRGBO(70, 18, 32, 20),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -68,13 +74,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Colors.red[900], Colors.red[500]]),
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.red,
-                  ),
+                      gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Colors.red[900], Colors.red[500]]),
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromRGBO(254, 208, 187, 100)),
                   height: 200,
                   width: 350,
                   padding: EdgeInsets.symmetric(
@@ -95,13 +100,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Colors.red[900], Colors.red[500]]),
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.red,
-                  ),
+                      gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Colors.red[900], Colors.red[500]]),
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromRGBO(254, 208, 187, 100)),
                   height: 200,
                   width: 350,
                   padding: EdgeInsets.symmetric(
