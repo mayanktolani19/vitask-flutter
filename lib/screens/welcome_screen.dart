@@ -4,6 +4,7 @@ import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dashboard.dart';
+import 'package:vitask/database.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -101,6 +102,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          doStuff();
+        },
       ),
     );
   }
