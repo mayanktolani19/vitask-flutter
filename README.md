@@ -7,8 +7,12 @@ Fork the repo<br/>
 Clone it to your PC<br/>
 Commit changes and make PR. 
 
+### For updating a forked repo
+* `git remote add upstream https://github.com/mayanktolani19/vitask-flutter.git`
+* `git fetch upstream`
+* `git checkout master`
+* `git rebase upstream/master`
+* `git push`
 
-git add README.md
-git commit -m "first commit"
-git remote add origin https://github.com/mayanktolani19/vitask-flutter.git
+
 git push -u origin master
