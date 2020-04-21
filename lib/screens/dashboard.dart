@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/timetable.dart';
@@ -10,12 +12,43 @@ import 'package:vitask/screens/moodle.dart';
 
 class MenuDashboardPage extends StatefulWidget {
   MenuDashboardPage(this.profileData);
-  Map<String, dynamic> profileData;
+  var profileData;
   @override
   _MenuDashboardPageState createState() => _MenuDashboardPageState();
 }
 
 class _MenuDashboardPageState extends State<MenuDashboardPage> {
+  Database _database;
+  String path;
+  Database db;
+  @override
+  void initState() {
+    super.initState();
+    hi();
+  }
+
+  void hi() async {
+    db = await database;
+    if (db == null) print("Chal be");
+  }
+
+  Future<Database> get database async {
+    if (_database != null) return _database;
+    // if _database is null we instantiate it
+    _database = await initDB();
+    return _database;
+  }
+
+  initDB() async {
+    var databasesPath = await getDatabasesPath();
+    path = join(databasesPath, 'demo7.db');
+    return await openDatabase(path, version: 1, onOpen: (db) {},
+        onCreate: (Database db, int version) async {
+      await db.execute(
+          'CREATE TABLE users(username TEXT PRIMARY KEY, token TEXT, profile TEXT,attendance TEXT, timetable TEXT, marks TEXT, acadhistory TEXT)');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,9 +186,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
             ListTile(
               title: Texts('Attendance', 20),
               onTap: () async {
-                API attendance = API('https://vitask.me/classesapi?token=' +
-                    widget.profileData["APItoken"]);
-                Map<String, dynamic> tt = await attendance.getAPIData();
+                String u = widget.profileData['RegNo'].toString();
+                var tt = await db
+                    .rawQuery("SELECT marks from users WHERE username=?", [u]);
+                print(tt);
                 Navigator.pop(context);
                 Navigator.push(
                   context,
@@ -165,68 +199,68 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                 );
               },
             ),
-            ListTile(
-              title: Texts('Time Table', 20),
-              onTap: () async {
-                API timetable = API('https://vitask.me/timetableapi?token=' +
-                    widget.profileData["APItoken"]);
-                Map<String, dynamic> tt = await timetable.getAPIData();
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TimeTable(tt),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Texts('Marks', 20),
-              onTap: () async {
-                API marks = API('https://vitask.me/marksapi?token=' +
-                    widget.profileData["APItoken"]);
-                Map<String, dynamic> m = await marks.getAPIData();
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Marks(m),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Texts('Academic History', 20),
-              onTap: () async {
-                API academicHistory = API(
-                    'https://vitask.me/acadhistoryapi?token=' +
-                        widget.profileData["APItoken"]);
-                Map<String, dynamic> academic =
-                    await academicHistory.getAPIData();
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AcademicHistory(academic),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Texts('Moodle', 20),
-              onTap: () async {
-                API moodle = API('https://vitask.me/moodleapi?token=' +
-                    widget.profileData["APItoken"]);
-                Map<String, dynamic> mod = await moodle.getAPIData();
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Moodle(mod),
-                  ),
-                );
-              },
-            ),
+//            ListTile(
+//              title: Texts('Time Table', 20),
+//              onTap: () async {
+//                API timetable = API('https://vitask.me/timetableapi?token=' +
+//                    widget.profileData["APItoken"]);
+//                Map<String, dynamic> tt = await timetable.getAPIData();
+//                Navigator.pop(context);
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                    builder: (context) => TimeTable(tt),
+//                  ),
+//                );
+//              },
+//            ),
+//            ListTile(
+//              title: Texts('Marks', 20),
+//              onTap: () async {
+//                API marks = API('https://vitask.me/marksapi?token=' +
+//                    widget.profileData["APItoken"]);
+//                Map<String, dynamic> m = await marks.getAPIData();
+//                Navigator.pop(context);
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                    builder: (context) => Marks(m),
+//                  ),
+//                );
+//              },
+//            ),
+//            ListTile(
+//              title: Texts('Academic History', 20),
+//              onTap: () async {
+//                API academicHistory = API(
+//                    'https://vitask.me/acadhistoryapi?token=' +
+//                        widget.profileData["APItoken"]);
+//                Map<String, dynamic> academic =
+//                    await academicHistory.getAPIData();
+//                Navigator.pop(context);
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                    builder: (context) => AcademicHistory(academic),
+//                  ),
+//                );
+//              },
+//            ),
+//            ListTile(
+//              title: Texts('Moodle', 20),
+//              onTap: () async {
+//                API moodle = API('https://vitask.me/moodleapi?token=' +
+//                    widget.profileData["APItoken"]);
+//                Map<String, dynamic> mod = await moodle.getAPIData();
+//                Navigator.pop(context);
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                    builder: (context) => Moodle(mod),
+//                  ),
+//                );
+//              },
+//            ),
           ],
         ),
       ),
