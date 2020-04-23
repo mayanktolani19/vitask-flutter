@@ -114,7 +114,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       ],
                     ),
                     new AnimatedCircularChart(
-                      duration: Duration(milliseconds: 1500),
+                      duration: Duration(milliseconds: 900),
                       chartType: CircularChartType.Radial,
                       key: k.chartKey,
                       size: const Size(150.0, 150.0),

@@ -18,6 +18,7 @@ dependencies:
   path_provider: ^1.6.7
   pie_chart: ^3.1.1
   flutter_circular_chart: ^0.1.0
+  font_awesome_flutter: ^8.7.0
 
 
 dev_dependencies:

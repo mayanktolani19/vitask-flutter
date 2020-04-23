@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitask/constants.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Attendance extends StatefulWidget {
   Attendance(this.attendance);
@@ -11,9 +12,9 @@ class Attendance extends StatefulWidget {
 }
 
 class _AttendanceState extends State<Attendance> {
-  GlobalWidget k = GlobalWidget();
   static List<Map<String, dynamic>> attended;
   static int len;
+  Map<String, dynamic> current;
   @override
   void initState() {
     super.initState();
@@ -46,11 +47,12 @@ class _AttendanceState extends State<Attendance> {
       body: ListView.builder(
           itemCount: len,
           itemBuilder: (BuildContext context, int index) {
-            var current = attended[index];
-            var p = current["percentage"];
-            var c = current["courseName"];
-            var a = current["attended"];
-            var t = current["total"];
+            current = attended[index];
+            int p = current["percentage"];
+            String c = current["courseName"];
+            int a = current["attended"];
+            int t = current["total"];
+//            var ty = current["type"].split;
             Map<String, double> pie = {};
             pie["Present"] = double.parse(p.toString());
             pie["Absent"] = 100 - double.parse(p.toString());
@@ -64,62 +66,116 @@ class _AttendanceState extends State<Attendance> {
                 color: Colors.black,
                 margin: EdgeInsets.all(15),
 //                  elevation: 10,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
                   children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Texts('$c', 20),
-                          SizedBox(height: 4),
-                          Texts('$a' + "/" + '$t', 16),
-                        ],
-                      ),
-                    ),
-                    Stack(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-//                              color: Colors.blue,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          height: 80,
-                          width: 82,
-                          margin: EdgeInsets.only(top: 23, left: 11),
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            "$p%",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(fontSize: 20),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Texts(c.toString(), 23),
+                              SizedBox(height: 4),
+                              Texts(a.toString() + "/" + t.toString(), 19),
+                            ],
                           ),
                         ),
-                        PieChart(
-                          dataMap: pie,
-                          animationDuration: Duration(milliseconds: 800),
-                          //chartLegendSpacing: 32.0,
-                          //showChartValues: false,
-                          colorList: [Colors.red, Colors.blueGrey],
-                          chartRadius: MediaQuery.of(context).size.width / 4.5,
-                          //showChartValuesInPercentage: true,
+                        Expanded(
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+//                              color: Colors.blue,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                height: 80,
+                                width: 82,
+                                margin: EdgeInsets.only(top: 23, left: 15),
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "$p%",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              PieChart(
+                                dataMap: pie,
+                                animationDuration: Duration(milliseconds: 800),
+                                //chartLegendSpacing: 32.0,
+                                //showChartValues: false,
+                                colorList: [Colors.red, Colors.blueGrey],
+                                chartRadius:
+                                    MediaQuery.of(context).size.width / 4.5,
+                                //showChartValuesInPercentage: true,
 //                        showChartValues: true,
 //                      showChartValuesOutside: true,
-                          chartValueBackgroundColor: Colors.transparent,
-                          //legendPosition: LegendPosition.left,
-                          decimalPlaces: 1,
-                          showLegends: false,
-                          showChartValueLabel: true,
-                          initialAngle: 180,
-                          chartValueStyle: defaultChartValueStyle.copyWith(
-                              color: Colors.transparent),
-                          chartType: ChartType.ring,
+                                chartValueBackgroundColor: Colors.transparent,
+                                //legendPosition: LegendPosition.left,
+                                decimalPlaces: 1,
+                                showLegends: false,
+                                showChartValueLabel: true,
+                                initialAngle: 180,
+                                chartValueStyle: defaultChartValueStyle
+                                    .copyWith(color: Colors.transparent),
+                                chartType: ChartType.ring,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(width: 10),
+                        Center(
+                          child: Ink(
+                            decoration: const ShapeDecoration(
+                              color: Colors.black26,
+                              shape: CircleBorder(),
+                            ),
+                            child: IconButton(
+                              icon: Icon(FontAwesomeIcons.minus),
+                              color: Colors.red,
+                              onPressed: () {
+                                setState(() {
+                                  a--;
+                                  t++;
+                                  print(a);
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Center(
+                          child: Ink(
+                            decoration: const ShapeDecoration(
+                              color: Colors.black,
+                              shape: CircleBorder(),
+                            ),
+                            child: IconButton(
+                              icon: Icon(FontAwesomeIcons.plus),
+                              color: Colors.white,
+                              onPressed: () {
+                                setState(() {
+                                  a++;
+                                  t++;
+                                  print(a);
+                                });
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(width: 15),
+                    SizedBox(height: 5),
+                    Divider(color: Colors.grey),
                   ],
                 ),
               ),
@@ -127,31 +183,4 @@ class _AttendanceState extends State<Attendance> {
           }),
     );
   }
-
-//  static final makeListTile = ListTile(
-//    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-//    leading: Container(
-//      padding: EdgeInsets.only(right: 12.0),
-//      decoration: new BoxDecoration(
-//          border: new Border(
-//              right: new BorderSide(width: 1.0, color: Colors.white24))),
-//      child: Icon(Icons.autorenew, color: Colors.white),
-//    ),
-//    title: Text(
-//      '$len',
-//      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-//    ),
-//    // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-//
-//    subtitle: Row(
-//      children: <Widget>[
-//        Icon(Icons.linear_scale, color: Colors.yellowAccent),
-//        Text(" Intermediate", style: TextStyle(color: Colors.white))
-//      ],
-//    ),
-//    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
-//  );
-//  Widget attCard(index){
-//
-//  }
 }
