@@ -35,7 +35,7 @@ class AppDatabase {
     // Get a platform-specific directory where persistent app data can be stored
     final appDocumentDir = await getApplicationDocumentsDirectory();
     // Path with the form: /platform-specific-directory/demo.db
-    final dbPath = join(appDocumentDir.path, 'Students1.db');
+    final dbPath = join(appDocumentDir.path, 'Students5.db');
 
     final database = await databaseFactoryIo.openDatabase(dbPath);
 

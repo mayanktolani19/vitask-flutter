@@ -1,21 +1,24 @@
-import 'package:flutter/rendering.dart';
-
 class Student {
-  String regNo;
+  String profileKey;
+  String timeTableKey;
+  String attendanceKey;
+  String marksKey;
+  String acadHistoryKey;
   Map<String, dynamic> profile;
+  Map<String, dynamic> timeTable;
+  Map<String, dynamic> attendance;
+  Map<String, dynamic> marks;
+  Map<String, dynamic> acadHistory;
 
-  Student({
-    this.regNo,
-    this.profile,
-  });
-
-  factory Student.fromJson(Map<String, dynamic> json) => Student(
-        regNo: json["regNo"],
-        profile: json["profile"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "regNo": regNo,
-        "profile": profile,
-      };
+  Student(
+      {this.profileKey,
+      this.profile,
+      this.timeTableKey,
+      this.timeTable,
+      this.attendanceKey,
+      this.attendance,
+      this.marksKey,
+      this.marks,
+      this.acadHistoryKey,
+      this.acadHistory});
 }

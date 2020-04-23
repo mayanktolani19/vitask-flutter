@@ -3,36 +3,30 @@ import 'StudentModel.dart';
 import 'database_setup.dart';
 
 class StudentDao {
-  static const String folderName = "Students";
-  final _studentFolder = intMapStoreFactory.store(folderName);
+  var store = StoreRef.main();
 
   Future<Database> get _db async => await AppDatabase.instance.database;
 
   void insertStudent(Student student) async {
-    //print(student);
-    await _studentFolder.add(await _db, student.toJson());
+    await store.record(student.profileKey).put(await _db, student.profile);
+    await store
+        .record(student.attendanceKey)
+        .put(await _db, student.attendance);
+    await store.record(student.timeTableKey).put(await _db, student.timeTable);
+    await store.record(student.marksKey).put(await _db, student.marks);
+    await store
+        .record(student.acadHistoryKey)
+        .put(await _db, student.acadHistory);
     print('Student Inserted successfully !!');
   }
 
-//  Future updateStudent(Student student) async{
-//    final finder = Finder(filter: Filter.byKey(student.regNo));
-//    await _studentFolder.update(await _db, student.toJson(),finder: finder);
-//
-//  }
-//
-//
-  Future delete(Student student) async {
-    final finder = Finder(filter: Filter.byKey(student.regNo));
-    await _studentFolder.delete(await _db, finder: finder);
+  Future<Map<String, dynamic>> getData(String key) async {
+    var settings = await store.record(key).get(await _db) as Map;
+    return settings;
+    //print(finder);
   }
 
-//
-  Future<List<Student>> getAllStudents() async {
-    final recordSnapshot = await _studentFolder.find(await _db);
-    return recordSnapshot.map((snapshot) {
-      print(snapshot["profile"]["APItoken"]);
-      final student = Student.fromJson(snapshot.value);
-      return student;
-    }).toList();
+  Future deleteStudent(Student student) async {
+    await store.record(student.profileKey).delete(await _db);
   }
 }

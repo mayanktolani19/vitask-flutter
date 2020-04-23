@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Marks extends StatefulWidget {
   Marks(this.marks);
-  Map<String, dynamic> marks;
+  final Map<String, dynamic> marks;
   @override
   _MarksState createState() => _MarksState();
 }

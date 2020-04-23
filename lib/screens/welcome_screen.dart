@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vitask/api.dart';
+//import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'dart:convert';
-import 'package:vitask/database/StudentModel.dart';
+//import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -89,45 +88,61 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         setState(() {
                           showSpinner = true;
                         });
-//                      regNo = '18BLC1082';
-//                      password = 'St.franciscollege1';
-                        url =
-                            'https://vitask.me/authenticate?username=18BLC1082&password=St.franciscollege1';
-                        API api = API();
-                        Map<String, dynamic> profileData =
-                            await api.getAPIData(url);
-                        String t = profileData['APItoken'];
-                        String u = profileData['RegNo'].toString();
-                        print(u);
-                        Student student =
-                            Student(regNo: u, profile: profileData);
-                        //StudentDao().insertStudent(student);
-                        StudentDao().delete(student);
-                        print('Profile');
+//                        regNo = '18BLC1082';
+//                        password = 'St.franciscollege1';
+//                        url =
+//                            'https://vitask.me/authenticate?username=$regNo&password=$password';
+//                        API api = API();
+//                        Map<String, dynamic> profileData =
+//                            await api.getAPIData(url);
+//                        String t = profileData['APItoken'].toString();
+//                        String u = profileData['RegNo'].toString();
 //                        Map<String, dynamic> attendanceData =
 //                            await api.getAPIData(
 //                                'https://vitask.me/classesapi?token=$t');
 //                        print('Classes');
-//                        Map<String, dynamic> timetableData =
+//                        Map<String, dynamic> timeTableData =
 //                            await api.getAPIData(
 //                                'https://vitask.me/timetableapi?token=$t');
 //                        print('Time Table');
 //                        Map<String, dynamic> marksData = await api
 //                            .getAPIData('https://vitask.me/marksapi?token=$t');
 //                        print('Marks');
-//                        Map<String, dynamic> acadhistoryData =
+//                        Map<String, dynamic> acadHistoryData =
 //                            await api.getAPIData(
 //                                'https://vitask.me/acadhistoryapi?token=$t');
-//                        print('ACadHistory');
-//                      Map<String, dynamic> moodleData =
-//                          await moodle.getAPIData('https://vitask.me/moodleapi?token=$t');
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                            builder: (context) =>
-//                                MenuDashboardPage(profileData),
-//                          ),
-//                        );
+//                        print('AcadHistory');
+//
+//                        Student student = Student(
+//                            profileKey: (u + "-profile"),
+//                            profile: profileData,
+//                            attendanceKey: (u + "-attendance"),
+//                            attendance: attendanceData,
+//                            timeTableKey: (u + "-timeTable"),
+//                            timeTable: timeTableData,
+//                            marksKey: (u + "-marks"),
+//                            marks: marksData,
+//                            acadHistoryKey: (u + "-acadHistory"),
+//                            acadHistory: acadHistoryData);
+//                        StudentDao().deleteStudent(student);
+//                        StudentDao().insertStudent(student);
+                        Map<String, dynamic> p =
+                            (await StudentDao().getData("18BLC1082-profile"));
+                        Map<String, dynamic> att = (await StudentDao()
+                            .getData("18BLC1082-attendance"));
+                        Map<String, dynamic> tt =
+                            (await StudentDao().getData("18BLC1082-timeTable"));
+                        Map<String, dynamic> m =
+                            (await StudentDao().getData("18BLC1082-marks"));
+                        Map<String, dynamic> ah = (await StudentDao()
+                            .getData("18BLC1082-acadHistory"));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MenuDashboardPage(p, att, tt, m, ah),
+                          ),
+                        );
                         setState(() {
                           showSpinner = false;
                         });
@@ -145,7 +160,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
                 FloatingActionButton(onPressed: () async {
-                  Future<List<Student>> i = StudentDao().getAllStudents();
+                  Map<String, dynamic> hi =
+                      (await StudentDao().getData("18BLC1083-marks"));
+                  print(hi["Marks"]);
                 })
               ],
             ),
