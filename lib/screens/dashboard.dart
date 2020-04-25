@@ -55,7 +55,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
