@@ -8,24 +8,37 @@ class Marks extends StatefulWidget {
 }
 
 class _MarksState extends State<Marks> {
+  List<Map<String, dynamic>> m;
+  List<String> courses;
+  List<dynamic> mark;
   @override
   void initState() {
     super.initState();
-    printData();
+    getData();
   }
 
-  void printData() {
-    print(widget.marks['Marks']);
+  void getData() {
+    m = [];
+    courses = widget.marks["Marks"].keys.toList();
+    mark = widget.marks["Marks"].values.toList();
+//    for (var i = 0; i < widget.marks["Marks"].length; i++) {
+//      m.add(widget.marks["Marks"][i]);
+//    }
+//    print(courses);
+//    print(mark);
+    print(m);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-//        child: Column(
-//      children: <Widget>[
-//        for (var item in acadList) new Text(),
-//      ],
-//    )
-        );
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView.builder(
+        itemCount: courses.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Text('');
+        },
+      ),
+    );
   }
 }

@@ -120,7 +120,7 @@ class _BunkMeterState extends State<BunkMeter> {
                               "absent": 100 - percent
                             },
                             animationDuration: Duration(milliseconds: 800),
-                            colorList: [Colors.red, Colors.black12],
+                            colorList: [Colors.red[900], Colors.red[200]],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 4.5,
                             chartValueBackgroundColor: Colors.transparent,

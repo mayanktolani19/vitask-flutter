@@ -117,7 +117,10 @@ class _AttendanceState extends State<Attendance>
                                     dataMap: pie,
                                     animationDuration:
                                         Duration(milliseconds: 800),
-                                    colorList: [Colors.red, Colors.black12],
+                                    colorList: [
+                                      Colors.red[900],
+                                      Colors.red[200]
+                                    ],
                                     chartRadius:
                                         MediaQuery.of(context).size.width / 5,
                                     chartValueBackgroundColor:

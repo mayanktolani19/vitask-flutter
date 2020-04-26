@@ -9,6 +9,7 @@ import 'package:vitask/screens/marks.dart';
 import 'package:vitask/screens/acadhistory.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:vitask/constants.dart';
+import 'moodle_login.dart';
 //import 'package:vitask/screens/moodle.dart';
 
 class MenuDashboardPage extends StatefulWidget {
@@ -236,12 +237,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                 title: Texts('Moodle', 20),
                 onTap: () async {
                   Navigator.pop(context);
-//                Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                    builder: (context) => Moodle(mod),
-//                  ),
-//                );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MoodleLogin(),
+                    ),
+                  );
                 },
               ),
             ],

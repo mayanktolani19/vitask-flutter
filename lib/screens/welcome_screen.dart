@@ -88,8 +88,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         setState(() {
                           showSpinner = true;
                         });
-//                        regNo = '18BLC1082';
-//                        password = 'St.franciscollege1';
+                        //Run this part to get the data from all the APIs and store it in the database.
 //                        url =
 //                            'https://vitask.me/authenticate?username=$regNo&password=$password';
 //                        API api = API();
@@ -126,6 +125,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 //                            acadHistory: acadHistoryData);
 //                        StudentDao().deleteStudent(student);
 //                        StudentDao().insertStudent(student);
+                        //Run this part for fetching the stored data from the database. Note the key value,i.e, "18BLC1082-profile, etc."
                         Map<String, dynamic> p =
                             (await StudentDao().getData("18BLC1082-profile"));
                         Map<String, dynamic> att = (await StudentDao()
