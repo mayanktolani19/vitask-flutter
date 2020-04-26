@@ -2,9 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class API {
-  API(this.url);
-  String url;
-  Future getAPIData() async {
+  Future getAPIData(String url) async {
     http.Response response = await http.get(url);
 
     if (response.statusCode == 200) {

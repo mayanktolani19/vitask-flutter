@@ -1,11 +1,13 @@
 # VITask
 
+# Caution! Work in progress. 
+
 VITask flutter application made for the students of VIT Chennai for their VTOP login.
 
 ## Contributing Guidelines
-Fork the repo<br/>
-Clone it to your PC<br/>
-Commit changes and make PR. 
+
+#### Fork this repo and clone the forked repo into your PC.
+#### This repo is frequently updated so make sure you always pull the latest version.
 
 ### For updating a forked repo
 * `git remote add upstream https://github.com/mayanktolani19/vitask-flutter.git`
@@ -14,5 +16,8 @@ Commit changes and make PR.
 * `git rebase upstream/master`
 * `git push`
 
-
-git push -u origin master
+### Making changes to your forked repo
+* `git add .`
+* `git commit -m"<Describe your changes>"`
+* `git push`
+* After committing your changes, make Pull Request.

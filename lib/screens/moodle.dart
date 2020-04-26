@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Moodle extends StatefulWidget {
   Moodle(this.moodle);
-  Map<String, dynamic> moodle;
+  final Map<String, dynamic> moodle;
   @override
   _MoodleState createState() => _MoodleState();
 }
