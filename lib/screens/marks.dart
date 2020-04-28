@@ -61,37 +61,51 @@ class _MarksState extends State<Marks> {
               width: double.infinity,
               child: Card(
                 color: Colors.transparent,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Text(mr.subject,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          )),
-                    ),
-                    Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Color.fromRGBO(229, 45, 39, 100),
-                                  Color.fromRGBO(179, 18, 23, 100),
+                child: Container(
+                  padding: EdgeInsets.all(1.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Color.fromRGBO(229, 45, 39, 100),
+                          Color.fromRGBO(179, 18, 23, 100),
+                        ]),
+                  ),
+                  child: Card(
+                    color: Colors.black,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 10),
+                          child: Text(mr.subject,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              )),
+                        ),
+                        Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(10.0),
+                            // decoration: BoxDecoration(
+                            //   gradient: LinearGradient(
+                            //       begin: Alignment.topRight,
+                            //       end: Alignment.bottomLeft,
+                            //       colors: [
+                            //         Color.fromRGBO(229, 45, 39, 100),
+                            //         Color.fromRGBO(179, 18, 23, 100),
 
-                                  // Colors.deepPurpleAccent,
-                                  // Colors.pinkAccent
-                                ]),
-                            borderRadius: BorderRadius.circular(7.0),
-                            border: Border.all(
-                              width: .003,
-                            )),
-                        child: minimar(mr.group)),
-                  ],
+                            //         // Colors.deepPurpleAccent,
+                            //         // Colors.pinkAccent
+                            //       ]),
+                            //   borderRadius: BorderRadius.circular(7.0),
+                            // ),
+                            child: minimar(mr.group)),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             );
