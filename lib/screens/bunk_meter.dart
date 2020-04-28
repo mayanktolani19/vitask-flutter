@@ -23,6 +23,8 @@ class _BunkMeterState extends State<BunkMeter> {
   static var total;
   static var a = 0;
   static var b = 0;
+  static var color1 = Colors.red[400];
+  static var type;
   @override
   void initState() {
     // TODO: implement initState
@@ -41,8 +43,17 @@ class _BunkMeterState extends State<BunkMeter> {
     course = attended[ij[0]]["courseName"];
     faculty = attended[ij[0]]["faculty"];
     code = attended[ij[0]]["code"];
+    type = attended[ij[0]]["type"];
     percent = double.parse(attended[ij[0]]["percentage"].toString());
     total = attended[ij[0]]["total"];
+
+    if (percent >= 80) {
+      color1 = Colors.green[400];
+    } else if (percent < 80 && percent >= 75) {
+      color1 = Colors.yellow[400];
+    } else if (percent < 75) {
+      color1 = Colors.red[400];
+    }
     a = 0;
     b = 0;
   }
@@ -65,10 +76,13 @@ class _BunkMeterState extends State<BunkMeter> {
                   color: Colors.black45,
                   margin: EdgeInsets.all(25),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Texts(course.toString() + ' - ' + code.toString(), 26),
+                      Texts(course.toString() + ' - ' + code.toString(), 27),
                       SizedBox(height: 20),
-                      Texts(faculty.toString(), 24),
+                      Texts(type.toString(), 25),
+                      SizedBox(height: 20),
+                      Texts(faculty.toString(), 23),
                     ],
                   ),
                 ),
@@ -120,7 +134,7 @@ class _BunkMeterState extends State<BunkMeter> {
                               "absent": 100 - percent
                             },
                             animationDuration: Duration(milliseconds: 800),
-                            colorList: [Colors.red[900], Colors.red[200]],
+                            colorList: [color1, Colors.black],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 4.5,
                             chartValueBackgroundColor: Colors.transparent,
@@ -166,6 +180,13 @@ class _BunkMeterState extends State<BunkMeter> {
                                   a++;
                                   total++;
                                   percent = att / total * 100;
+                                  if (percent >= 80) {
+                                    color1 = Colors.green[400];
+                                  } else if (percent < 80 && percent >= 75) {
+                                    color1 = Colors.yellow[400];
+                                  } else if (percent < 75) {
+                                    color1 = Colors.red[400];
+                                  }
                                 });
                               }),
                           IconButton(
@@ -178,6 +199,13 @@ class _BunkMeterState extends State<BunkMeter> {
                                     a--;
                                     total--;
                                     percent = att / total * 100;
+                                    if (percent >= 80) {
+                                      color1 = Colors.green[400];
+                                    } else if (percent < 80 && percent >= 75) {
+                                      color1 = Colors.yellow[400];
+                                    } else if (percent < 75) {
+                                      color1 = Colors.red[400];
+                                    }
                                   }
                                 });
                               }),
@@ -207,6 +235,13 @@ class _BunkMeterState extends State<BunkMeter> {
                                   total++;
                                   b++;
                                   percent = att / total * 100;
+                                  if (percent >= 80) {
+                                    color1 = Colors.green[400];
+                                  } else if (percent < 80 && percent >= 75) {
+                                    color1 = Colors.yellow[400];
+                                  } else if (percent < 75) {
+                                    color1 = Colors.red[400];
+                                  }
                                 });
                               }),
                           IconButton(
@@ -218,6 +253,13 @@ class _BunkMeterState extends State<BunkMeter> {
                                     b--;
                                     total--;
                                     percent = att / total * 100;
+                                    if (percent >= 80) {
+                                      color1 = Colors.green[400];
+                                    } else if (percent < 80 && percent >= 75) {
+                                      color1 = Colors.yellow[400];
+                                    } else if (percent < 75) {
+                                      color1 = Colors.red[400];
+                                    }
                                   }
                                 });
                               }),

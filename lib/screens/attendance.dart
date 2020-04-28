@@ -49,16 +49,23 @@ class _AttendanceState extends State<Attendance>
         body: ListView.builder(
             itemCount: len,
             itemBuilder: (BuildContext context, int index) {
+              var color1 = Colors.red[400];
               current = attended[index];
               int p = current["percentage"];
+              if (p >= 80) {
+                color1 = Colors.green[400];
+              } else if (p < 80 && p >= 75) {
+                color1 = Colors.yellow[400];
+              }
               String c = current["courseName"];
               int a = current["attended"];
               int t = current["total"];
+              String ty = current["type"];
               Map<String, double> pie = {};
               pie["Present"] = double.parse(p.toString());
               pie["Absent"] = 100 - double.parse(p.toString());
               return Container(
-                padding: EdgeInsets.all(5),
+                padding: EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
@@ -86,9 +93,11 @@ class _AttendanceState extends State<Attendance>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Texts(c.toString(), 23),
+                                  Texts(c.toString(), 20),
                                   SizedBox(height: 4),
-                                  Texts(a.toString() + "/" + t.toString(), 19),
+                                  Texts(ty, 18),
+                                  SizedBox(height: 4),
+                                  Texts(a.toString() + "/" + t.toString(), 16),
                                 ],
                               ),
                             ),
@@ -118,8 +127,8 @@ class _AttendanceState extends State<Attendance>
                                     animationDuration:
                                         Duration(milliseconds: 800),
                                     colorList: [
-                                      Colors.red[900],
-                                      Colors.red[200]
+                                      color1,
+                                      Colors.black,
                                     ],
                                     chartRadius:
                                         MediaQuery.of(context).size.width / 5,
