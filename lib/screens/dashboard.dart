@@ -157,95 +157,103 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 //            ),
           ],
         ),
-        drawer: Drawer(
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Texts('VITask', 35),
-                      Container(
-                        child: Image.asset(
-                          'images/blue.png',
-                          width: 150,
-                          height: 100,
-                        ),
+        drawer: SafeArea(
+          child: Drawer(
+            child: SafeArea(
+              child: ListView(
+                // Important: Remove any padding from the ListView.
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  DrawerHeader(
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Texts('VITask', 35),
+                          Container(
+                            child: SafeArea(
+                              child: Image.asset(
+                                'images/blue.png',
+                                // width: 150,
+                                // height: 100,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: ExactAssetImage("images/side.jpg"),
+                          fit: BoxFit.cover),
+                    ),
                   ),
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: ExactAssetImage("images/side.jpg"),
-                      fit: BoxFit.cover),
-                ),
+                  ListTile(
+                    title: Texts('Attendance', 20),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Attendance(widget.attendanceData),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Texts('Time Table', 20),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      print(widget.timeTableData["Timetable"]["Monday"]);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TimeScreen(widget.timeTableData),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Texts('Marks', 20),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Marks(widget.marksData),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Texts('Academic History', 20),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AcademicHistory(widget.acadHistoryData),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Texts('Moodle', 20),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MoodleLogin(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-              ListTile(
-                title: Texts('Attendance', 20),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Attendance(widget.attendanceData),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Texts('Time Table', 20),
-                onTap: () async {
-                  Navigator.pop(context);
-                  print(widget.timeTableData["Timetable"]["Monday"]);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TimeScreen(widget.timeTableData),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Texts('Marks', 20),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Marks(widget.marksData),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Texts('Academic History', 20),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AcademicHistory(widget.acadHistoryData),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Texts('Moodle', 20),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MoodleLogin(),
-                    ),
-                  );
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),
