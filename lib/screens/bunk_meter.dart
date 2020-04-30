@@ -48,7 +48,7 @@ class _BunkMeterState extends State<BunkMeter> {
     total = attended[ij[0]]["total"];
 
     if (percent >= 80) {
-      color1 = Colors.green[400];
+      color1 = Colors.blue[400];
     } else if (percent < 80 && percent >= 75) {
       color1 = Colors.yellow[400];
     } else if (percent < 75) {
@@ -157,7 +157,7 @@ class _BunkMeterState extends State<BunkMeter> {
               Column(
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(left: 20),
@@ -181,7 +181,7 @@ class _BunkMeterState extends State<BunkMeter> {
                                   total++;
                                   percent = att / total * 100;
                                   if (percent >= 80) {
-                                    color1 = Colors.green[400];
+                                    color1 = Colors.blue[400];
                                   } else if (percent < 80 && percent >= 75) {
                                     color1 = Colors.yellow[400];
                                   } else if (percent < 75) {
@@ -200,7 +200,7 @@ class _BunkMeterState extends State<BunkMeter> {
                                     total--;
                                     percent = att / total * 100;
                                     if (percent >= 80) {
-                                      color1 = Colors.green[400];
+                                      color1 = Colors.blue[400];
                                     } else if (percent < 80 && percent >= 75) {
                                       color1 = Colors.yellow[400];
                                     } else if (percent < 75) {
@@ -215,7 +215,7 @@ class _BunkMeterState extends State<BunkMeter> {
                   ),
                   SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(left: 20),
@@ -236,7 +236,7 @@ class _BunkMeterState extends State<BunkMeter> {
                                   b++;
                                   percent = att / total * 100;
                                   if (percent >= 80) {
-                                    color1 = Colors.green[400];
+                                    color1 = Colors.blue[400];
                                   } else if (percent < 80 && percent >= 75) {
                                     color1 = Colors.yellow[400];
                                   } else if (percent < 75) {
@@ -254,7 +254,7 @@ class _BunkMeterState extends State<BunkMeter> {
                                     total--;
                                     percent = att / total * 100;
                                     if (percent >= 80) {
-                                      color1 = Colors.green[400];
+                                      color1 = Colors.blue[400];
                                     } else if (percent < 80 && percent >= 75) {
                                       color1 = Colors.yellow[400];
                                     } else if (percent < 75) {

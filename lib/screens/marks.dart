@@ -21,28 +21,9 @@ class _MarksState extends State<Marks> {
     getData();
   }
 
-  // void getData() {
-  //   m = [];
-  //   courses = widget.marks["Marks"].keys.toList();
-  //   mark = widget.marks["Marks"].values.toList();
-  //   for (var i = 0; i < widget.marks["Marks"].length; i++) {
-  //     m.add(widget.marks["Marks"][i]);
-  //   }
-  //   print(widget.marks);
-  //   //print(courses);
-  //   //print(mark);
-  //   //print(m);
-  // }
-
   void getData() {
     courses = widget.marks["Marks"].keys.toList();
     mark = widget.marks["Marks"].values.toList();
-    // print(widget.marks["Marks"].values.toList()[0]);
-    // acad.forEach((k, v) => courses.add(
-    //       k,
-    //     ));
-
-    //print(mark);
     marele = [];
     var num = 0;
     while (num < courses.length) {
