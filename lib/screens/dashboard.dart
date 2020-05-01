@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/timetable.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:vitask/constants.dart';
 import 'moodle_login.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'profile.dart';
+
 //import 'package:vitask/screens/moodle.dart';
 
 class MenuDashboardPage extends StatefulWidget {
@@ -40,6 +43,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   List<dynamic> tt;
   List<String> days;
   var now;
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +83,24 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           ),
           title: Text('Dashboard'),
           backgroundColor: Color.fromRGBO(200, 25, 25, 40),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Profile(
+                          widget.acadHistoryData["CurriculumDetails"]["CGPA"],
+                          widget.profileData),
+                    ));
+                // do something
+              },
+            )
+          ],
         ),
         body: Column(
           children: <Widget>[
@@ -120,16 +142,19 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Texts("Attendance", 30),
-                              Texts(
-                                  attDetails["Attended"] +
-                                      "/" +
-                                      attDetails["Total"],
-                                  18),
-                            ],
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Texts("Average Attendance", 30),
+                                Texts(
+                                    attDetails["Attended"] +
+                                        "/" +
+                                        attDetails["Total"],
+                                    23),
+                              ],
+                            ),
                           ),
                           new AnimatedCircularChart(
                             duration: Duration(milliseconds: 3000),
@@ -181,13 +206,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                 child: SingleChildScrollView(
                     child: Column(
                   children: tt.map((e) {
-                    var course = e["courseName"];
                     var att = 80;
                     for (var i = 0;
                         i < widget.attendanceData["Attended"].length;
                         i++) {
                       if (widget.attendanceData["Attended"][i]["courseName"] ==
-                          course) {
+                          e["courseName"]) {
                         att =
                             widget.attendanceData["Attended"][i]["percentage"];
                         break;
@@ -233,11 +257,19 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         Texts(e["slot"], 21),
                                         SizedBox(height: 8),
                                         Container(
-//                                  width: 40,
-//                                  height: 40,
-                                          //color: Color.fromRGBO(450, 0, 0, 5),
-                                          color: Colors.black,
                                           child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.blueAccent,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            alignment: Alignment.center,
+                                            margin: EdgeInsets.only(
+                                              left: 60,
+                                              right: 60,
+                                            ),
                                             child: Card(
                                               color: Colors.transparent,
                                               elevation: 0,
@@ -249,14 +281,42 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: <Widget>[
-                                                        Texts(
-                                                            e["startTime"] +
-                                                                " - ",
-                                                            19),
-                                                        Texts(e["endTime"], 19),
+                                                        Text(
+                                                          e["startTime"] +
+                                                              " - ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            color: Colors.blue,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          e["endTime"],
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            color: Colors.blue,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
-                                                    Texts(e["class"], 19),
+                                                    Text(
+                                                      e["class"],
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        color: Colors.blue,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                               ),
