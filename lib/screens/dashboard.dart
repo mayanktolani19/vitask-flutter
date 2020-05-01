@@ -13,6 +13,7 @@ import 'package:vitask/constants.dart';
 import 'moodle_login.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'profile.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //import 'package:vitask/screens/moodle.dart';
 
@@ -43,12 +44,22 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   List<dynamic> tt;
   List<String> days;
   var now;
-
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   void initState() {
     super.initState();
     getAttendance();
     getTimeTable();
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+    chalJaoPlease();
   }
 
   void getAttendance() {
@@ -64,9 +75,23 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 
   void getTimeTable() {
     days = [];
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ];
     now = DateTime.now();
-    tt = widget.timeTableData["Timetable"][days[now.weekday - 1]];
+    if (now.weekday < 6) {
+      tt = widget.timeTableData["Timetable"][days[now.weekday - 1]];
+    } else {
+      tt = [
+        {"Saturday": "Sit back and relax"},
+      ];
+    }
   }
 
   @override
@@ -383,7 +408,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                         ),
                       );
                     }
-                    return Container();
+                    return Container(
+                        child:
+                            Texts("No Classes today, Sit back and relax", 25));
                   }).toList(),
                 )),
               ),
@@ -490,6 +517,36 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future chalJaoPlease() async {
+    var scheduledNotificationDateTime =
+        DateTime.now().add(Duration(seconds: 30));
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your other channel id',
+        'your other channel name',
+        'your other channel description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        0,
+        'scheduled title',
+        'scheduled body',
+        scheduledNotificationDateTime,
+        platformChannelSpecifics);
+  }
+
+  Future onSelectNotification(String payload) async {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return new AlertDialog(
+          title: Text("PayLoad"),
+          content: Text("Payload : $payload"),
+        );
+      },
     );
   }
 }
