@@ -35,8 +35,7 @@ class _MarksState extends State<Marks> {
   Widget marlist() {
     return Container(
         width: double.infinity,
-        child: SingleChildScrollView(
-            child: Column(
+        child: Column(
           children: marele.map((mr) {
             return Container(
               width: double.infinity,
@@ -47,70 +46,48 @@ class _MarksState extends State<Marks> {
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
                     padding: EdgeInsets.all(3.0),
-                    // decoration: BoxDecoration(
-                    //   gradient: LinearGradient(
-                    //       begin: Alignment.topRight,
-                    //       end: Alignment.bottomLeft,
-                    //       colors: [
-                    //         // Color.fromRGBO(229, 45, 39, 100),
-                    //         // Color.fromRGBO(179, 18, 23, 100),
-                    //         Colors.blue[900],
-                    //         Colors.indigo,
-                    //       ]),
-                    // ),
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(0),
-                            // gradient: LinearGradient(
-                            //     begin: Alignment.topRight,
-                            //     end: Alignment.bottomLeft,
-                            //     colors: [
-                            //       // Color.fromRGBO(229, 45, 39, 100),
-                            //       // Color.fromRGBO(179, 18, 23, 100),
-                            //       Colors.blue[900],
-                            //       Colors.indigo,
-                            //     ]),
-                            boxShadow: [
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
                           BoxShadow(
                             color: Colors.indigo,
                             blurRadius: 3,
                             spreadRadius: 0.3,
                           ),
                         ]),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              Color.fromRGBO(175, 234, 220, 200),
+                              Color.fromRGBO(175, 234, 220, 200)
+                            ]),
                       ),
-                      color: Colors.black,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            child: Text(mr.subject,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                )),
-                          ),
-                          Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.all(10.0),
-                              // decoration: BoxDecoration(
-                              //   gradient: LinearGradient(
-                              //       begin: Alignment.topRight,
-                              //       end: Alignment.bottomLeft,
-                              //       colors: [
-                              //         Color.fromRGBO(229, 45, 39, 100),
-                              //         Color.fromRGBO(179, 18, 23, 100),
-
-                              //         // Colors.deepPurpleAccent,
-                              //         // Colors.pinkAccent
-                              //       ]),
-                              //   borderRadius: BorderRadius.circular(7.0),
-                              // ),
-                              child: minimar(mr.group)),
-                        ],
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        color: Colors.transparent,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 24, horizontal: 20),
+                              child: Text(mr.subject,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Color.fromRGBO(236, 150, 150, 3))),
+                            ),
+                            Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(24.0),
+                                child: minimar(mr.group)),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -118,7 +95,7 @@ class _MarksState extends State<Marks> {
               ),
             );
           }).toList(),
-        )));
+        ));
   }
 
   Widget minimar(var group) {
@@ -136,8 +113,7 @@ class _MarksState extends State<Marks> {
     }
 
     return Container(
-        color: Colors.black,
-        padding: EdgeInsets.all(10),
+        color: Colors.transparent,
         child: SingleChildScrollView(
             child: Column(
           children: exeele.map((e) {
@@ -152,9 +128,10 @@ class _MarksState extends State<Marks> {
                       children: <Widget>[
                         Text(e.exname,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 17,
+                                color: Color.fromRGBO(152, 255, 152, 60))),
                         ClipOval(
                           child: Container(
                             width: 40,
@@ -190,19 +167,11 @@ class _MarksState extends State<Marks> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.black,
-      // appBar: AppBar(
-      //   titleSpacing: 61,
-      //   shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.vertical(
-      //         bottom: Radius.circular(20), top: Radius.circular(20)),
-      //   ),
-      //   title: Text('Marks'),
-      //   backgroundColor: Color.fromRGBO(200, 25, 25, 60),
-      // ),
+      backgroundColor: Color.fromRGBO(0, 22, 60, 10),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            centerTitle: true,
             expandedHeight: 90,
             floating: true,
             pinned: false,
@@ -217,16 +186,13 @@ class _MarksState extends State<Marks> {
               background: Image.asset("images/side.jpg", fit: BoxFit.cover),
             ),
           ),
-          SliverFillRemaining(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: marlist(),
-                ),
-              ),
-            ),
+          SliverPadding(
+            padding: const EdgeInsets.all(11.0),
+            sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+              // return Card(child: Text('hi'));
+              return marlist();
+            })),
           ),
         ],
       ),

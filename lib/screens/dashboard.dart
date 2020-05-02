@@ -464,12 +464,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     title: Texts('Time Table', 20),
                     onTap: () async {
                       Navigator.pop(context);
-                      print(widget.timeTableData["Timetable"]["Monday"]);
+                      //print(widget.timeTableData["Timetable"]["Monday"]);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              TimeScreen(widget.timeTableData),
+                          builder: (context) => TimeTable(widget.timeTableData),
                         ),
                       );
                     },

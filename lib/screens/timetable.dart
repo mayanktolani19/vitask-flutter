@@ -1,126 +1,289 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vitask/constants.dart';
-import 'package:vitask/Widgets/pie_chart.dart';
+import 'tt.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
-//Widget cont() {
-//  for (int i = 0; i < 3; i++) {
-//    return Container(
-//      child: Text("Hey"),
-//    );
-//  }
-//}
+class TimeTable extends StatefulWidget {
+  TimeTable(this.timeTableData);
+  final Map<String, dynamic> timeTableData;
 
-class TimeScreen extends StatelessWidget {
-  TimeScreen(this.data);
-  final Map<String, dynamic> data;
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: ListView(
-          padding: EdgeInsets.all(10.0),
-          children: <Widget>[
-            Material(
-              //elevation: 5,
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(Radius.circular(32)),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.grey[900], Colors.grey[850]]),
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  color: Colors.grey,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[800],
-                      offset: Offset(5.0, 5.0),
-                      blurRadius: 10.0,
-                      spreadRadius: 1.0,
+  _TimeTableState createState() => _TimeTableState();
+}
+
+class _TimeTableState extends State<TimeTable> {
+  List<String> days;
+  List<dynamic> daylist;
+
+  List<DayList> dayele = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void getData() {
+    days = widget.timeTableData["Timetable"].keys.toList();
+    daylist = widget.timeTableData["Timetable"].values.toList();
+
+    dayele = [];
+    var num = 0;
+    while (num < days.length) {
+      dayele.add(DayList(day: days[num], list: daylist[num]));
+      num++;
+    }
+    print(dayele[0]);
+  }
+
+  Widget marlist() {
+    return Column(
+      children: dayele.map((mr) {
+        return Container(
+          width: double.infinity,
+          child:
+              //main card
+              Card(
+            color: Colors.transparent,
+            elevation: 0,
+            child: Container(
+              child: Card(
+                //color: Colors.transparent,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Center(
+                      child: Text(mr.day,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Color.fromRGBO(236, 150, 150, 3))),
                     ),
-                    BoxShadow(
-                      color: Colors.grey[900],
-                      offset: Offset(-5.0, -5.0),
-                      blurRadius: 20.0,
-                      spreadRadius: 2.0,
-                    )
+                    Container(
+                        width: double.infinity,
+                        //padding: EdgeInsets.all(15.0),
+                        child: minimar(mr.list)),
                   ],
                 ),
-                child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                          top: 10,
-                          child: Text('$data["Timetable"]["Friday"][0][3]',
-                              style: ktt.copyWith(
-                                  fontWeight: FontWeight.w600, fontSize: 30)),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 1),
-                            child: ListTile(
-                              leading: Icon(Icons.location_on),
-                              title: Text(
-                                  '$data["Timetable"]["Friday"][0][1]' +
-                                      "  " +
-                                      '$data["Timetable"]["Friday"][0][2]',
-                                  style: ktt),
-                            ),
-                          ),
-                        ),
-//                        Align(
-//                          alignment: Alignment.bottomRight,
-//                          child: Padding(
-//                            padding: EdgeInsets.only(bottom: 30),
-//                            child: Row(
-//                              children: <Widget>[
-//                                CircleAvatar(
-//                                  backgroundColor: Colors.green,
-//                                  radius: 10,
-//                                ),
-//                                Text("Attendace percent")
-//                              ],
-//                            ),
-//                          ),
-//                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            margin: EdgeInsets.all(10),
-                            height: 100,
-                            width: 100,
-                            child: CustomPaint(
-                                child: Center(
-                                  child: Text("70 %", style: ktt),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget minimar(List<dynamic> list) {
+    var codes = [];
+    var loc = [];
+    var courseName = [];
+    var endTime = [];
+    var startTime = [];
+    var slot = [];
+    List<Info> exeele = [];
+
+    var num = 0;
+
+    while (num < list.length) {
+      codes.add(list[num]["code"]);
+      loc.add(list[num]["class"]);
+      courseName.add(list[num]["courseName"]);
+      endTime.add(list[num]["endTime"]);
+      startTime.add(list[num]["startTime"]);
+      slot.add(list[num]["slot"]);
+      num++;
+    }
+    var n = 0;
+    while (n < codes.length) {
+      exeele.add(Info(
+          codes: codes[n],
+          courseName: courseName[n],
+          endTime: endTime[n],
+          loc: loc[n],
+          slot: slot[n],
+          startTime: startTime[n]));
+      n++;
+    }
+
+    return Container(
+        color: Colors.transparent,
+        child: SingleChildScrollView(
+            child: Column(
+          children: exeele.map((e) {
+            return Container(
+              child: Column(
+                children: <Widget>[
+                  Card(
+                    //individial card color
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        //color: Colors.amber,
+                        padding: EdgeInsets.symmetric(vertical: 10),
+
+                        child: Stack(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      e.courseName,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 23,
+                                        color: Colors.greenAccent[400],
+                                        //Color.fromRGBO(152, 255, 152, 60),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                foregroundPainter: ProgressPainter(
-                                    defaultCircleColor: Colors.red,
-                                    percentageCompletedCircleColor:
-                                        Colors.red[900],
-                                    completedPercentage: 70.0,
-                                    circleWidth: 30.0)),
-                          ),
+                                Card(
+                                  color: Colors.transparent,
+                                  elevation: 10,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(e.codes,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          )),
+                                      Container(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Text(
+                                            " :  ${e.startTime}  --  ${e.endTime}",
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            //loc
+                            Positioned(
+                              left: 300,
+                              right: 0,
+                              bottom: 0,
+                              child: ClipRect(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: [
+                                        Color.fromRGBO(142, 14, 30, 10),
+                                        Color.fromRGBO(31, 28, 24, 120)
+                                      ])),
+                                  child: Card(
+                                    color: Colors.transparent,
+                                    elevation: 20,
+                                    child: Center(
+                                        child: Text(e.loc,
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                            ))),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            //loc end
+                          ],
                         ),
-                        Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 40),
-                              child: ListTile(
-                                  leading: Icon(Icons.access_time),
-                                  title: Text(
-                                      '$data["Timetable"]["Friday"][0][4]' +
-                                          " - " +
-                                          '$data["Timetable"]["Friday"][0][5]',
-                                      style: ktt)),
-                            ))
-                      ],
-                    )),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        )));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+              Color.fromRGBO(13, 50, 77, 100),
+              Color.fromRGBO(0, 0, 10, 10)
+            ])),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              //centerTitle: true,
+              backgroundColor: Colors.transparent,
+              expandedHeight: 10,
+              centerTitle: true,
+              floating: true,
+              pinned: false,
+              title: Text(
+                "timetable",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                //height of the main box
+                height: height,
+                padding: EdgeInsets.all(9),
+
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: dayele.map(
+                    (mr) {
+                      return Container(
+                        width: width,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  mr.day,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 50,
+                                    color: Colors.pinkAccent,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 50,
+                              right: 10,
+                              child: Container(
+                                padding: EdgeInsets.all(15),
+                                height: height / 1.2,
+                                width: width,
+                                child: minimar(mr.list),
+                              ),
+                            ),
+                          ],
+                          overflow: Overflow.visible,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
               ),
             ),
           ],
@@ -129,21 +292,3 @@ class TimeScreen extends StatelessWidget {
     );
   }
 }
-
-//Column(
-//crossAxisAlignment: CrossAxisAlignment.start,
-//mainAxisAlignment: MainAxisAlignment.start,
-//children: <Widget>[
-//
-//Row(
-//children: <Widget>[
-//Expanded(
-//child:
-//Expanded(
-//child:
-//))
-//],
-//),
-//
-//],
-//),
