@@ -53,7 +53,7 @@ class _AttendanceState extends State<Attendance>
               current = attended[index];
               int p = current["percentage"];
               if (p >= 80) {
-                color1 = Colors.green[400];
+                color1 = Colors.blue[400];
               } else if (p < 80 && p >= 75) {
                 color1 = Colors.yellow[400];
               }
@@ -65,9 +65,13 @@ class _AttendanceState extends State<Attendance>
               pie["Present"] = double.parse(p.toString());
               pie["Absent"] = 100 - double.parse(p.toString());
               return Container(
+                margin: EdgeInsets.all(7),
                 padding: EdgeInsets.all(0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  border: Border.all(
+                    color: Colors.blueAccent,
+                  ),
                 ),
                 child: MaterialButton(
                   padding: EdgeInsets.all(0),
@@ -105,23 +109,6 @@ class _AttendanceState extends State<Attendance>
                               flex: 1,
                               child: Stack(
                                 children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-//                              color: Colors.blue,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    height: 80,
-                                    width: 82,
-                                    margin: EdgeInsets.only(top: 23, left: 15),
-                                    padding: EdgeInsets.all(20),
-                                    child: Text(
-                                      "$p%",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ),
                                   PieChart(
                                     dataMap: pie,
                                     animationDuration:
@@ -142,6 +129,23 @@ class _AttendanceState extends State<Attendance>
                                         .copyWith(color: Colors.transparent),
                                     chartType: ChartType.ring,
                                   ),
+                                  Container(
+                                    decoration: BoxDecoration(
+//                              color: Colors.blue,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    height: 80,
+                                    width: 82,
+                                    margin: EdgeInsets.only(top: 23, left: 15),
+                                    padding: EdgeInsets.all(20),
+                                    child: Text(
+                                      "$p%",
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -150,7 +154,6 @@ class _AttendanceState extends State<Attendance>
                           ],
                         ),
                         SizedBox(height: 5),
-                        Divider(color: Colors.grey),
                       ],
                     ),
                   ),

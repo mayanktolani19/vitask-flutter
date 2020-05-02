@@ -24,7 +24,6 @@ class _MarksState extends State<Marks> {
   void getData() {
     courses = widget.marks["Marks"].keys.toList();
     mark = widget.marks["Marks"].values.toList();
-
     marele = [];
     var num = 0;
     while (num < courses.length) {
