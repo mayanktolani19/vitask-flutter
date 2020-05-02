@@ -115,27 +115,47 @@ class _AcademicHistoryState extends State<AcademicHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        titleSpacing: 61,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(15),
-          ),
-        ),
-        title: Text('Academic History'),
-        backgroundColor: Color.fromRGBO(200, 25, 25, 60),
-      ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: elelist(acad),
-          ),
-        ),
-      ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+            expandedHeight: 90,
+            floating: true,
+            pinned: true,
+            snap: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                "Acad history",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            )),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            // return Card(child: Text('hi'));
+            return elelist(acad);
+          }),
+        )
+      ],
     );
+    // return Scaffold(
+    //   backgroundColor: Colors.black,
+    //   appBar: AppBar(
+    //     titleSpacing: 61,
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.vertical(
+    //         top: Radius.circular(15),
+    //       ),
+    //     ),
+    //     title: Text('Academic History'),
+    //     backgroundColor: Color.fromRGBO(200, 25, 25, 60),
+    //   ),
+    //   body: SingleChildScrollView(
+    //     scrollDirection: Axis.vertical,
+    //     child: elelist(acad),
+    //   ),
+    // );
+    // return Scaffold(body: _buildScrollView(context));
   }
 }

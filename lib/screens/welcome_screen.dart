@@ -7,6 +7,7 @@ import 'dashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
+import 'timetable.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -161,9 +162,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
                 FloatingActionButton(onPressed: () async {
-                  Map<String, dynamic> hi =
-                      (await StudentDao().getData("18BLC1095-marks"));
-                  print(hi["Marks"]);
+                  Map<String, dynamic> tt =
+                      (await StudentDao().getData("18BLC1095-timeTable"));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TimeTable(tt),
+                    ),
+                  );
                 })
               ],
             ),
