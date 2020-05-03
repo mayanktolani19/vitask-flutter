@@ -128,15 +128,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         // StudentDao().insertStudent(student);
                         //Run this part for fetching the stored data from the database. Note the key value,i.e, "18BLC1082-profile, etc."
                         Map<String, dynamic> p =
-                            (await StudentDao().getData("18BLC1082-profile"));
+                            (await StudentDao().getData("18BLC1092-profile"));
                         Map<String, dynamic> att = (await StudentDao()
-                            .getData("18BLC1082-attendance"));
+                            .getData("18BLC1095-attendance"));
                         Map<String, dynamic> tt =
-                            (await StudentDao().getData("18BLC1082-timeTable"));
+                            (await StudentDao().getData("18BLC1095-timeTable"));
                         Map<String, dynamic> m =
-                            (await StudentDao().getData("18BLC1082-marks"));
+                            (await StudentDao().getData("18BLC1095-marks"));
                         Map<String, dynamic> ah = (await StudentDao()
-                            .getData("18BLC1082-acadHistory"));
+                            .getData("18BLC1095-acadHistory"));
                         print(att);
                         Navigator.push(
                           context,

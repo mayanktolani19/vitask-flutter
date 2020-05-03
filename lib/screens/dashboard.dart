@@ -98,7 +98,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -106,8 +106,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               top: Radius.circular(15),
             ),
           ),
-          title: Text('Dashboard'),
-          backgroundColor: Color.fromRGBO(200, 25, 25, 40),
+          title: Text('dashboard'),
+          backgroundColor: Colors.transparent,
           actions: <Widget>[
             IconButton(
               icon: Icon(
@@ -127,12 +127,21 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
             )
           ],
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: <Widget>[
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                Color.fromRGBO(13, 50, 77, 100),
+                Color.fromRGBO(0, 0, 10, 10)
+              ])),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: <Widget>[
 //                  Container(
 //                    decoration: BoxDecoration(
 //                      color: Colors.black,
@@ -155,267 +164,278 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 //                  Divider(
 //                    color: Colors.grey,
 //                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      //color: Colors.redAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    child: Card(
-                      color: Colors.black45,
-                      margin: EdgeInsets.all(15),
-                      elevation: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Texts("Average Attendance", 30),
-                                Texts(
-                                    attDetails["Attended"] +
-                                        "/" +
-                                        attDetails["Total"],
-                                    23),
-                              ],
-                            ),
-                          ),
-                          new AnimatedCircularChart(
-                            duration: Duration(milliseconds: 3000),
-                            chartType: CircularChartType.Radial,
-                            key: k.chartKey,
-                            size: const Size(140.0, 140.0),
-                            initialChartData: <CircularStackEntry>[
-                              new CircularStackEntry(
-                                <CircularSegmentEntry>[
-                                  new CircularSegmentEntry(
-                                    pie["Present"],
-                                    Colors.indigoAccent,
-                                    rankKey: 'completed',
-                                  ),
-                                  new CircularSegmentEntry(
-                                    pie["Absent"],
-                                    Colors.blueGrey[600],
-                                    rankKey: 'remaining',
-                                  ),
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: Colors.redAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Card(
+                        color: Colors.black12,
+                        margin: EdgeInsets.all(15),
+                        elevation: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Texts("Average Attendance", 30),
+                                  Texts(
+                                      attDetails["Attended"] +
+                                          "/" +
+                                          attDetails["Total"],
+                                      23),
                                 ],
-                                rankKey: 'progress',
                               ),
-                            ],
-                            percentageValues: true,
-                            edgeStyle: SegmentEdgeStyle.round,
-                            holeLabel: attDetails["Percentage"] + "%",
-                            labelStyle: new TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24.0,
                             ),
-                          )
-                        ],
+                            new AnimatedCircularChart(
+                              duration: Duration(milliseconds: 3000),
+                              chartType: CircularChartType.Radial,
+                              key: k.chartKey,
+                              size: const Size(140.0, 140.0),
+                              initialChartData: <CircularStackEntry>[
+                                new CircularStackEntry(
+                                  <CircularSegmentEntry>[
+                                    new CircularSegmentEntry(
+                                      pie["Present"],
+                                      Colors.indigoAccent,
+                                      rankKey: 'completed',
+                                    ),
+                                    new CircularSegmentEntry(
+                                      pie["Absent"],
+                                      Colors.blueGrey[600],
+                                      rankKey: 'remaining',
+                                    ),
+                                  ],
+                                  rankKey: 'progress',
+                                ),
+                              ],
+                              percentageValues: true,
+                              edgeStyle: SegmentEdgeStyle.round,
+                              holeLabel: attDetails["Percentage"] + "%",
+                              labelStyle: new TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24.0,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Divider(color: Colors.grey),
-                ],
+                    Divider(color: Colors.grey),
+                  ],
+                ),
               ),
-            ),
-            Texts(days[now.weekday - 1].toString(), 30),
-            SizedBox(height: 10),
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: EdgeInsets.all(0),
-                //margin: EdgeInsets.all(10),
-                width: double.infinity,
-                child: SingleChildScrollView(
-                    child: Column(
-                  children: tt.map((e) {
-                    var att = 80;
-                    for (var i = 0;
-                        i < widget.attendanceData["Attended"].length;
-                        i++) {
-                      if (widget.attendanceData["Attended"][i]["courseName"] ==
-                          e["courseName"]) {
-                        att =
-                            widget.attendanceData["Attended"][i]["percentage"];
-                        break;
+              Texts(days[now.weekday - 1].toString(), 30),
+              SizedBox(height: 10),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.all(0),
+                  //margin: EdgeInsets.all(10),
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                      child: Column(
+                    children: tt.map((e) {
+                      var att = 80;
+                      for (var i = 0;
+                          i < widget.attendanceData["Attended"].length;
+                          i++) {
+                        if (widget.attendanceData["Attended"][i]
+                                ["courseName"] ==
+                            e["courseName"]) {
+                          att = widget.attendanceData["Attended"][i]
+                              ["percentage"];
+                          break;
+                        }
                       }
-                    }
-                    var color1;
-                    if (att >= 80) {
-                      color1 = Colors.blue[400];
-                    } else if (att < 80 && att >= 75) {
-                      color1 = Colors.yellow[400];
-                    } else if (att < 75) {
-                      color1 = Colors.red[400];
-                    }
-                    if (now.weekday < 6) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.blueAccent,
+                      var color1;
+                      if (att >= 80) {
+                        color1 = Colors.blue[400];
+                      } else if (att < 80 && att >= 75) {
+                        color1 = Colors.yellow[400];
+                      } else if (att < 75) {
+                        color1 = Colors.red[400];
+                      }
+                      if (now.weekday < 6) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.blueAccent,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.all(5),
-                        child: Column(
-                          children: <Widget>[
-                            Card(
-                              color: Colors.transparent,
-                              elevation: 0,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Texts(
-                                            e["code"] + " - " + e["courseName"],
-                                            21),
-                                        SizedBox(height: 8),
-                                        Texts(e["slot"], 21),
-                                        SizedBox(height: 8),
-                                        Container(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.blueAccent,
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.all(5),
+                          child: Column(
+                            children: <Widget>[
+                              Card(
+                                color: Colors.transparent,
+                                elevation: 0,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Texts(
+                                              e["code"] +
+                                                  " - " +
+                                                  e["courseName"],
+                                              21),
+                                          SizedBox(height: 8),
+                                          Texts(e["slot"], 21),
+                                          SizedBox(height: 8),
+                                          Container(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.blueAccent,
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
                                               ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                            ),
-                                            alignment: Alignment.center,
-                                            margin: EdgeInsets.only(
-                                              left: 60,
-                                              right: 60,
-                                            ),
-                                            child: Card(
-                                              color: Colors.transparent,
-                                              elevation: 0,
-                                              child: Center(
-                                                child: Column(
-                                                  children: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          e["startTime"] +
-                                                              " - ",
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            color: Colors.blue,
-                                                            fontSize: 20,
+                                              alignment: Alignment.center,
+                                              margin: EdgeInsets.only(
+                                                left: 60,
+                                                right: 60,
+                                              ),
+                                              child: Card(
+                                                color: Colors.transparent,
+                                                elevation: 0,
+                                                child: Center(
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            e["startTime"] +
+                                                                " - ",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic,
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontSize: 20,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Text(
-                                                          e["endTime"],
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            color: Colors.blue,
-                                                            fontSize: 20,
+                                                          Text(
+                                                            e["endTime"],
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic,
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontSize: 20,
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Text(
-                                                      e["class"],
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        color: Colors.blue,
-                                                        fontSize: 20,
+                                                        ],
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        e["class"],
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color: Colors.blue,
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: BoxDecoration(
+                                    SizedBox(width: 20),
+                                    Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
 //                              color: Colors.blue,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          ),
+                                          height: 80,
+                                          width: 74,
+                                          margin: EdgeInsets.only(
+                                              top: 23, left: 15),
+                                          padding: EdgeInsets.all(20),
+                                          child: Text(
+                                            "$att%",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(fontSize: 20),
                                           ),
                                         ),
-                                        height: 80,
-                                        width: 74,
-                                        margin:
-                                            EdgeInsets.only(top: 23, left: 15),
-                                        padding: EdgeInsets.all(20),
-                                        child: Text(
-                                          "$att%",
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(fontSize: 20),
+                                        PieChart(
+                                          dataMap: {
+                                            "present":
+                                                double.parse(att.toString()),
+                                            "absent": 100 -
+                                                double.parse(att.toString()),
+                                          },
+                                          animationDuration:
+                                              Duration(milliseconds: 800),
+                                          colorList: [
+                                            color1,
+                                            Colors.black,
+                                          ],
+                                          chartRadius: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              5,
+                                          chartValueBackgroundColor:
+                                              Colors.transparent,
+                                          decimalPlaces: 1,
+                                          showLegends: false,
+                                          showChartValueLabel: true,
+                                          initialAngle: 180,
+                                          chartValueStyle:
+                                              defaultChartValueStyle.copyWith(
+                                                  color: Colors.transparent),
+                                          chartType: ChartType.ring,
                                         ),
-                                      ),
-                                      PieChart(
-                                        dataMap: {
-                                          "present":
-                                              double.parse(att.toString()),
-                                          "absent": 100 -
-                                              double.parse(att.toString()),
-                                        },
-                                        animationDuration:
-                                            Duration(milliseconds: 800),
-                                        colorList: [
-                                          color1,
-                                          Colors.black,
-                                        ],
-                                        chartRadius:
-                                            MediaQuery.of(context).size.width /
-                                                5,
-                                        chartValueBackgroundColor:
-                                            Colors.transparent,
-                                        decimalPlaces: 1,
-                                        showLegends: false,
-                                        showChartValueLabel: true,
-                                        initialAngle: 180,
-                                        chartValueStyle:
-                                            defaultChartValueStyle.copyWith(
-                                                color: Colors.transparent),
-                                        chartType: ChartType.ring,
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return Container(
-                        child:
-                            Texts("No Classes today, Sit back and relax", 25));
-                  }).toList(),
-                )),
-              ),
-            )
-          ],
+                            ],
+                          ),
+                        );
+                      }
+                      return Container(
+                          child: Texts(
+                              "No Classes today, Sit back and relax", 25));
+                    }).toList(),
+                  )),
+                ),
+              )
+            ],
+          ),
         ),
         drawer: SafeArea(
           child: Drawer(

@@ -27,18 +27,13 @@ class _AcademicHistoryState extends State<AcademicHistory> {
   }
 
   void printData() {
-//    print(widget.acadHistory);
     acad = widget.acadHistory['AcadHistory'];
     curriculum = widget.acadHistory['CurriculumDetails'];
-//    createLists();
   }
 
-//  void createLists() {
-//    acad.forEach((k, v) => courses.add(k));
-//    print(courses);
-//  }
-
   Widget elelist(Map<String, dynamic> acad) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     grades = [];
     acad.forEach((k, v) => grades.add(v));
     courses = [];
@@ -52,110 +47,116 @@ class _AcademicHistoryState extends State<AcademicHistory> {
       num++;
     }
 
-    return Container(
-      width: double.infinity,
+    return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: elements.map((tx) {
-          Divider(color: Colors.grey);
-          return Container(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              //color: Color.fromRGBO(140, 47, 57, 100),
-              color: Colors.transparent,
-              child: Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: 1,
-                  horizontal: 0.001,
-                ),
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      tx.subject,
-                      textScaleFactor: 1.04,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
+        children: elements.map(
+          (e) {
+            return Container(
+              child: Card(
+                color: Colors.black,
+                child: Container(
+                  //
+                  margin: EdgeInsets.all(7),
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border.all(
+                      color: Colors.blueAccent,
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color.fromRGBO(200, 25, 25, 80),
-                          width: 1,
+                  ),
+                  //
+                  height: 80,
+                  width: width / 1.09,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        right: 50,
+                        child: Text(
+                          e.subject,
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 23,
+                            //color: Colors.pinkAccent,
+                          ),
                         ),
                       ),
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        tx.grade,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Color.fromRGBO(200, 8, 7, 10),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: ClipOval(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                  Colors.red[900],
+                                  Colors.red[900]
+                                ])),
+                            child: Padding(
+                              padding: const EdgeInsets.all(11.0),
+                              child: Card(
+                                color: Colors.transparent,
+                                elevation: 25,
+                                child: Center(
+                                  child: Text(
+                                    e.grade,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        }).toList(),
+            );
+          },
+        ).toList(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-            expandedHeight: 90,
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+            Color.fromRGBO(13, 50, 77, 100),
+            Color.fromRGBO(0, 0, 10, 10)
+          ])),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor: Colors.transparent,
+            expandedHeight: 10,
+            centerTitle: true,
             floating: true,
-            pinned: true,
-            snap: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                "Acad history",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+            pinned: false,
+            title: Text(
+              "academic history",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 20,
               ),
-            )),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            // return Card(child: Text('hi'));
-            return elelist(acad);
-          }),
-        )
-      ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(child: elelist(acad)),
+          ),
+        ],
+      ),
     );
-    // return Scaffold(
-    //   backgroundColor: Colors.black,
-    //   appBar: AppBar(
-    //     titleSpacing: 61,
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.vertical(
-    //         top: Radius.circular(15),
-    //       ),
-    //     ),
-    //     title: Text('Academic History'),
-    //     backgroundColor: Color.fromRGBO(200, 25, 25, 60),
-    //   ),
-    //   body: SingleChildScrollView(
-    //     scrollDirection: Axis.vertical,
-    //     child: elelist(acad),
-    //   ),
-    // );
-    // return Scaffold(body: _buildScrollView(context));
   }
 }

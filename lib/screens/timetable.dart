@@ -52,11 +52,14 @@ class _TimeTableState extends State<TimeTable> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Center(
-                      child: Text(mr.day,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Color.fromRGBO(236, 150, 150, 3))),
+                      child: Text(
+                        mr.day,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          //color: Color.fromRGBO(236, 150, 150, 3),
+                        ),
+                      ),
                     ),
                     Container(
                         width: double.infinity,
@@ -105,106 +108,111 @@ class _TimeTableState extends State<TimeTable> {
     }
 
     return Container(
-        color: Colors.transparent,
         child: SingleChildScrollView(
             child: Column(
-          children: exeele.map((e) {
-            return Container(
-              child: Column(
-                children: <Widget>[
-                  Card(
-                    //individial card color
-                    color: Colors.transparent,
-                    elevation: 0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        //color: Colors.amber,
-                        padding: EdgeInsets.symmetric(vertical: 10),
-
-                        child: Stack(
+      children: exeele.map((e) {
+        return Container(
+          margin: EdgeInsets.all(7),
+          padding: EdgeInsets.all(0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(
+              color: Colors.blueAccent,
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              Card(
+                color: Colors.transparent,
+                margin: EdgeInsets.all(4),
+                elevation: 10,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(17),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Stack(
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      e.courseName,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 23,
-                                        color: Colors.greenAccent[400],
-                                        //Color.fromRGBO(152, 255, 152, 60),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Card(
-                                  color: Colors.transparent,
-                                  elevation: 10,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(e.codes,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          )),
-                                      Container(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Text(
-                                            " :  ${e.startTime}  --  ${e.endTime}",
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 20,
-                                            )),
-                                      ),
-                                    ],
+                                Text(
+                                  e.courseName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 23,
+                                    //color: Colors.greenAccent[400],
+                                    //Color.fromRGBO(152, 255, 152, 60),
                                   ),
                                 ),
                               ],
                             ),
-
-                            //loc
-                            Positioned(
-                              left: 300,
-                              right: 0,
-                              bottom: 0,
-                              child: ClipRect(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: [
-                                        Color.fromRGBO(142, 14, 30, 10),
-                                        Color.fromRGBO(31, 28, 24, 120)
-                                      ])),
-                                  child: Card(
-                                    color: Colors.transparent,
-                                    elevation: 20,
-                                    child: Center(
-                                        child: Text(e.loc,
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                            ))),
+                            Card(
+                              color: Colors.transparent,
+                              elevation: 10,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(e.codes,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      )),
+                                  Container(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                        " :  ${e.startTime}  --  ${e.endTime}",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20,
+                                        )),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
-
-                            //loc end
                           ],
                         ),
-                      ),
+
+                        //loc
+                        Positioned(
+                          left: 300,
+                          right: 0,
+                          bottom: 0,
+                          child: ClipRect(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                    Color.fromRGBO(142, 14, 30, 10),
+                                    Color.fromRGBO(31, 28, 24, 120)
+                                  ])),
+                              child: Card(
+                                color: Colors.transparent,
+                                elevation: 20,
+                                child: Center(
+                                    child: Text(e.loc,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        ))),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        //loc end
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            );
-          }).toList(),
-        )));
+            ],
+          ),
+        );
+      }).toList(),
+    )));
   }
 
   @override
@@ -212,7 +220,10 @@ class _TimeTableState extends State<TimeTable> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Container(
+      body:
+
+          //sliverbox
+          Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topRight,
@@ -262,7 +273,7 @@ class _TimeTableState extends State<TimeTable> {
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FontStyle.normal,
                                     fontSize: 50,
-                                    color: Colors.pinkAccent,
+                                    //color: Colors.pinkAccent,
                                   ),
                                 ),
                               ),
@@ -289,6 +300,8 @@ class _TimeTableState extends State<TimeTable> {
           ],
         ),
       ),
+
+/////sliver box content
     );
   }
 }
