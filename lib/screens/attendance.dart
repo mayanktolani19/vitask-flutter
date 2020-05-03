@@ -43,7 +43,8 @@ class _AttendanceState extends State<Attendance>
             ),
           ),
           title: Text('Attendance'),
-          backgroundColor: Color.fromRGBO(200, 25, 25, 40),
+          //backgroundColor: Color.fromRGBO(200, 25, 25, 40),
+          backgroundColor: Colors.transparent,
         ),
         backgroundColor: Colors.black,
         body: ListView.builder(
@@ -86,7 +87,6 @@ class _AttendanceState extends State<Attendance>
                   child: Card(
                     color: Colors.black,
                     margin: EdgeInsets.all(15),
-//                  elevation: 10,
                     child: Column(
                       children: <Widget>[
                         Row(
@@ -131,7 +131,6 @@ class _AttendanceState extends State<Attendance>
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
-//                              color: Colors.blue,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(10),
                                       ),
