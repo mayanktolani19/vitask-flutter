@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vitask/constants.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'package:vitask/screens/bunk_meter.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Attendance extends StatefulWidget {
   Attendance(this.attendance);
@@ -50,28 +51,30 @@ class _AttendanceState extends State<Attendance>
         body: ListView.builder(
             itemCount: len,
             itemBuilder: (BuildContext context, int index) {
-              var color1 = Colors.red[400];
               current = attended[index];
               int p = current["percentage"];
-              if (p >= 80) {
-                color1 = Colors.blue[400];
-              } else if (p < 80 && p >= 75) {
-                color1 = Colors.yellow[400];
+              var color1 = Colors.blue[800];
+              var color2 = Colors.blue[300];
+              if (p < 80 && p >= 75) {
+                color1 = Colors.yellow[900];
+                color2 = Colors.yellow[400];
+              } else if (p < 75) {
+                color1 = Colors.red[900];
+                color2 = Colors.red[300];
               }
               String c = current["courseName"];
               int a = current["attended"];
               int t = current["total"];
               String ty = current["type"];
-              Map<String, double> pie = {};
-              pie["Present"] = double.parse(p.toString());
-              pie["Absent"] = 100 - double.parse(p.toString());
+              var pie;
+              pie = double.parse(p.toString());
               return Container(
                 margin: EdgeInsets.all(7),
                 padding: EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
-                    color: Colors.blueAccent,
+                    color: color1,
                   ),
                 ),
                 child: MaterialButton(
@@ -101,54 +104,27 @@ class _AttendanceState extends State<Attendance>
                                   SizedBox(height: 4),
                                   Texts(ty, 18),
                                   SizedBox(height: 4),
-                                  Texts(a.toString() + "/" + t.toString(), 16),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Stack(
-                                children: <Widget>[
-                                  PieChart(
-                                    dataMap: pie,
-                                    animationDuration:
-                                        Duration(milliseconds: 800),
-                                    colorList: [
-                                      color1,
-                                      Colors.black,
-                                    ],
-                                    chartRadius:
-                                        MediaQuery.of(context).size.width / 5,
-                                    chartValueBackgroundColor:
-                                        Colors.transparent,
-                                    decimalPlaces: 1,
-                                    showLegends: false,
-                                    showChartValueLabel: true,
-                                    initialAngle: 180,
-                                    chartValueStyle: defaultChartValueStyle
-                                        .copyWith(color: Colors.transparent),
-                                    chartType: ChartType.ring,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    height: 80,
-                                    width: 82,
-                                    margin: EdgeInsets.only(top: 23, left: 15),
-                                    padding: EdgeInsets.all(20),
-                                    child: Text(
-                                      "$p%",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(fontSize: 20),
+                                  Text(
+                                    a.toString() + "/" + t.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      color: color1,
+                                      fontSize: 20,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(width: 15),
+                            CircularPercentIndicator(
+                              radius: 100.0,
+                              lineWidth: 6.0,
+                              percent: double.parse(pie.toString()) / 100,
+                              center: Texts(p.toString() + "%", 20),
+                              progressColor: color1,
+                              backgroundColor: color2,
+                            ),
+                            SizedBox(width: 8),
                             Icon(Icons.navigate_next),
                           ],
                         ),

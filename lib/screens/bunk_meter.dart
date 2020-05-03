@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pie_chart/pie_chart.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:vitask/constants.dart';
 
 class BunkMeter extends StatefulWidget {
@@ -23,7 +23,8 @@ class _BunkMeterState extends State<BunkMeter> {
   static var total;
   static var a = 0;
   static var b = 0;
-  static var color1 = Colors.red[400];
+  static var color1;
+  static var color2;
   static var type;
   @override
   void initState() {
@@ -46,14 +47,17 @@ class _BunkMeterState extends State<BunkMeter> {
     type = attended[ij[0]]["type"];
     percent = double.parse(attended[ij[0]]["percentage"].toString());
     total = attended[ij[0]]["total"];
-
-    if (percent >= 80) {
-      color1 = Colors.blue[400];
-    } else if (percent < 80 && percent >= 75) {
-      color1 = Colors.yellow[400];
+    print(percent);
+    color1 = Colors.blue[800];
+    color2 = Colors.blue[300];
+    if (percent < 80 && percent >= 75) {
+      color1 = Colors.yellow[900];
+      color2 = Colors.yellow[400];
     } else if (percent < 75) {
-      color1 = Colors.red[400];
+      color1 = Colors.red[900];
+      color2 = Colors.red[300];
     }
+    print(color1.value);
     a = 0;
     b = 0;
   }
@@ -68,9 +72,13 @@ class _BunkMeterState extends State<BunkMeter> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
+                margin: EdgeInsets.all(7),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  border: Border.all(
+                    color: color1,
+                  ),
                 ),
                 child: Card(
                   color: Colors.black45,
@@ -87,70 +95,51 @@ class _BunkMeterState extends State<BunkMeter> {
                   ),
                 ),
               ),
-              Divider(
-                color: Colors.grey,
-              ),
-              Card(
-                margin: EdgeInsets.all(25),
-                color: Colors.black,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Texts("Classes Attended", 25),
-                          SizedBox(height: 5),
-                          Texts(att.toString() + "/" + total.toString(), 20),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-//                              color: Colors.blue,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
+              SizedBox(height: 15),
+              Container(
+                margin: EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  border: Border.all(
+                    color: color1,
+                  ),
+                ),
+                child: Card(
+                  margin: EdgeInsets.all(25),
+                  color: Colors.black,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Texts("Classes Attended", 25),
+                            SizedBox(height: 5),
+                            Text(
+                              att.toString() + "/" + total.toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                color: color1,
+                                fontSize: 20,
                               ),
                             ),
-                            height: 80,
-                            width: 82,
-                            margin: EdgeInsets.only(top: 23, left: 15),
-                            padding: EdgeInsets.all(20),
-                            child: Text(
-                              percent.round().toString() + "%",
-                              textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          PieChart(
-                            dataMap: {
-                              "present": percent,
-                              "absent": 100 - percent
-                            },
-                            animationDuration: Duration(milliseconds: 800),
-                            colorList: [color1, Colors.black],
-                            chartRadius:
-                                MediaQuery.of(context).size.width / 4.5,
-                            chartValueBackgroundColor: Colors.transparent,
-                            decimalPlaces: 1,
-                            showLegends: false,
-                            showChartValueLabel: true,
-                            initialAngle: 180,
-                            chartValueStyle: defaultChartValueStyle.copyWith(
-                                color: Colors.transparent),
-                            chartType: ChartType.ring,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 15),
-                  ],
+                      CircularPercentIndicator(
+                        radius: 100.0,
+                        lineWidth: 6.0,
+                        percent: double.parse(percent.toString()) / 100,
+                        center: Texts(percent.ceil().toString() + "%", 20),
+                        progressColor: color1,
+                        backgroundColor: color2,
+                      ),
+                      SizedBox(width: 15),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 30),
@@ -180,12 +169,16 @@ class _BunkMeterState extends State<BunkMeter> {
                                   a++;
                                   total++;
                                   percent = att / total * 100;
-                                  if (percent >= 80) {
-                                    color1 = Colors.blue[400];
-                                  } else if (percent < 80 && percent >= 75) {
-                                    color1 = Colors.yellow[400];
-                                  } else if (percent < 75) {
-                                    color1 = Colors.red[400];
+                                  if (percent.ceil() >= 80) {
+                                    color1 = Colors.blue[800];
+                                    color2 = Colors.blue[300];
+                                  } else if (percent.ceil() < 80 &&
+                                      percent.ceil() >= 75) {
+                                    color1 = Colors.yellow[900];
+                                    color2 = Colors.yellow[400];
+                                  } else if (percent.ceil() < 75) {
+                                    color1 = Colors.red[900];
+                                    color2 = Colors.red[300];
                                   }
                                 });
                               }),
@@ -199,12 +192,16 @@ class _BunkMeterState extends State<BunkMeter> {
                                     a--;
                                     total--;
                                     percent = att / total * 100;
-                                    if (percent >= 80) {
-                                      color1 = Colors.blue[400];
-                                    } else if (percent < 80 && percent >= 75) {
-                                      color1 = Colors.yellow[400];
-                                    } else if (percent < 75) {
-                                      color1 = Colors.red[400];
+                                    if (percent.ceil() >= 80) {
+                                      color1 = Colors.blue[800];
+                                      color2 = Colors.blue[300];
+                                    } else if (percent.ceil() < 80 &&
+                                        percent.ceil() >= 75) {
+                                      color1 = Colors.yellow[900];
+                                      color2 = Colors.yellow[400];
+                                    } else if (percent.ceil() < 75) {
+                                      color1 = Colors.red[900];
+                                      color2 = Colors.red[300];
                                     }
                                   }
                                 });
@@ -235,12 +232,16 @@ class _BunkMeterState extends State<BunkMeter> {
                                   total++;
                                   b++;
                                   percent = att / total * 100;
-                                  if (percent >= 80) {
-                                    color1 = Colors.blue[400];
-                                  } else if (percent < 80 && percent >= 75) {
-                                    color1 = Colors.yellow[400];
-                                  } else if (percent < 75) {
-                                    color1 = Colors.red[400];
+                                  if (percent.ceil() >= 80) {
+                                    color1 = Colors.blue[800];
+                                    color2 = Colors.blue[300];
+                                  } else if (percent.ceil() < 80 &&
+                                      percent.ceil() >= 75) {
+                                    color1 = Colors.yellow[900];
+                                    color2 = Colors.yellow[400];
+                                  } else if (percent.ceil() < 75) {
+                                    color1 = Colors.red[900];
+                                    color2 = Colors.red[300];
                                   }
                                 });
                               }),
@@ -253,12 +254,16 @@ class _BunkMeterState extends State<BunkMeter> {
                                     b--;
                                     total--;
                                     percent = att / total * 100;
-                                    if (percent >= 80) {
-                                      color1 = Colors.blue[400];
-                                    } else if (percent < 80 && percent >= 75) {
-                                      color1 = Colors.yellow[400];
-                                    } else if (percent < 75) {
-                                      color1 = Colors.red[400];
+                                    if (percent.ceil() >= 80) {
+                                      color1 = Colors.blue[800];
+                                      color2 = Colors.blue[300];
+                                    } else if (percent.ceil() < 80 &&
+                                        percent.ceil() >= 75) {
+                                      color1 = Colors.yellow[900];
+                                      color2 = Colors.yellow[400];
+                                    } else if (percent.ceil() < 75) {
+                                      color1 = Colors.red[900];
+                                      color2 = Colors.red[300];
                                     }
                                   }
                                 });
