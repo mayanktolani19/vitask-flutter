@@ -65,194 +65,121 @@ class _BunkMeterState extends State<BunkMeter> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Center(
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(7),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  border: Border.all(
-                    color: color1,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+              Color.fromRGBO(13, 50, 77, 100),
+              Color.fromRGBO(0, 0, 10, 10)
+            ])),
+        child: Center(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(7),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border.all(
+                      color: color1,
+                    ),
+                  ),
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    margin: EdgeInsets.all(25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Texts(course.toString() + ' - ' + code.toString(), 27),
+                        SizedBox(height: 20),
+                        Texts(type.toString(), 25),
+                        SizedBox(height: 20),
+                        Texts(faculty.toString(), 23),
+                      ],
+                    ),
                   ),
                 ),
-                child: Card(
-                  color: Colors.black45,
-                  margin: EdgeInsets.all(25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Texts(course.toString() + ' - ' + code.toString(), 27),
-                      SizedBox(height: 20),
-                      Texts(type.toString(), 25),
-                      SizedBox(height: 20),
-                      Texts(faculty.toString(), 23),
-                    ],
+                SizedBox(height: 15),
+                Container(
+                  margin: EdgeInsets.all(7),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border.all(
+                      color: color1,
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                margin: EdgeInsets.all(7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  border: Border.all(
-                    color: color1,
-                  ),
-                ),
-                child: Card(
-                  margin: EdgeInsets.all(25),
-                  color: Colors.black,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Texts("Classes Attended", 25),
-                            SizedBox(height: 5),
-                            Text(
-                              att.toString() + "/" + total.toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                                color: color1,
-                                fontSize: 20,
+                  child: Card(
+                    margin: EdgeInsets.all(25),
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Texts("Classes Attended", 25),
+                              SizedBox(height: 5),
+                              Text(
+                                att.toString() + "/" + total.toString(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  color: color1,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      CircularPercentIndicator(
-                        radius: 100.0,
-                        lineWidth: 6.0,
-                        percent: double.parse(percent.toString()) / 100,
-                        center: Texts(percent.ceil().toString() + "%", 20),
-                        progressColor: color1,
-                        backgroundColor: color2,
-                      ),
-                      SizedBox(width: 15),
-                    ],
+                        CircularPercentIndicator(
+                          radius: 100.0,
+                          lineWidth: 6.0,
+                          percent: double.parse(percent.toString()) / 100,
+                          center: Texts(percent.ceil().toString() + "%", 20),
+                          progressColor: color1,
+                          backgroundColor: color2,
+                        ),
+                        SizedBox(width: 15),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 30),
-              Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
+                SizedBox(height: 30),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
 //                      SizedBox(width: 20),
-                            Texts("Attend + " + a.toString(), 25),
-                          ],
+                              Texts("Attend + " + a.toString(), 25),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 60),
-                      Row(
-                        children: <Widget>[
-                          IconButton(
-                              icon: Icon(FontAwesomeIcons.plus),
-                              onPressed: () {
-                                setState(() {
-                                  att++;
-                                  a++;
-                                  total++;
-                                  percent = att / total * 100;
-                                  if (percent.ceil() >= 80) {
-                                    color1 = Colors.blue[800];
-                                    color2 = Colors.blue[300];
-                                  } else if (percent.ceil() < 80 &&
-                                      percent.ceil() >= 75) {
-                                    color1 = Colors.yellow[900];
-                                    color2 = Colors.yellow[400];
-                                  } else if (percent.ceil() < 75) {
-                                    color1 = Colors.red[900];
-                                    color2 = Colors.red[300];
-                                  }
-                                });
-                              }),
-                          IconButton(
-                              icon: Icon(FontAwesomeIcons.minus),
-                              color: Colors.red,
-                              onPressed: () {
-                                setState(() {
-                                  if (a > 0) {
-                                    att--;
-                                    a--;
-                                    total--;
-                                    percent = att / total * 100;
-                                    if (percent.ceil() >= 80) {
-                                      color1 = Colors.blue[800];
-                                      color2 = Colors.blue[300];
-                                    } else if (percent.ceil() < 80 &&
-                                        percent.ceil() >= 75) {
-                                      color1 = Colors.yellow[900];
-                                      color2 = Colors.yellow[400];
-                                    } else if (percent.ceil() < 75) {
-                                      color1 = Colors.red[900];
-                                      color2 = Colors.red[300];
-                                    }
-                                  }
-                                });
-                              }),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Row(
+                        SizedBox(width: 60),
+                        Row(
                           children: <Widget>[
-                            Texts("Bunk + " + b.toString(), 25),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 60),
-                      Row(
-                        children: <Widget>[
-                          IconButton(
-                              icon: Icon(FontAwesomeIcons.plus),
-                              onPressed: () {
-                                setState(() {
-                                  total++;
-                                  b++;
-                                  percent = att / total * 100;
-                                  if (percent.ceil() >= 80) {
-                                    color1 = Colors.blue[800];
-                                    color2 = Colors.blue[300];
-                                  } else if (percent.ceil() < 80 &&
-                                      percent.ceil() >= 75) {
-                                    color1 = Colors.yellow[900];
-                                    color2 = Colors.yellow[400];
-                                  } else if (percent.ceil() < 75) {
-                                    color1 = Colors.red[900];
-                                    color2 = Colors.red[300];
-                                  }
-                                });
-                              }),
-                          IconButton(
-                              color: Colors.red,
-                              icon: Icon(FontAwesomeIcons.minus),
-                              onPressed: () {
-                                setState(() {
-                                  if (b > 0) {
-                                    b--;
-                                    total--;
+                            IconButton(
+                                icon: Icon(FontAwesomeIcons.plus),
+                                onPressed: () {
+                                  setState(() {
+                                    att++;
+                                    a++;
+                                    total++;
                                     percent = att / total * 100;
                                     if (percent.ceil() >= 80) {
                                       color1 = Colors.blue[800];
@@ -265,17 +192,103 @@ class _BunkMeterState extends State<BunkMeter> {
                                       color1 = Colors.red[900];
                                       color2 = Colors.red[300];
                                     }
-                                  }
-                                });
-                              }),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ],
+                                  });
+                                }),
+                            IconButton(
+                                icon: Icon(FontAwesomeIcons.minus),
+                                color: Colors.red,
+                                onPressed: () {
+                                  setState(() {
+                                    if (a > 0) {
+                                      att--;
+                                      a--;
+                                      total--;
+                                      percent = att / total * 100;
+                                      if (percent.ceil() >= 80) {
+                                        color1 = Colors.blue[800];
+                                        color2 = Colors.blue[300];
+                                      } else if (percent.ceil() < 80 &&
+                                          percent.ceil() >= 75) {
+                                        color1 = Colors.yellow[900];
+                                        color2 = Colors.yellow[400];
+                                      } else if (percent.ceil() < 75) {
+                                        color1 = Colors.red[900];
+                                        color2 = Colors.red[300];
+                                      }
+                                    }
+                                  });
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 20),
+                          child: Row(
+                            children: <Widget>[
+                              Texts("Bunk + " + b.toString(), 25),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 60),
+                        Row(
+                          children: <Widget>[
+                            IconButton(
+                                icon: Icon(FontAwesomeIcons.plus),
+                                onPressed: () {
+                                  setState(() {
+                                    total++;
+                                    b++;
+                                    percent = att / total * 100;
+                                    if (percent.ceil() >= 80) {
+                                      color1 = Colors.blue[800];
+                                      color2 = Colors.blue[300];
+                                    } else if (percent.ceil() < 80 &&
+                                        percent.ceil() >= 75) {
+                                      color1 = Colors.yellow[900];
+                                      color2 = Colors.yellow[400];
+                                    } else if (percent.ceil() < 75) {
+                                      color1 = Colors.red[900];
+                                      color2 = Colors.red[300];
+                                    }
+                                  });
+                                }),
+                            IconButton(
+                                color: Colors.red,
+                                icon: Icon(FontAwesomeIcons.minus),
+                                onPressed: () {
+                                  setState(() {
+                                    if (b > 0) {
+                                      b--;
+                                      total--;
+                                      percent = att / total * 100;
+                                      if (percent.ceil() >= 80) {
+                                        color1 = Colors.blue[800];
+                                        color2 = Colors.blue[300];
+                                      } else if (percent.ceil() < 80 &&
+                                          percent.ceil() >= 75) {
+                                        color1 = Colors.yellow[900];
+                                        color2 = Colors.yellow[400];
+                                      } else if (percent.ceil() < 75) {
+                                        color1 = Colors.red[900];
+                                        color2 = Colors.red[300];
+                                      }
+                                    }
+                                  });
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

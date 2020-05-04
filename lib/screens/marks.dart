@@ -47,25 +47,14 @@ class _MarksState extends State<Marks> {
                   child: Container(
                     padding: EdgeInsets.all(3.0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.indigo,
-                            blurRadius: 3,
-                            spreadRadius: 0.3,
-                          ),
-                        ]),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Color.fromRGBO(175, 234, 220, 200),
-                              Color.fromRGBO(175, 234, 220, 200)
-                            ]),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      border: Border.all(
+                        color: Colors.blueAccent,
                       ),
+                    ),
+                    child: Container(
                       child: Card(
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.0),
                         ),
@@ -76,11 +65,14 @@ class _MarksState extends State<Marks> {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 24, horizontal: 20),
-                              child: Text(mr.subject,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Color.fromRGBO(236, 150, 150, 3))),
+                              child: Text(
+                                mr.subject,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  //color: Color.fromRGBO(236, 150, 150, 3),
+                                ),
+                              ),
                             ),
                             Container(
                                 width: double.infinity,
@@ -126,12 +118,15 @@ class _MarksState extends State<Marks> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(e.exname,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 17,
-                                color: Color.fromRGBO(152, 255, 152, 60))),
+                        Text(
+                          e.exname,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 17,
+                            color: Colors.grey[300],
+                          ),
+                        ),
                         ClipOval(
                           child: Container(
                             width: 40,
@@ -166,16 +161,21 @@ class _MarksState extends State<Marks> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: Color.fromRGBO(0, 22, 60, 10),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            centerTitle: true,
-            expandedHeight: 90,
-            floating: true,
-            pinned: false,
-            flexibleSpace: FlexibleSpaceBar(
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+            Color.fromRGBO(13, 50, 77, 100),
+            Color.fromRGBO(0, 0, 10, 10)
+          ])),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
               title: Text(
                 "Marks",
                 style: TextStyle(
@@ -183,18 +183,19 @@ class _MarksState extends State<Marks> {
                   fontSize: 20,
                 ),
               ),
-              background: Image.asset("images/side.jpg", fit: BoxFit.cover),
+              floating: true,
+              pinned: false,
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(11.0),
-            sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-              // return Card(child: Text('hi'));
-              return marlist();
-            })),
-          ),
-        ],
+            SliverPadding(
+              padding: const EdgeInsets.all(11.0),
+              sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                // return Card(child: Text('hi'));
+                return marlist();
+              })),
+            ),
+          ],
+        ),
       ),
     );
   }

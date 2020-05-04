@@ -120,7 +120,7 @@ class _TimeTableState extends State<TimeTable> {
               Card(
                 color: Colors.transparent,
                 margin: EdgeInsets.all(4),
-                elevation: 10,
+                elevation: 0,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(17),
                   child: Container(
@@ -146,7 +146,7 @@ class _TimeTableState extends State<TimeTable> {
                             ),
                             Card(
                               color: Colors.transparent,
-                              elevation: 10,
+                              elevation: 0,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
@@ -247,8 +247,8 @@ class _TimeTableState extends State<TimeTable> {
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
                 colors: [
-              Color.fromRGBO(13, 20, 100, 100),
-              Color.fromRGBO(0, 0, 0, 10)
+              Color.fromRGBO(13, 50, 77, 100),
+              Color.fromRGBO(0, 0, 10, 10)
             ])),
         child: CustomScrollView(
           slivers: <Widget>[
@@ -260,11 +260,7 @@ class _TimeTableState extends State<TimeTable> {
               floating: true,
               pinned: false,
               title: Text(
-                "Time-Table",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 24,
-                ),
+                "Timetable",
               ),
             ),
             SliverToBoxAdapter(
@@ -289,7 +285,7 @@ class _TimeTableState extends State<TimeTable> {
                                   mr.day,
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.normal,
+                                    fontStyle: FontStyle.italic,
                                     fontSize: 35,
                                     //color: Colors.pinkAccent,
                                   ),
