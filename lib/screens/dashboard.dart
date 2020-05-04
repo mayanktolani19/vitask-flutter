@@ -3,17 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/timetable.dart';
 import 'package:vitask/screens/marks.dart';
 import 'package:vitask/screens/acadhistory.dart';
+import 'welcome_screen.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:vitask/constants.dart';
 import 'moodle_login.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vitask/api.dart';
+import 'package:vitask/database/StudentModel.dart';
+import 'package:vitask/database/Student_DAO.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 //import 'package:vitask/screens/moodle.dart';
 
@@ -25,11 +31,11 @@ class MenuDashboardPage extends StatefulWidget {
     this.marksData,
     this.acadHistoryData,
   );
-  final Map<String, dynamic> profileData;
-  final Map<String, dynamic> timeTableData;
-  final Map<String, dynamic> attendanceData;
-  final Map<String, dynamic> marksData;
-  final Map<String, dynamic> acadHistoryData;
+  Map<String, dynamic> profileData;
+  Map<String, dynamic> timeTableData;
+  Map<String, dynamic> attendanceData;
+  Map<String, dynamic> marksData;
+  Map<String, dynamic> acadHistoryData;
   @override
   _MenuDashboardPageState createState() => _MenuDashboardPageState();
 }
@@ -44,6 +50,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   List<dynamic> tt;
   List<String> days;
   var now;
+  bool refresh = false;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   void initState() {
@@ -106,22 +113,51 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               top: Radius.circular(15),
             ),
           ),
-          title: Text('dashboard'),
+          title: Text('Dashboard'),
           backgroundColor: Colors.transparent,
           actions: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.person,
+                Icons.refresh,
                 color: Colors.white,
               ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Profile(
-                          widget.acadHistoryData["CurriculumDetails"]["CGPA"],
-                          widget.profileData),
-                    ));
+              onPressed: () async {
+                setState(() {
+                  refresh = true;
+                });
+                API api = API();
+                String t = widget.profileData['APItoken'].toString();
+                String u = widget.profileData['RegNo'].toString();
+                widget.attendanceData = await api
+                    .getAPIData('https://vitask.me/classesapi?token=$t');
+                print('Classes');
+                widget.timeTableData = await api
+                    .getAPIData('https://vitask.me/timetableapi?token=$t');
+                print('Time Table');
+                widget.marksData =
+                    await api.getAPIData('https://vitask.me/marksapi?token=$t');
+                print('Marks');
+                widget.acadHistoryData = await api
+                    .getAPIData('https://vitask.me/acadhistoryapi?token=$t');
+                print('AcadHistory');
+                Student student = Student(
+                    profileKey: (u + "-profile"),
+                    profile: widget.profileData,
+                    attendanceKey: (u + "-attendance"),
+                    attendance: widget.attendanceData,
+                    timeTableKey: (u + "-timeTable"),
+                    timeTable: widget.timeTableData,
+                    marksKey: (u + "-marks"),
+                    marks: widget.marksData,
+                    acadHistoryKey: (u + "-acadHistory"),
+                    acadHistory: widget.acadHistoryData);
+                StudentDao().deleteStudent(student);
+                StudentDao().insertStudent(student);
+                getAttendance();
+                getTimeTable();
+                setState(() {
+                  refresh = false;
+                });
                 // do something
               },
             )
@@ -142,35 +178,13 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                 flex: 1,
                 child: Column(
                   children: <Widget>[
-//                  Container(
-//                    decoration: BoxDecoration(
-//                      color: Colors.black,
-//                      borderRadius: BorderRadius.all(Radius.circular(15)),
-//                    ),
-////                    child: Card(
-////                      color: Colors.black45,
-////                      margin: EdgeInsets.all(25),
-////                      child: Column(
-////                        children: <Widget>[
-////                          Texts(widget.profileData["Name"], 25),
-////                          SizedBox(height: 15),
-////                          Texts(widget.profileData["RegNo"], 25),
-////                          SizedBox(height: 15),
-////                          Texts(widget.profileData["Branch"], 25),
-////                        ],
-////                      ),
-////                    ),
-//                  ),
-//                  Divider(
-//                    color: Colors.grey,
-//                  ),
                     Container(
                       decoration: BoxDecoration(
                         //color: Colors.redAccent,
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Card(
-                        color: Colors.black12,
+                        color: Colors.transparent,
                         margin: EdgeInsets.all(15),
                         elevation: 0,
                         child: Row(
@@ -179,7 +193,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             Expanded(
                               flex: 1,
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Texts("Average Attendance", 30),
                                   Texts(
@@ -190,22 +204,22 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 ],
                               ),
                             ),
-                            new AnimatedCircularChart(
-                              duration: Duration(milliseconds: 3000),
+                            AnimatedCircularChart(
+                              duration: Duration(milliseconds: 900),
                               chartType: CircularChartType.Radial,
                               key: k.chartKey,
                               size: const Size(140.0, 140.0),
                               initialChartData: <CircularStackEntry>[
-                                new CircularStackEntry(
+                                CircularStackEntry(
                                   <CircularSegmentEntry>[
-                                    new CircularSegmentEntry(
+                                    CircularSegmentEntry(
                                       pie["Present"],
-                                      Colors.indigoAccent,
+                                      Colors.blue[800],
                                       rankKey: 'completed',
                                     ),
-                                    new CircularSegmentEntry(
+                                    CircularSegmentEntry(
                                       pie["Absent"],
-                                      Colors.blueGrey[600],
+                                      Colors.blue[400],
                                       rankKey: 'remaining',
                                     ),
                                   ],
@@ -229,7 +243,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                   ],
                 ),
               ),
-              Texts(days[now.weekday - 1].toString(), 30),
+              Texts(days[now.weekday - 1].toString(), 35),
               SizedBox(height: 10),
               Expanded(
                 flex: 2,
@@ -252,19 +266,20 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                           break;
                         }
                       }
-                      var color1;
-                      if (att >= 80) {
-                        color1 = Colors.blue[400];
-                      } else if (att < 80 && att >= 75) {
-                        color1 = Colors.yellow[400];
+                      var color1 = Colors.blue[800];
+                      var color2 = Colors.blue[300];
+                      if (att < 80 && att >= 75) {
+                        color1 = Colors.yellow[900];
+                        color2 = Colors.yellow[400];
                       } else if (att < 75) {
-                        color1 = Colors.red[400];
+                        color1 = Colors.red[900];
+                        color2 = Colors.red[300];
                       }
                       if (now.weekday < 6) {
                         return Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.blueAccent,
+                              color: color1,
                             ),
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
@@ -291,13 +306,28 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                   e["courseName"],
                                               21),
                                           SizedBox(height: 8),
-                                          Texts(e["slot"], 21),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(FontAwesomeIcons.tag,
+                                                  size: 17, color: color1),
+                                              SizedBox(width: 8),
+                                              Text(
+                                                e["slot"],
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                  color: color1,
+                                                  fontSize: 22,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           SizedBox(height: 8),
                                           Container(
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 border: Border.all(
-                                                  color: Colors.blueAccent,
+                                                  color: color1,
                                                 ),
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)),
@@ -311,56 +341,74 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                 color: Colors.transparent,
                                                 elevation: 0,
                                                 child: Center(
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Text(
-                                                            e["startTime"] +
-                                                                " - ",
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic,
-                                                              color:
-                                                                  Colors.blue,
-                                                              fontSize: 20,
+                                                  child: SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Icon(
+                                                                FontAwesomeIcons
+                                                                    .clock,
+                                                                size: 17,
+                                                                color: color1),
+                                                            SizedBox(width: 5),
+                                                            Text(
+                                                              e["startTime"] +
+                                                                  " - ",
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                                color: color1,
+                                                                fontSize: 20,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Text(
-                                                            e["endTime"],
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic,
-                                                              color:
-                                                                  Colors.blue,
-                                                              fontSize: 20,
+                                                            Text(
+                                                              e["endTime"],
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                                color: color1,
+                                                                fontSize: 20,
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Text(
-                                                        e["class"],
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          color: Colors.blue,
-                                                          fontSize: 20,
+                                                          ],
                                                         ),
-                                                      ),
-                                                    ],
+                                                        SizedBox(height: 5),
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Icon(
+                                                                FontAwesomeIcons
+                                                                    .mapMarkerAlt,
+                                                                size: 17,
+                                                                color: color1),
+                                                            SizedBox(width: 5),
+                                                            Text(
+                                                              e["class"],
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                                color: color1,
+                                                                fontSize: 20,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -370,55 +418,14 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       ),
                                     ),
                                     SizedBox(width: 20),
-                                    Stack(
-                                      children: <Widget>[
-                                        Container(
-                                          decoration: BoxDecoration(
-//                              color: Colors.blue,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                          ),
-                                          height: 80,
-                                          width: 74,
-                                          margin: EdgeInsets.only(
-                                              top: 23, left: 15),
-                                          padding: EdgeInsets.all(20),
-                                          child: Text(
-                                            "$att%",
-                                            textAlign: TextAlign.right,
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        PieChart(
-                                          dataMap: {
-                                            "present":
-                                                double.parse(att.toString()),
-                                            "absent": 100 -
-                                                double.parse(att.toString()),
-                                          },
-                                          animationDuration:
-                                              Duration(milliseconds: 800),
-                                          colorList: [
-                                            color1,
-                                            Colors.black,
-                                          ],
-                                          chartRadius: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              5,
-                                          chartValueBackgroundColor:
-                                              Colors.transparent,
-                                          decimalPlaces: 1,
-                                          showLegends: false,
-                                          showChartValueLabel: true,
-                                          initialAngle: 180,
-                                          chartValueStyle:
-                                              defaultChartValueStyle.copyWith(
-                                                  color: Colors.transparent),
-                                          chartType: ChartType.ring,
-                                        ),
-                                      ],
+                                    CircularPercentIndicator(
+                                      radius: 100.0,
+                                      lineWidth: 6.0,
+                                      percent:
+                                          double.parse(att.toString()) / 100,
+                                      center: Texts(att.toString() + "%", 20),
+                                      progressColor: color1,
+                                      backgroundColor: color2,
                                     )
                                   ],
                                 ),
@@ -427,9 +434,47 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                           ),
                         );
                       }
-                      return Container(
-                          child: Texts(
-                              "No Classes today, Sit back and relax", 25));
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 10),
+                            Container(
+                                child: Texts(
+                                    "No Classes today, Sit back and relax.",
+                                    25)),
+                            SizedBox(height: 40),
+                            Divider(color: Colors.grey),
+                            Container(
+                              child:
+                                  Texts("Maybe work on some assignments.", 25),
+                              padding: EdgeInsets.only(top: 15),
+                            ),
+                            SizedBox(height: 10),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: Material(
+                                  elevation: 5.0,
+                                  color: Colors.indigo,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      print("Moodle button was pressed.");
+                                    },
+                                    minWidth: 200.0,
+                                    height: 42.0,
+                                    child: Text(
+                                      'Log In To Moodle',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )),
+                            ),
+                            SizedBox(height: 15),
+                            Divider(color: Colors.grey),
+                          ],
+                        ),
+                      );
                     }).toList(),
                   )),
                 ),
@@ -467,68 +512,91 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                           fit: BoxFit.cover),
                     ),
                   ),
-                  ListTile(
-                    title: Texts('Attendance', 20),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              Attendance(widget.attendanceData),
+                  Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                          Color.fromRGBO(13, 50, 77, 100),
+                          Color.fromRGBO(0, 0, 10, 10)
+                        ])),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        ListTile(
+                          title: Texts('Attendance', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Attendance(widget.attendanceData),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Texts('Time Table', 20),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      //print(widget.timeTableData["Timetable"]["Monday"]);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TimeTable(widget.timeTableData),
+                        ListTile(
+                          title: Texts('Time Table', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            //print(widget.timeTableData["Timetable"]["Monday"]);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    TimeTable(widget.timeTableData),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Texts('Marks', 20),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Marks(widget.marksData),
+                        ListTile(
+                          title: Texts('Marks', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Marks(widget.marksData),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Texts('Academic History', 20),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AcademicHistory(widget.acadHistoryData),
+                        ListTile(
+                          title: Texts('Academic History', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AcademicHistory(widget.acadHistoryData),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Texts('Moodle', 20),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MoodleLogin(),
+                        ListTile(
+                          title: Texts('Moodle', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MoodleLogin(),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                        ListTile(
+                          title: Texts('Logout', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            logoutUser();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -537,6 +605,14 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         ),
       ),
     );
+  }
+
+  void logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.clear();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+        (Route<dynamic> route) => false);
   }
 
   Future chalJaoPlease() async {

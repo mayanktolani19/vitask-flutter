@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tt.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:vitask/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TimeTable extends StatefulWidget {
   TimeTable(this.timeTableData);
@@ -23,16 +24,17 @@ class _TimeTableState extends State<TimeTable> {
   }
 
   void getData() {
-    days = widget.timeTableData["Timetable"].keys.toList();
-    daylist = widget.timeTableData["Timetable"].values.toList();
-
+    daylist = [];
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    for (var i = 0; i < days.length; i++) {
+      daylist.add(widget.timeTableData["Timetable"][days[i]]);
+    }
     dayele = [];
     var num = 0;
     while (num < days.length) {
       dayele.add(DayList(day: days[num], list: daylist[num]));
       num++;
     }
-    print(dayele[0]);
   }
 
   Widget marlist() {
@@ -52,14 +54,7 @@ class _TimeTableState extends State<TimeTable> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Center(
-                      child: Text(
-                        mr.day,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          //color: Color.fromRGBO(236, 150, 150, 3),
-                        ),
-                      ),
+                      child: Texts(mr.day, 18),
                     ),
                     Container(
                         width: double.infinity,
@@ -113,7 +108,7 @@ class _TimeTableState extends State<TimeTable> {
       children: exeele.map((e) {
         return Container(
           margin: EdgeInsets.all(7),
-          padding: EdgeInsets.all(0),
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(
@@ -138,15 +133,15 @@ class _TimeTableState extends State<TimeTable> {
                             Column(
                               children: <Widget>[
                                 Text(
-                                  e.courseName,
+                                  e.codes + " - " + e.courseName,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: 23,
-                                    //color: Colors.greenAccent[400],
-                                    //Color.fromRGBO(152, 255, 152, 60),
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.white,
+                                    fontSize: 24,
                                   ),
                                 ),
+                                SizedBox(height: 10),
                               ],
                             ),
                             Card(
@@ -155,54 +150,80 @@ class _TimeTableState extends State<TimeTable> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(e.codes,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      )),
+                                  Icon(
+                                    FontAwesomeIcons.clock,
+                                    size: 17,
+                                    color: Colors.lightBlue,
+                                  ),
                                   Container(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: Text(
-                                        " :  ${e.startTime}  --  ${e.endTime}",
+                                    child: Text("${e.startTime} - ${e.endTime}",
                                         style: TextStyle(
-                                          color: Colors.red,
+                                          color: Colors.lightBlue,
                                           fontSize: 20,
                                         )),
                                   ),
                                 ],
                               ),
                             ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Card(
+                                      color: Colors.transparent,
+                                      elevation: 10,
+                                    ),
+                                    Icon(
+                                      FontAwesomeIcons.tag,
+                                      size: 17,
+                                      color: Colors.lightBlue,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text("${e.slot}",
+                                          style: TextStyle(
+                                            color: Colors.lightBlue,
+                                            fontSize: 20,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      FontAwesomeIcons.mapMarkerAlt,
+                                      size: 18,
+                                      color: Colors.lightBlue,
+                                    ),
+                                    ClipRect(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                                begin: Alignment.topRight,
+                                                end: Alignment.bottomLeft,
+                                                colors: [
+                                              Color.fromRGBO(14, 14, 160, 10),
+                                              Color.fromRGBO(31, 28, 24, 120)
+                                            ])),
+                                        child: Card(
+                                          color: Colors.transparent,
+                                          elevation: 20,
+                                          child: Center(
+                                              child: Text(e.loc,
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                  ))),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ],
                         ),
-
-                        //loc
-                        Positioned(
-                          left: 300,
-                          right: 0,
-                          bottom: 0,
-                          child: ClipRect(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      begin: Alignment.topRight,
-                                      end: Alignment.bottomLeft,
-                                      colors: [
-                                    Color.fromRGBO(142, 14, 30, 10),
-                                    Color.fromRGBO(31, 28, 24, 120)
-                                  ])),
-                              child: Card(
-                                color: Colors.transparent,
-                                elevation: 20,
-                                child: Center(
-                                    child: Text(e.loc,
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                        ))),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        //loc end
                       ],
                     ),
                   ),
@@ -220,17 +241,14 @@ class _TimeTableState extends State<TimeTable> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body:
-
-          //sliverbox
-          Container(
+      body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
                 colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
+              Color.fromRGBO(13, 20, 100, 100),
+              Color.fromRGBO(0, 0, 0, 10)
             ])),
         child: CustomScrollView(
           slivers: <Widget>[
@@ -238,14 +256,14 @@ class _TimeTableState extends State<TimeTable> {
               //centerTitle: true,
               backgroundColor: Colors.transparent,
               expandedHeight: 10,
-              centerTitle: true,
+              //centerTitle: true,
               floating: true,
               pinned: false,
               title: Text(
-                "timetable",
+                "Time-Table",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
-                  fontSize: 20,
+                  fontSize: 24,
                 ),
               ),
             ),
@@ -272,7 +290,7 @@ class _TimeTableState extends State<TimeTable> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FontStyle.normal,
-                                    fontSize: 50,
+                                    fontSize: 35,
                                     //color: Colors.pinkAccent,
                                   ),
                                 ),
@@ -300,8 +318,6 @@ class _TimeTableState extends State<TimeTable> {
           ],
         ),
       ),
-
-/////sliver box content
     );
   }
 }

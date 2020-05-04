@@ -143,7 +143,7 @@ class _MarksState extends State<Marks> {
                                 color: Colors.transparent,
                                 elevation: 0,
                                 child: Center(
-                                  child: Text(e.val,
+                                  child: Text(e.val["scored"],
                                       style: TextStyle(
                                         color: Colors.greenAccent[100],
                                         fontSize: 18,
