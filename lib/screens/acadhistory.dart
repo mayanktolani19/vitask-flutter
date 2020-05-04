@@ -53,7 +53,8 @@ class _AcademicHistoryState extends State<AcademicHistory> {
           (e) {
             return Container(
               child: Card(
-                color: Colors.black,
+                color: Colors.transparent,
+                elevation: 0,
                 child: Container(
                   //
                   margin: EdgeInsets.all(7),
@@ -61,7 +62,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     border: Border.all(
-                      color: Colors.blueAccent,
+                      color: Colors.blue[700],
                     ),
                   ),
                   //
@@ -70,15 +71,15 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                   child: Stack(
                     children: <Widget>[
                       Positioned(
-                        top: 10,
+                        top: 20,
+                        bottom: 10,
                         left: 10,
                         right: 50,
                         child: Text(
                           e.subject,
                           style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 23,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 19,
                             //color: Colors.pinkAccent,
                           ),
                         ),
@@ -88,24 +89,29 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         right: 10,
                         child: ClipOval(
                           child: Container(
+                            height: 49,
+                            width: 45,
                             decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                  Colors.red[900],
-                                  Colors.red[900]
-                                ])),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.indigo,
+                                  Colors.blue[900],
+                                ],
+                              ),
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(11.0),
                               child: Card(
+                                elevation: 0,
                                 color: Colors.transparent,
-                                elevation: 25,
                                 child: Center(
                                   child: Text(
                                     e.grade,
                                     style: TextStyle(
                                       fontSize: 17,
+                                      color: Colors.greenAccent,
                                     ),
                                   ),
                                 ),
@@ -141,13 +147,11 @@ class _AcademicHistoryState extends State<AcademicHistory> {
           SliverAppBar(
             backgroundColor: Colors.transparent,
             expandedHeight: 10,
-            centerTitle: true,
             floating: true,
             pinned: false,
             title: Text(
-              "academic history",
+              "Academic history",
               style: TextStyle(
-                fontWeight: FontWeight.normal,
                 fontSize: 20,
               ),
             ),

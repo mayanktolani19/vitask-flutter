@@ -62,7 +62,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   TextField(
                     textAlign: TextAlign.center,
                     onChanged: (value) {
-                      regNo = value;
+                      // regNo = value;
                     },
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your Registration No.',
@@ -76,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   TextField(
                     textAlign: TextAlign.center,
                     onChanged: (value) {
-                      password = value;
+                      //password = value;
                     },
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your Password',
@@ -98,8 +98,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           setState(() {
                             showSpinner = true;
                           });
+                          regNo = "18BLC1095";
+                          password = "Durjanatoz2000";
                           //Run this part to get the data from all the APIs and store it in the database.
-                          regNo = regNo.toUpperCase();
+                          //regNo = regNo.toUpperCase();
                           url =
                               'https://vitask.me/authenticate?username=$regNo&password=$password';
                           API api = API();

@@ -26,76 +26,92 @@ class _MoodleLoginState extends State<MoodleLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  child: Image.asset(
-                    'images/icon1.png',
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+            Color.fromRGBO(13, 50, 77, 100),
+            Color.fromRGBO(0, 0, 10, 10)
+          ])),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Moodle'),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        backgroundColor: Colors.transparent,
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 100,
+                    child: Image.asset(
+                      'images/icon1.png',
+                    ),
                   ),
-                ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    regNo = value;
-                  },
-                  decoration: kTextFieldDecorationMoodle.copyWith(
-                      hintText: 'Enter your Registration No.'),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  decoration: kTextFieldDecorationMoodle.copyWith(
-                      hintText: 'Enter your Password'),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Material(
-                    elevation: 5.0,
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(30.0),
-                    child: MaterialButton(
-                      onPressed: () async {
-                        setState(() {
-                          showSpinner = true;
-                        });
-                        setState(() {
-                          showSpinner = false;
-                        });
-                      },
-                      minWidth: 200.0,
-                      height: 42.0,
-                      child: Text(
-                        'Log In',
-                        style: TextStyle(
-                          color: Colors.white,
+                  TextField(
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      regNo = value;
+                    },
+                    decoration: kTextFieldDecorationMoodle.copyWith(
+                        hintText: 'Enter your Registration No.'),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  TextField(
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      password = value;
+                    },
+                    decoration: kTextFieldDecorationMoodle.copyWith(
+                        hintText: 'Enter your Password'),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Material(
+                      elevation: 5.0,
+                      color: Colors.indigo,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                        onPressed: () async {
+                          setState(() {
+                            showSpinner = true;
+                          });
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        },
+                        minWidth: 200.0,
+                        height: 42.0,
+                        child: Text(
+                          'Log In',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                FloatingActionButton(onPressed: () async {
-                  Map<String, dynamic> hi =
-                      (await StudentDao().getData("18BLC1083-marks"));
-                  print(hi["Marks"]);
-                })
-              ],
+                  FloatingActionButton(onPressed: () async {
+                    Map<String, dynamic> hi =
+                        (await StudentDao().getData("18BLC1083-marks"));
+                    print(hi["Marks"]);
+                  })
+                ],
+              ),
             ),
           ),
         ),
