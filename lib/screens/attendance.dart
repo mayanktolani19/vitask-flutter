@@ -4,6 +4,8 @@ import 'package:vitask/screens/bunk_meter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 class Attendance extends StatefulWidget {
   Attendance(this.attendance);
   final Map<String, dynamic> attendance;

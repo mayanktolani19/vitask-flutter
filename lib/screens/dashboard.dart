@@ -20,6 +20,7 @@ import 'package:vitask/api.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:intl/intl.dart';
 
 //import 'package:vitask/screens/moodle.dart';
 
@@ -49,12 +50,18 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   List<String> a;
   List<dynamic> tt;
   List<String> days;
+  List<DateTime> time;
+  List<String> hours;
+  List<DateTime> timeNotifications;
+  List<dynamic> tt1;
   var now;
+  int count;
   bool refresh = false;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   void initState() {
     super.initState();
+    count = 0;
     getAttendance();
     getTimeTable();
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
@@ -66,7 +73,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
-    chalJaoPlease();
+//    chalJaoPlease(DateTime.now(), "hi");
   }
 
   void getAttendance() {
@@ -81,7 +88,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   }
 
   void getTimeTable() {
-    days = [];
     days = [
       "Monday",
       "Tuesday",
@@ -91,9 +97,52 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       "Saturday",
       "Sunday"
     ];
+    hours = ["0", "13", "14", "15", "16", "17", "18", "19"];
     now = DateTime.now();
+    tt1 = [];
+    timeNotifications = [];
     if (now.weekday < 6) {
       tt = widget.timeTableData["Timetable"][days[now.weekday - 1]];
+      for (var j = 0; j < tt.length; j++) {
+        tt1.add({"startTime": "xx"});
+      }
+      //print(DateTime.now());
+      //print(tt.length);
+      for (var i = 0; i < tt.length; i++) {
+        if (int.parse(tt[i]["startTime"].split(':')[0]) >= 1 &&
+            int.parse(tt[i]["startTime"].split(':')[0]) < 8) {
+          tt1[i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) +
+              " " +
+              hours[int.parse(tt[i]["startTime"].split(':')[0])] +
+              ":";
+          if ((int.parse(tt[i]["startTime"].split(':')[1])).toString() == "0") {
+            tt1[i]["startTime"] = tt1[i]["startTime"] + "00";
+          } else {
+            tt1[i]["startTime"] = tt1[i]["startTime"] +
+                (int.parse(tt[i]["startTime"].split(':')[1])).toString();
+          }
+          tt1[i]["startTime"] = tt1[i]["startTime"] + ":" + "00";
+        } else {
+          tt1[i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) + " ";
+          if ((tt[i]["startTime"].split(':')[0]).length < 2) {
+            tt1[i]["startTime"] = tt1[i]["startTime"] +
+                "0" +
+                tt[i]["startTime"].split(':')[0] +
+                ":";
+          } else {
+            tt1[i]["startTime"] =
+                tt1[i]["startTime"] + tt[i]["startTime"].split(':')[0] + ":";
+          }
+          if ((int.parse(tt[i]["startTime"].split(':')[1])).toString() == "0") {
+            tt1[i]["startTime"] = tt1[i]["startTime"] + "00";
+          } else {
+            tt1[i]["startTime"] = tt1[i]["startTime"] +
+                (int.parse(tt[i]["startTime"].split(':')[1])).toString();
+          }
+          tt1[i]["startTime"] = tt1[i]["startTime"] + ":" + "00";
+        }
+        timeNotifications.add(DateTime.parse(tt1[i]["startTime"]));
+      }
     } else {
       tt = [
         {"Saturday": "Sit back and relax"},
@@ -214,7 +263,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     ),
                                     CircularSegmentEntry(
                                       pie["Absent"],
-                                      Colors.blue[400],
+                                      Colors.blue[300],
                                       rankKey: 'remaining',
                                     ),
                                   ],
@@ -224,7 +273,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               percentageValues: true,
                               edgeStyle: SegmentEdgeStyle.round,
                               holeLabel: attDetails["Percentage"] + "%",
-                              labelStyle: new TextStyle(
+                              labelStyle: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24.0,
@@ -250,6 +299,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     child: SingleChildScrollView(
                         child: Column(
                       children: tt.map((e) {
+                        if (count < tt.length)
+                          chalJaoPlease(timeNotifications[count++],
+                              e["courseName"], e["startTime"], e["class"]);
                         var att = 80;
                         for (var i = 0;
                             i < widget.attendanceData["Attended"].length;
@@ -432,6 +484,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         center: Texts(att.toString() + "%", 20),
                                         progressColor: color1,
                                         backgroundColor: color2,
+                                        circularStrokeCap:
+                                            CircularStrokeCap.round,
                                       )
                                     ],
                                   ),
@@ -559,8 +613,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      TimeTable(widget.timeTableData),
+                                  builder: (context) => TimeTable(
+                                      widget.timeTableData,
+                                      widget.attendanceData),
                                 ),
                               );
                             },
@@ -630,33 +685,50 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         (Route<dynamic> route) => false);
   }
 
-  Future chalJaoPlease() async {
-    var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 30));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  Future chalJaoPlease(
+      DateTime t, String c, String startTime, String venue) async {
+//    print(t);
+//    print(DateTime.now().add(Duration(seconds: 30)));
+    //var scheduledNotificationDateTime = t.add(Duration(seconds: 30));
+//    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+//        'repeating channel id',
+//        'repeating channel name',
+//        'repeating description');
+//    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+//    NotificationDetails platformChannelSpecifics = NotificationDetails(
+//        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+//    await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
+//        'repeating body', RepeatInterval.EveryMinute, platformChannelSpecifics);
+    //await flutterLocalNotificationsPlugin.
+//    if (DateTime.now().difference(t) == 0)
+    //print(DateTime.now()
+    //  .add(Duration(seconds: t.difference(DateTime.now()).inSeconds)));
+    //print(t.difference(DateTime.now()).inSeconds);
+    if (t.isAfter(DateTime.now())) {
+      var scheduledNotificationDateTime = t;
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your other channel id',
         'your other channel name',
-        'your other channel description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(
-        0,
-        'scheduled title',
-        'scheduled body',
-        scheduledNotificationDateTime,
-        platformChannelSpecifics);
+        'your other channel description',
+        //color: Colors.lightBlue,
+      );
+      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.schedule(count, c + " - " + venue,
+          startTime, scheduledNotificationDateTime, platformChannelSpecifics);
+    }
   }
 
   Future onSelectNotification(String payload) async {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return new AlertDialog(
-          title: Text("PayLoad"),
-          content: Text("Payload : $payload"),
-        );
-      },
-    );
+//    showDialog(
+//      context: context,
+//      builder: (_) {
+//        return new AlertDialog(
+//          title: Text("PayLoad"),
+//          content: Text("Payload : $payload"),
+//        );
+//      },
+//    );
   }
 }

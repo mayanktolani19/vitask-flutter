@@ -98,8 +98,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           setState(() {
                             showSpinner = true;
                           });
-                          regNo = "18BLC1095";
-                          password = "Durjanatoz2000";
+//                          regNo = "18BLC1095";
+//                          password = "Durjanatoz2000";
                           //Run this part to get the data from all the APIs and store it in the database.
                           //regNo = regNo.toUpperCase();
                           url =
@@ -182,12 +182,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   FloatingActionButton(onPressed: () async {
                     Map<String, dynamic> tt =
                         (await StudentDao().getData("18BLC1095-timeTable"));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TimeTable(tt),
-                      ),
-                    );
+//                    Navigator.push(
+//                      context,
+//                      MaterialPageRoute(
+//                        builder: (context) => TimeTable(tt),
+//                      ),
+//                    );
                   })
                 ],
               ),

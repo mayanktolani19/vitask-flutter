@@ -21,6 +21,7 @@ dependencies:
   flutter_local_notifications: ^1.4.2
   shared_preferences: ^0.5.7
   percent_indicator: ^2.1.3
+  intl: ^0.15.8
 
 
 dev_dependencies:

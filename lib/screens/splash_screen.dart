@@ -41,13 +41,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigateUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var status = prefs.getString('regNo');
-    print(status);
     Map<String, dynamic> p;
     Map<String, dynamic> att;
     Map<String, dynamic> tt;
     Map<String, dynamic> m;
     Map<String, dynamic> ah;
-    print(status);
+//    print(status);
     if (status != null) {
       p = (await StudentDao().getData(status + "-profile"));
       att = (await StudentDao().getData(status + "-attendance"));
