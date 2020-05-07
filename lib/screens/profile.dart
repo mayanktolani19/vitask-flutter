@@ -12,12 +12,10 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    printData();
+    getData();
   }
 
-  void printData() {
-    print(widget.cgpa);
-  }
+  void getData() {}
 
   @override
   Widget build(BuildContext context) {

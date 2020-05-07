@@ -143,16 +143,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 //                          regNo = "18BLC1095";
 //                          password = "Durjanatoz2000";
                           //Run this part to get the data from all the APIs and store it in the database.
-                          regNo = "18BLC1082";
-                          password = "St.franciscollege1";
                           regNo = regNo.toUpperCase();
                           url =
                               'https://vitask.me/authenticate?username=$regNo&password=$password';
                           API api = API();
                           Map<String, dynamic> profileData =
                               await api.getAPIData(url);
-                          print(profileData);
-                          if (profileData["Error"] == null) {
+                          if (profileData != null &&
+                              profileData["Error"] == null) {
                             String t = profileData['APItoken'].toString();
                             String u = profileData['RegNo'].toString();
                             Map<String, dynamic> attendanceData =
@@ -171,19 +169,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 await api.getAPIData(
                                     'https://vitask.me/acadhistoryapi?token=$t');
                             print('AcadHistory');
-                            Student student = Student(
-                                profileKey: (u + "-profile"),
-                                profile: profileData,
-                                attendanceKey: (u + "-attendance"),
-                                attendance: attendanceData,
-                                timeTableKey: (u + "-timeTable"),
-                                timeTable: timeTableData,
-                                marksKey: (u + "-marks"),
-                                marks: marksData,
-                                acadHistoryKey: (u + "-acadHistory"),
-                                acadHistory: acadHistoryData);
-                            StudentDao().deleteStudent(student);
-                            StudentDao().insertStudent(student);
+                            if (attendanceData != null &&
+                                timeTableData != null &&
+                                marksData != null &&
+                                acadHistoryData != null) {
+                              Student student = Student(
+                                  profileKey: (u + "-profile"),
+                                  profile: profileData,
+                                  attendanceKey: (u + "-attendance"),
+                                  attendance: attendanceData,
+                                  timeTableKey: (u + "-timeTable"),
+                                  timeTable: timeTableData,
+                                  marksKey: (u + "-marks"),
+                                  marks: marksData,
+                                  acadHistoryKey: (u + "-acadHistory"),
+                                  acadHistory: acadHistoryData);
+                              var a = StudentDao().getData(regNo + "-profile");
+                              if (a != null)
+                                StudentDao().deleteStudent(student);
+                              StudentDao().insertStudent(student);
+                            }
                             //Run this part for fetching the stored data from the database. Note the key value,i.e, "18BLC1082-profile, etc."
                             Map<String, dynamic> p = (await StudentDao()
                                 .getData(regNo + "-profile"));
@@ -220,6 +225,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     ),
                   ),
+//                  FloatingActionButton(
+//                    onPressed: () async {
+//                      regNo = "18BLC1082";
+//                      Map<String, dynamic> tt =
+//                          (await StudentDao().getData(regNo + "-attendance"));
+//                      print(tt);
+//                    },
+//                  )
                 ],
               ),
             ),

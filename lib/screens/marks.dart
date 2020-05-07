@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'marksheet.dart';
+import 'package:vitask/constants.dart';
 
 class Marks extends StatefulWidget {
   Marks(this.marks);
@@ -65,14 +66,7 @@ class _MarksState extends State<Marks> {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 24, horizontal: 20),
-                              child: Text(
-                                mr.subject,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  //color: Color.fromRGBO(236, 150, 150, 3),
-                                ),
-                              ),
+                              child: Texts(mr.subject, 20),
                             ),
                             Container(
                                 width: double.infinity,

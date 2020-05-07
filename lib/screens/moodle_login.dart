@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/MoodleModel.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
@@ -22,6 +21,8 @@ class _MoodleLoginState extends State<MoodleLogin> {
   String url;
   String profile;
   bool showSpinner = false;
+  var reg;
+  var a;
   @override
   void initState() {
     super.initState();
@@ -87,9 +88,8 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             setState(() {
                               showSpinner = true;
                             });
-                            var reg = widget.regNo;
-                            password = "Fall@9264";
-                            var a = widget.appNo;
+                            reg = widget.regNo;
+                            a = widget.appNo;
                             url =
                                 "https://vitask.me/moodleapi?username=$reg&password=$password&appno=$a";
                             API api = API();
@@ -110,7 +110,7 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          Moodle(mod)));
+                                          Moodle(reg, a, mod)));
                             }
                             setState(() {
                               showSpinner = false;

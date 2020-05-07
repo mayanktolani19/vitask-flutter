@@ -172,7 +172,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             elevation: 0,
-            title: Text('Dashboard'),
+            title: Texts('Dashboard', 21),
             backgroundColor: Colors.transparent,
             actions: <Widget>[
               IconButton(
@@ -406,7 +406,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                       BorderRadius.all(
                                                           Radius.circular(20)),
                                                 ),
-                                                alignment: Alignment.center,
+                                                alignment: Alignment.centerLeft,
                                                 margin: EdgeInsets.only(
                                                   left: 60,
                                                   right: 60,
@@ -420,6 +420,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                       scrollDirection:
                                                           Axis.horizontal,
                                                       child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: <Widget>[
                                                           Row(
                                                             children: <Widget>[
@@ -671,11 +674,14 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               Map<String, dynamic> mod = await MoodleDAO()
                                   .getMoodleData(
                                       widget.profileData["RegNo"] + "-moodle");
+                              pass = widget.password;
                               Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => Moodle(
+                                    widget.profileData["RegNo"],
+                                    widget.profileData["AppNo"],
                                     mod,
                                   ),
                                 ),
@@ -701,8 +707,32 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                         ListTile(
                           title: Texts('Logout', 20),
                           onTap: () async {
-                            Navigator.pop(context);
-                            logoutUser();
+                            showDialog(
+                              context: context,
+                              child: AlertDialog(
+                                backgroundColor: Colors.blue[900],
+                                title: Texts(
+                                    'Are you sure you want to logout?', 19),
+                                content:
+                                    Texts('We hate to see you leave...', 16),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () {
+                                      print("you choose no");
+                                      Navigator.of(context).pop(false);
+                                    },
+                                    child: Texts('No', 15),
+                                  ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      logoutUser();
+                                    },
+                                    child: Texts('Yes', 15),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                         ),
                       ],

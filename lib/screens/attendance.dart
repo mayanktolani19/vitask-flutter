@@ -19,6 +19,8 @@ class _AttendanceState extends State<Attendance>
   bool get wantKeepAlive => true;
   static List<Map<String, dynamic>> attended;
   static int len;
+  List<IconData> i = [FontAwesomeIcons.bookOpen, FontAwesomeIcons.laptopCode];
+  int icon = 0;
   Map<String, dynamic> current;
   @override
   void initState() {
@@ -71,6 +73,11 @@ class _AttendanceState extends State<Attendance>
                 int a = current["attended"];
                 int t = current["total"];
                 String ty = current["type"];
+                IconData iconUsed;
+                if (ty.contains("Theory"))
+                  iconUsed = i[0];
+                else
+                  iconUsed = i[1];
                 var pie;
                 pie = double.parse(p.toString());
                 return Container(
@@ -106,24 +113,23 @@ class _AttendanceState extends State<Attendance>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Texts(c.toString(), 20),
+                                    Texts(c.toString(), 19),
                                     SizedBox(height: 4),
-                                    Texts(ty, 18),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      a.toString() + "/" + t.toString(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                        color: color1,
-                                        fontSize: 20,
-                                      ),
+                                    Row(
+                                      children: <Widget>[
+                                        Texts(ty, 17),
+                                        SizedBox(width: 8),
+                                        Icon(iconUsed, size: 16, color: color1),
+                                      ],
                                     ),
+                                    SizedBox(height: 4),
+                                    Texts(
+                                        a.toString() + "/" + t.toString(), 19),
                                   ],
                                 ),
                               ),
                               CircularPercentIndicator(
-                                radius: 100.0,
+                                radius: 90.0,
                                 lineWidth: 6.0,
                                 percent: double.parse(pie.toString()) / 100,
                                 center: Texts(p.toString() + "%", 20),
