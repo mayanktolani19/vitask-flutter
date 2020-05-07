@@ -333,7 +333,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   BorderRadius.all(Radius.circular(20)),
                             ),
                             padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsets.all(12),
                             child: Column(
                               children: <Widget>[
                                 Card(
@@ -652,7 +652,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => MoodleLogin(),
+                                  builder: (context) => MoodleLogin(
+                                      widget.profileData["RegNo"],
+                                      widget.profileData["AppNo"]),
                                 ),
                               );
                             },
