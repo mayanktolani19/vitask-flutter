@@ -4,6 +4,12 @@
 
 VITask flutter application made for the students of VIT Chennai for their VTOP login.
 
+# Installation
+
+* Download the Flutter SDK from https://flutter.dev/docs/get-started/install/windows
+* Extract the downloaded SDK and add the location of the bin file inside the Flutter SDK to your path variables.
+* Install the flutter plugin into your Android Studio.
+
 ## Contributing Guidelines
 
 #### Fork this repo and clone the forked repo into your PC.
