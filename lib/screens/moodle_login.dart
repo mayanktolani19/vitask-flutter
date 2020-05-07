@@ -7,6 +7,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/MoodleModel.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
 import 'moodle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MoodleLogin extends StatefulWidget {
   MoodleLogin(this.regNo, this.appNo);
@@ -17,19 +18,13 @@ class MoodleLogin extends StatefulWidget {
 }
 
 class _MoodleLoginState extends State<MoodleLogin> {
-  String regNo;
   String password;
   String url;
   String profile;
   bool showSpinner = false;
-  var appNo1;
-  var a;
   @override
   void initState() {
     super.initState();
-    appNo1 = [];
-    appNo1.add(widget.appNo);
-    a = appNo1[0];
   }
 
   @override
@@ -92,24 +87,25 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             setState(() {
                               showSpinner = true;
                             });
-                            regNo = "18BLC1082";
+                            var reg = widget.regNo;
                             password = "Fall@9264";
-                            //print(widget.appNo);
-//                            url =
-//                                'https://vitask.me/moodleapi?username=18BLC1082&password=Fall@9264&appno=2018038483';
-//                            print(a);
+                            var a = widget.appNo;
                             url =
-                                "https://vitask.me/moodleapi?username=$regNo&password=$password&appno=$a";
+                                "https://vitask.me/moodleapi?username=$reg&password=$password&appno=$a";
                             API api = API();
                             Map<String, dynamic> moodleData =
                                 await api.getAPIData(url);
                             if (moodleData != null) {
                               MoodleData m =
-                                  MoodleData(regNo + "-moodle", moodleData);
+                                  MoodleData(reg + "-moodle", moodleData);
                               MoodleDAO().deleteStudent(m);
                               MoodleDAO().insertMoodleData(m);
                               Map<String, dynamic> mod = await MoodleDAO()
-                                  .getMoodleData(regNo + "-moodle");
+                                  .getMoodleData(reg + "-moodle");
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.setString(
+                                  "moodle-password", password);
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

@@ -8,7 +8,7 @@ class Vitask extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-//    hi();
+    hi();
     return MaterialApp(
       title: 'VITask',
       theme: ThemeData.dark(),
@@ -16,8 +16,8 @@ class Vitask extends StatelessWidget {
     );
   }
 
-//  void hi() async {
-//    SharedPreferences preferences = await SharedPreferences.getInstance();
-//    preferences.clear();
-//  }
+  void hi() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
+  }
 }

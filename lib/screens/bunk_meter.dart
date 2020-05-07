@@ -77,6 +77,11 @@ class _BunkMeterState extends State<BunkMeter> {
             ])),
         child: Center(
           child: Scaffold(
+            appBar: AppBar(
+              title: Text('Bunk Meter'),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
             backgroundColor: Colors.transparent,
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,

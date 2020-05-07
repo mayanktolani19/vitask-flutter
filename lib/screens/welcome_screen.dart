@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -22,6 +23,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String profile;
   bool showSpinner = false;
   bool loginFail = false;
+  bool hidePassword = true;
+  var passwordIcon = [FontAwesomeIcons.eyeSlash, FontAwesomeIcons.eye];
+  var c = 0;
 
   @override
   void initState() {
@@ -46,7 +50,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FadeAnimatedTextKit(
-                    text: ['VITask'],
+                    text: ['VITASK'],
                     textAlign: TextAlign.center,
                     textStyle: TextStyle(
                       fontSize: 45.0,
@@ -59,29 +63,58 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 60.0,
                   ),
                   SizedBox(height: 18),
-                  TextField(
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      // regNo = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your Registration No.',
-                      errorText:
-                          loginFail ? 'Invalid UserName or Password' : null,
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        regNo = value;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 26.0),
+                        prefixIcon: Icon(
+                          FontAwesomeIcons.userAlt,
+                          color: Colors.redAccent,
+                          size: 18,
+                        ),
+                        hintText: 'Enter your Registration No.',
+                        errorText:
+                            loginFail ? 'Invalid UserName or Password' : null,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 30.0,
                   ),
-                  TextField(
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      //password = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your Password',
-                      errorText:
-                          loginFail ? 'Invalid UserName or Password' : null,
+                  Container(
+                    child: TextField(
+                      obscureText: hidePassword,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        prefixIcon: Icon(FontAwesomeIcons.lock,
+                            color: Colors.redAccent, size: 18),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              hidePassword = !hidePassword;
+                              if (c == 0)
+                                c = 1;
+                              else
+                                c = 0;
+                            });
+                          },
+                          icon: Icon(passwordIcon[c]),
+                          color: Colors.redAccent,
+                          iconSize: 19,
+                        ),
+                        hintText: 'Enter your Password',
+                        errorText:
+                            loginFail ? 'Invalid UserName or Password' : null,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -94,6 +127,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(30.0),
                       child: MaterialButton(
+                        child: Text(
+                          'Log In',
+                          style: TextStyle(
+                            color: Colors.red[100],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                         onPressed: () async {
                           setState(() {
                             showSpinner = true;
@@ -101,12 +143,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 //                          regNo = "18BLC1095";
 //                          password = "Durjanatoz2000";
                           //Run this part to get the data from all the APIs and store it in the database.
-                          //regNo = regNo.toUpperCase();
+                          regNo = "18BLC1082";
+                          password = "St.franciscollege1";
+                          regNo = regNo.toUpperCase();
                           url =
                               'https://vitask.me/authenticate?username=$regNo&password=$password';
                           API api = API();
                           Map<String, dynamic> profileData =
                               await api.getAPIData(url);
+                          print(profileData);
                           if (profileData["Error"] == null) {
                             String t = profileData['APItoken'].toString();
                             String u = profileData['RegNo'].toString();
@@ -153,11 +198,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             await prefs.setString("regNo", regNo);
+                            await prefs.setString("password", password);
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        MenuDashboardPage(p, att, tt, m, ah)));
+                                        MenuDashboardPage(
+                                            p, att, tt, m, ah, password)));
                             setState(() {
                               showSpinner = false;
                             });
@@ -170,25 +217,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         },
                         minWidth: 200.0,
                         height: 42.0,
-                        child: Text(
-                          'Log In',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
                       ),
                     ),
                   ),
-                  FloatingActionButton(onPressed: () async {
-                    Map<String, dynamic> tt =
-                        (await StudentDao().getData("18BLC1095-timeTable"));
-//                    Navigator.push(
-//                      context,
-//                      MaterialPageRoute(
-//                        builder: (context) => TimeTable(tt),
-//                      ),
-//                    );
-                  })
                 ],
               ),
             ),

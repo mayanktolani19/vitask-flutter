@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
   Profile(this.cgpa, this.profileData);
-  String cgpa;
-  Map<String, dynamic> profileData;
+  final String cgpa;
+  final Map<String, dynamic> profileData;
   @override
   _ProfileState createState() => _ProfileState();
 }
