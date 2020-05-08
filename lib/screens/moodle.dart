@@ -50,6 +50,7 @@ class _MoodleState extends State<Moodle> with SingleTickerProviderStateMixin {
               Color.fromRGBO(0, 0, 10, 10)
             ])),
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
               title: Text('Moodle'),
               elevation: 0,

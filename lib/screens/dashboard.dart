@@ -158,6 +158,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -171,8 +172,15 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            centerTitle: true,
             elevation: 0,
-            title: Texts('Dashboard', 21),
+            title: Text(
+              'Dashboard',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
             backgroundColor: Colors.transparent,
             actions: <Widget>[
               IconButton(
@@ -559,49 +567,60 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               ],
             ),
           ),
-          drawer: SafeArea(
-            child: Drawer(
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                      Color.fromRGBO(13, 50, 77, 100),
-                      Color.fromRGBO(0, 0, 10, 10)
-                    ])),
-                child: ListView(
-                  // Important: Remove any padding from the ListView.
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    DrawerHeader(
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Texts('VITask', 35),
-                            Container(
-                              child: SafeArea(
-                                child: Image.asset(
-                                  'images/blue.png',
-                                  // width: 150,
-                                  // height: 100,
-                                ),
-                              ),
-                            ),
-                          ],
+          drawer: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Drawer(
+                elevation: 1000,
+                child: ClipRRect(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40),
+                            bottomRight: Radius.circular(40)),
+                        border: Border.all(
+                          color: Colors.indigo,
                         ),
-                      ),
-                      decoration: BoxDecoration(
-                          // image: DecorationImage(
-                          //     image: ExactAssetImage("images/side.jpg"),
-                          //     fit: BoxFit.cover),
-                          ),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
+                        gradient: LinearGradient(
+                            end: Alignment.centerLeft,
+                            begin: Alignment.centerRight,
+                            colors: [
+                              Color.fromRGBO(13, 50, 77, 10),
+                              Color.fromRGBO(0, 0, 10, 10)
+                            ])),
+                    child: ListView(
+                      // Important: Remove any padding from the ListView.
+                      padding: EdgeInsets.zero,
                       children: <Widget>[
+                        DrawerHeader(
+                          padding: EdgeInsets.all(20),
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Texts('VITask', 35),
+                                Container(
+                                  child: SafeArea(
+                                    child: Image.asset(
+                                      'images/blue.png',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.indigo,
+                          thickness: 5,
+                        ),
                         ListTile(
-                          title: Texts('Attendance', 20),
+                          leading: Icon(Icons.assessment),
+                          dense: true,
+                          title: Text(
+                            'Attendance',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             Navigator.pop(context);
                             Navigator.push(
@@ -613,8 +632,17 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             );
                           },
                         ),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.indigo,
+                        ),
                         ListTile(
-                          title: Texts('Time Table', 20),
+                          leading: Icon(Icons.event_note),
+                          title: Text(
+                            'TimeTable',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             Navigator.pop(context);
                             //print(widget.timeTableData["Timetable"]["Monday"]);
@@ -628,8 +656,17 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             );
                           },
                         ),
+                        Divider(
+                          thickness: 2,
+                          color: Colors.indigo,
+                        ),
                         ListTile(
-                          title: Texts('Marks', 20),
+                          leading: Icon(Icons.warning),
+                          title: Text(
+                            'Marks',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             Navigator.pop(context);
                             Navigator.push(
@@ -640,8 +677,17 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             );
                           },
                         ),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.indigo,
+                        ),
                         ListTile(
-                          title: Texts('Academic History', 20),
+                          leading: Icon(Icons.book),
+                          title: Text(
+                            'Academic History',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             Navigator.pop(context);
                             Navigator.push(
@@ -653,8 +699,17 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             );
                           },
                         ),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.indigo,
+                        ),
                         ListTile(
-                          title: Texts('Moodle', 20),
+                          leading: Icon(Icons.assignment),
+                          title: Text(
+                            'Moodle',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
@@ -689,8 +744,18 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             }
                           },
                         ),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.indigo,
+                        ),
                         ListTile(
-                          title: Texts(widget.profileData["Name"], 20),
+                          leading: Icon(Icons.info),
+                          title: Text(
+                            "Profile",
+                            //widget.profileData["Name"],
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             Navigator.pop(context);
                             Navigator.push(
@@ -704,8 +769,18 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             );
                           },
                         ),
+                        Divider(
+                          thickness: 5,
+                          color: Colors.indigo,
+                        ),
+
+                        //
                         ListTile(
-                          title: Texts('Logout', 20),
+                          title: Text(
+                            'Logout',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.normal),
+                          ),
                           onTap: () async {
                             showDialog(
                               context: context,
@@ -735,9 +810,13 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             );
                           },
                         ),
+
+                        AboutListTile(
+                          applicationName: "VITask",
+                        )
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

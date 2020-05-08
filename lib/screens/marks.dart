@@ -157,13 +157,15 @@ class _MarksState extends State<Marks> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomLeft,
+          colors: [
             Color.fromRGBO(13, 50, 77, 100),
             Color.fromRGBO(0, 0, 10, 10)
-          ])),
+          ],
+        ),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: CustomScrollView(
@@ -183,10 +185,10 @@ class _MarksState extends State<Marks> {
             SliverPadding(
               padding: const EdgeInsets.all(11.0),
               sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                // return Card(child: Text('hi'));
-                return marlist();
-              })),
+                delegate: SliverChildListDelegate([
+                  marlist(),
+                ]),
+              ),
             ),
           ],
         ),
