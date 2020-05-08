@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
   Profile(this.cgpa, this.profileData);
-  String cgpa;
-  Map<String, dynamic> profileData;
+  final String cgpa;
+  final Map<String, dynamic> profileData;
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -12,12 +12,10 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    printData();
+    getData();
   }
 
-  void printData() {
-    print(widget.cgpa);
-  }
+  void getData() {}
 
   @override
   Widget build(BuildContext context) {

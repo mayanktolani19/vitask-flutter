@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'tt.dart';
 import 'package:vitask/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class TimeTable extends StatefulWidget {
-  TimeTable(this.timeTableData);
+  TimeTable(this.timeTableData, this.attendanceData);
   final Map<String, dynamic> timeTableData;
+  final Map<String, dynamic> attendanceData;
 
   @override
   _TimeTableState createState() => _TimeTableState();
@@ -77,6 +79,7 @@ class _TimeTableState extends State<TimeTable> {
     var endTime = [];
     var startTime = [];
     var slot = [];
+    var attendance = [];
     List<Info> exeele = [];
 
     var num = 0;
@@ -88,17 +91,26 @@ class _TimeTableState extends State<TimeTable> {
       endTime.add(list[num]["endTime"]);
       startTime.add(list[num]["startTime"]);
       slot.add(list[num]["slot"]);
+      for (var i = 0; i < widget.attendanceData["Attended"].length; i++) {
+        if (widget.attendanceData["Attended"][i]["courseName"] ==
+            list[num]["courseName"]) {
+          attendance.add(
+              widget.attendanceData["Attended"][i]["percentage"].toString());
+          break;
+        }
+      }
       num++;
     }
     var n = 0;
-    while (n < codes.length) {
+    while (n < attendance.length) {
       exeele.add(Info(
           codes: codes[n],
           courseName: courseName[n],
           endTime: endTime[n],
           loc: loc[n],
           slot: slot[n],
-          startTime: startTime[n]));
+          startTime: startTime[n],
+          attendance: attendance[n]));
       n++;
     }
 
@@ -222,6 +234,21 @@ class _TimeTableState extends State<TimeTable> {
                                 )
                               ],
                             ),
+                            SizedBox(height: 15),
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: LinearPercentIndicator(
+                                animation: true,
+                                width: MediaQuery.of(context).size.width / 1.4,
+                                lineHeight: 15,
+                                animationDuration: 900,
+                                percent: double.parse(e.attendance) / 100,
+                                backgroundColor: Colors.blue[300],
+                                progressColor: Colors.blue[800],
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                center: Texts(e.attendance + "%", 15),
+                              ),
+                            )
                           ],
                         ),
                       ],
@@ -281,15 +308,7 @@ class _TimeTableState extends State<TimeTable> {
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Align(
                                 alignment: Alignment.topLeft,
-                                child: Text(
-                                  mr.day,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 35,
-                                    //color: Colors.pinkAccent,
-                                  ),
-                                ),
+                                child: Texts(mr.day, 38),
                               ),
                             ),
                             Positioned(

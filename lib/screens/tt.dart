@@ -17,13 +17,14 @@ class Info {
   var endTime;
   var startTime;
   var slot;
+  var attendance;
 
-  Info({
-    this.codes,
-    this.loc,
-    this.courseName,
-    this.endTime,
-    this.startTime,
-    this.slot,
-  });
+  Info(
+      {this.codes,
+      this.loc,
+      this.courseName,
+      this.endTime,
+      this.startTime,
+      this.slot,
+      this.attendance});
 }

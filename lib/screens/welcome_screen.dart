@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -22,6 +23,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String profile;
   bool showSpinner = false;
   bool loginFail = false;
+  bool hidePassword = true;
+  var passwordIcon = [FontAwesomeIcons.eyeSlash, FontAwesomeIcons.eye];
+  var c = 0;
 
   @override
   void initState() {
@@ -46,7 +50,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FadeAnimatedTextKit(
-                    text: ['VITask'],
+                    text: ['VITASK'],
                     textAlign: TextAlign.center,
                     textStyle: TextStyle(
                       fontSize: 45.0,
@@ -59,29 +63,58 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 60.0,
                   ),
                   SizedBox(height: 18),
-                  TextField(
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      // regNo = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your Registration No.',
-                      errorText:
-                          loginFail ? 'Invalid UserName or Password' : null,
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        regNo = value;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 26.0),
+                        prefixIcon: Icon(
+                          FontAwesomeIcons.userAlt,
+                          color: Colors.redAccent,
+                          size: 18,
+                        ),
+                        hintText: 'Enter your Registration No.',
+                        errorText:
+                            loginFail ? 'Invalid UserName or Password' : null,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 30.0,
                   ),
-                  TextField(
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      //password = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your Password',
-                      errorText:
-                          loginFail ? 'Invalid UserName or Password' : null,
+                  Container(
+                    child: TextField(
+                      obscureText: hidePassword,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        prefixIcon: Icon(FontAwesomeIcons.lock,
+                            color: Colors.redAccent, size: 18),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              hidePassword = !hidePassword;
+                              if (c == 0)
+                                c = 1;
+                              else
+                                c = 0;
+                            });
+                          },
+                          icon: Icon(passwordIcon[c]),
+                          color: Colors.redAccent,
+                          iconSize: 19,
+                        ),
+                        hintText: 'Enter your Password',
+                        errorText:
+                            loginFail ? 'Invalid UserName or Password' : null,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -94,20 +127,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(30.0),
                       child: MaterialButton(
+                        child: Text(
+                          'Log In',
+                          style: TextStyle(
+                            color: Colors.red[100],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                         onPressed: () async {
                           setState(() {
                             showSpinner = true;
                           });
-                          regNo = "18BLC1095";
-                          password = "Durjanatoz2000";
+//                          regNo = "18BLC1095";
+//                          password = "Durjanatoz2000";
                           //Run this part to get the data from all the APIs and store it in the database.
-                          //regNo = regNo.toUpperCase();
+                          regNo = regNo.toUpperCase();
                           url =
                               'https://vitask.me/authenticate?username=$regNo&password=$password';
                           API api = API();
                           Map<String, dynamic> profileData =
                               await api.getAPIData(url);
-                          if (profileData["Error"] == null) {
+                          if (profileData != null &&
+                              profileData["Error"] == null) {
                             String t = profileData['APItoken'].toString();
                             String u = profileData['RegNo'].toString();
                             Map<String, dynamic> attendanceData =
@@ -126,19 +169,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 await api.getAPIData(
                                     'https://vitask.me/acadhistoryapi?token=$t');
                             print('AcadHistory');
-                            Student student = Student(
-                                profileKey: (u + "-profile"),
-                                profile: profileData,
-                                attendanceKey: (u + "-attendance"),
-                                attendance: attendanceData,
-                                timeTableKey: (u + "-timeTable"),
-                                timeTable: timeTableData,
-                                marksKey: (u + "-marks"),
-                                marks: marksData,
-                                acadHistoryKey: (u + "-acadHistory"),
-                                acadHistory: acadHistoryData);
-                            StudentDao().deleteStudent(student);
-                            StudentDao().insertStudent(student);
+                            if (attendanceData != null &&
+                                timeTableData != null &&
+                                marksData != null &&
+                                acadHistoryData != null) {
+                              Student student = Student(
+                                  profileKey: (u + "-profile"),
+                                  profile: profileData,
+                                  attendanceKey: (u + "-attendance"),
+                                  attendance: attendanceData,
+                                  timeTableKey: (u + "-timeTable"),
+                                  timeTable: timeTableData,
+                                  marksKey: (u + "-marks"),
+                                  marks: marksData,
+                                  acadHistoryKey: (u + "-acadHistory"),
+                                  acadHistory: acadHistoryData);
+                              var a = StudentDao().getData(regNo + "-profile");
+                              if (a != null)
+                                StudentDao().deleteStudent(student);
+                              StudentDao().insertStudent(student);
+                            }
                             //Run this part for fetching the stored data from the database. Note the key value,i.e, "18BLC1082-profile, etc."
                             Map<String, dynamic> p = (await StudentDao()
                                 .getData(regNo + "-profile"));
@@ -153,11 +203,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             await prefs.setString("regNo", regNo);
+                            await prefs.setString("password", password);
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        MenuDashboardPage(p, att, tt, m, ah)));
+                                        MenuDashboardPage(
+                                            p, att, tt, m, ah, password)));
                             setState(() {
                               showSpinner = false;
                             });
@@ -170,25 +222,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         },
                         minWidth: 200.0,
                         height: 42.0,
-                        child: Text(
-                          'Log In',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
                       ),
                     ),
                   ),
-                  FloatingActionButton(onPressed: () async {
-                    Map<String, dynamic> tt =
-                        (await StudentDao().getData("18BLC1095-timeTable"));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TimeTable(tt),
-                      ),
-                    );
-                  })
+//                  FloatingActionButton(
+//                    onPressed: () async {
+//                      regNo = "18BLC1082";
+//                      Map<String, dynamic> tt =
+//                          (await StudentDao().getData(regNo + "-attendance"));
+//                      print(tt);
+//                    },
+//                  )
                 ],
               ),
             ),

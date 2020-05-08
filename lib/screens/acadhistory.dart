@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitask/screens/classacad.dart';
+import 'package:vitask/constants.dart';
 
 class AcademicHistory extends StatefulWidget {
   AcademicHistory(this.acadHistory);
@@ -75,14 +76,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         bottom: 10,
                         left: 10,
                         right: 50,
-                        child: Text(
-                          e.subject,
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 19,
-                            //color: Colors.pinkAccent,
-                          ),
-                        ),
+                        child: Texts(e.subject, 19),
                       ),
                       Positioned(
                         top: 10,
@@ -150,7 +144,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
             floating: true,
             pinned: false,
             title: Text(
-              "Academic history",
+              "Academic History",
               style: TextStyle(
                 fontSize: 20,
               ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/timetable.dart';
@@ -19,7 +18,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
+import 'moodle.dart';
+import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:intl/intl.dart';
 
 //import 'package:vitask/screens/moodle.dart';
 
@@ -30,12 +32,14 @@ class MenuDashboardPage extends StatefulWidget {
     this.timeTableData,
     this.marksData,
     this.acadHistoryData,
+    this.password,
   );
   Map<String, dynamic> profileData;
   Map<String, dynamic> timeTableData;
   Map<String, dynamic> attendanceData;
   Map<String, dynamic> marksData;
   Map<String, dynamic> acadHistoryData;
+  String password;
   @override
   _MenuDashboardPageState createState() => _MenuDashboardPageState();
 }
@@ -49,15 +53,24 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   List<String> a;
   List<dynamic> tt;
   List<String> days;
+  List<DateTime> time;
+  List<String> hours;
+  List<DateTime> timeNotifications;
+  List<dynamic> tt1;
   var now;
+  int count;
   bool refresh = false;
+  var regNo;
+  var token;
+  var pass;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   void initState() {
     super.initState();
+    count = 0;
     getAttendance();
     getTimeTable();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings();
@@ -66,7 +79,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
-    chalJaoPlease();
+//    chalJaoPlease(DateTime.now(), "hi");
   }
 
   void getAttendance() {
@@ -81,7 +94,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   }
 
   void getTimeTable() {
-    days = [];
     days = [
       "Monday",
       "Tuesday",
@@ -91,9 +103,52 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       "Saturday",
       "Sunday"
     ];
+    hours = ["0", "13", "14", "15", "16", "17", "18", "19"];
     now = DateTime.now();
+    tt1 = [];
+    timeNotifications = [];
     if (now.weekday < 6) {
       tt = widget.timeTableData["Timetable"][days[now.weekday - 1]];
+      for (var j = 0; j < tt.length; j++) {
+        tt1.add({"startTime": "xx"});
+      }
+      //print(DateTime.now());
+      //print(tt.length);
+      for (var i = 0; i < tt.length; i++) {
+        if (int.parse(tt[i]["startTime"].split(':')[0]) >= 1 &&
+            int.parse(tt[i]["startTime"].split(':')[0]) < 8) {
+          tt1[i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) +
+              " " +
+              hours[int.parse(tt[i]["startTime"].split(':')[0])] +
+              ":";
+          if ((int.parse(tt[i]["startTime"].split(':')[1])).toString() == "0") {
+            tt1[i]["startTime"] = tt1[i]["startTime"] + "00";
+          } else {
+            tt1[i]["startTime"] = tt1[i]["startTime"] +
+                (int.parse(tt[i]["startTime"].split(':')[1])).toString();
+          }
+          tt1[i]["startTime"] = tt1[i]["startTime"] + ":" + "00";
+        } else {
+          tt1[i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) + " ";
+          if ((tt[i]["startTime"].split(':')[0]).length < 2) {
+            tt1[i]["startTime"] = tt1[i]["startTime"] +
+                "0" +
+                tt[i]["startTime"].split(':')[0] +
+                ":";
+          } else {
+            tt1[i]["startTime"] =
+                tt1[i]["startTime"] + tt[i]["startTime"].split(':')[0] + ":";
+          }
+          if ((int.parse(tt[i]["startTime"].split(':')[1])).toString() == "0") {
+            tt1[i]["startTime"] = tt1[i]["startTime"] + "00";
+          } else {
+            tt1[i]["startTime"] = tt1[i]["startTime"] +
+                (int.parse(tt[i]["startTime"].split(':')[1])).toString();
+          }
+          tt1[i]["startTime"] = tt1[i]["startTime"] + ":" + "00";
+        }
+        timeNotifications.add(DateTime.parse(tt1[i]["startTime"]));
+      }
     } else {
       tt = [
         {"Saturday": "Sit back and relax"},
@@ -117,7 +172,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             elevation: 0,
-            title: Text('Dashboard'),
+            title: Texts('Dashboard', 21),
             backgroundColor: Colors.transparent,
             actions: <Widget>[
               IconButton(
@@ -130,38 +185,56 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     refresh = true;
                   });
                   API api = API();
-                  String t = widget.profileData['APItoken'].toString();
-                  String u = widget.profileData['RegNo'].toString();
-                  widget.attendanceData = await api
-                      .getAPIData('https://vitask.me/classesapi?token=$t');
-                  print('Classes');
-                  widget.timeTableData = await api
-                      .getAPIData('https://vitask.me/timetableapi?token=$t');
-                  print('Time Table');
-                  widget.marksData = await api
-                      .getAPIData('https://vitask.me/marksapi?token=$t');
-                  print('Marks');
-                  widget.acadHistoryData = await api
-                      .getAPIData('https://vitask.me/acadhistoryapi?token=$t');
-                  print('AcadHistory');
-                  Student student = Student(
-                      profileKey: (u + "-profile"),
-                      profile: widget.profileData,
-                      attendanceKey: (u + "-attendance"),
-                      attendance: widget.attendanceData,
-                      timeTableKey: (u + "-timeTable"),
-                      timeTable: widget.timeTableData,
-                      marksKey: (u + "-marks"),
-                      marks: widget.marksData,
-                      acadHistoryKey: (u + "-acadHistory"),
-                      acadHistory: widget.acadHistoryData);
-                  StudentDao().deleteStudent(student);
-                  StudentDao().insertStudent(student);
-                  getAttendance();
-                  getTimeTable();
-                  setState(() {
-                    refresh = false;
-                  });
+                  pass = widget.password;
+                  regNo = widget.profileData["RegNo"];
+                  String url =
+                      'https://vitask.me/authenticate?username=$regNo&password=$pass';
+                  Map<String, dynamic> newProfileData =
+                      await api.getAPIData(url);
+                  if (newProfileData != null)
+                    widget.profileData = newProfileData;
+                  if (newProfileData != null) {
+                    String t = widget.profileData['APItoken'].toString();
+                    String u = widget.profileData['RegNo'].toString();
+                    Map<String, dynamic> newAttendanceData = await api
+                        .getAPIData('https://vitask.me/classesapi?token=$t');
+                    if (newAttendanceData != null)
+                      widget.attendanceData = newAttendanceData;
+                    print('Classes');
+                    Map<String, dynamic> newTimeTableData = await api
+                        .getAPIData('https://vitask.me/timetableapi?token=$t');
+                    if (newTimeTableData != null)
+                      widget.timeTableData = newTimeTableData;
+                    print('Time Table');
+                    Map<String, dynamic> newMarksData = await api
+                        .getAPIData('https://vitask.me/marksapi?token=$t');
+                    if (newMarksData != null) widget.marksData = newMarksData;
+                    print('Marks');
+                    Map<String, dynamic> newAcadHistoryData =
+                        await api.getAPIData(
+                            'https://vitask.me/acadhistoryapi?token=$t');
+                    if (newAcadHistoryData != null)
+                      widget.acadHistoryData = newAcadHistoryData;
+                    print('AcadHistory');
+                    Student student = Student(
+                        profileKey: (u + "-profile"),
+                        profile: widget.profileData,
+                        attendanceKey: (u + "-attendance"),
+                        attendance: widget.attendanceData,
+                        timeTableKey: (u + "-timeTable"),
+                        timeTable: widget.timeTableData,
+                        marksKey: (u + "-marks"),
+                        marks: widget.marksData,
+                        acadHistoryKey: (u + "-acadHistory"),
+                        acadHistory: widget.acadHistoryData);
+                    StudentDao().deleteStudent(student);
+                    StudentDao().insertStudent(student);
+                    getAttendance();
+                    getTimeTable();
+                    setState(() {
+                      refresh = false;
+                    });
+                  }
                   // do something
                 },
               )
@@ -190,12 +263,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Texts("Average Attendance", 30),
+                                  Texts("Average Attendance", 22),
                                   Texts(
                                       attDetails["Attended"] +
                                           "/" +
                                           attDetails["Total"],
-                                      22),
+                                      17),
                                 ],
                               ),
                             ),
@@ -203,7 +276,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               duration: Duration(milliseconds: 900),
                               chartType: CircularChartType.Radial,
                               key: k.chartKey,
-                              size: const Size(140.0, 140.0),
+                              size: const Size(130.0, 130.0),
                               initialChartData: <CircularStackEntry>[
                                 CircularStackEntry(
                                   <CircularSegmentEntry>[
@@ -214,7 +287,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     ),
                                     CircularSegmentEntry(
                                       pie["Absent"],
-                                      Colors.blue[400],
+                                      Colors.blue[300],
                                       rankKey: 'remaining',
                                     ),
                                   ],
@@ -224,10 +297,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               percentageValues: true,
                               edgeStyle: SegmentEdgeStyle.round,
                               holeLabel: attDetails["Percentage"] + "%",
-                              labelStyle: new TextStyle(
+                              labelStyle: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 24.0,
+                                fontSize: 18.0,
                               ),
                             )
                           ],
@@ -239,7 +312,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                 ),
                 Container(
                     padding: EdgeInsets.symmetric(vertical: 1),
-                    child: Texts(days[now.weekday - 1].toString(), 35)),
+                    child: Texts(days[now.weekday - 1].toString(), 25)),
                 // /SizedBox(height: 10),
                 Expanded(
                   flex: 2,
@@ -250,6 +323,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     child: SingleChildScrollView(
                         child: Column(
                       children: tt.map((e) {
+                        if (count < tt.length)
+                          chalJaoPlease(timeNotifications[count++],
+                              e["courseName"], e["startTime"], e["class"]);
                         var att = 80;
                         for (var i = 0;
                             i < widget.attendanceData["Attended"].length;
@@ -281,7 +357,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   BorderRadius.all(Radius.circular(20)),
                             ),
                             padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsets.all(9),
                             child: Column(
                               children: <Widget>[
                                 Card(
@@ -301,20 +377,20 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                 e["code"] +
                                                     " - " +
                                                     e["courseName"],
-                                                21),
+                                                18),
                                             SizedBox(height: 8),
                                             Row(
                                               children: <Widget>[
                                                 Icon(FontAwesomeIcons.tag,
-                                                    size: 17, color: color1),
+                                                    size: 18, color: color1),
                                                 SizedBox(width: 8),
                                                 Text(
                                                   e["slot"],
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontStyle: FontStyle.italic,
-                                                    color: color1,
-                                                    fontSize: 22,
+                                                    color: Colors.white,
+                                                    fontSize: 18,
                                                   ),
                                                 ),
                                               ],
@@ -330,7 +406,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                       BorderRadius.all(
                                                           Radius.circular(20)),
                                                 ),
-                                                alignment: Alignment.center,
+                                                alignment: Alignment.centerLeft,
                                                 margin: EdgeInsets.only(
                                                   left: 60,
                                                   right: 60,
@@ -344,20 +420,24 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                       scrollDirection:
                                                           Axis.horizontal,
                                                       child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: <Widget>[
                                                           Row(
                                                             children: <Widget>[
                                                               Icon(
                                                                   FontAwesomeIcons
                                                                       .clock,
-                                                                  size: 17,
+                                                                  size: 18,
                                                                   color:
                                                                       color1),
                                                               SizedBox(
                                                                   width: 5),
                                                               Text(
                                                                 e["startTime"] +
-                                                                    " - ",
+                                                                    " - " +
+                                                                    e["endTime"],
                                                                 style:
                                                                     TextStyle(
                                                                   fontWeight:
@@ -366,22 +446,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                                   fontStyle:
                                                                       FontStyle
                                                                           .italic,
-                                                                  color: color1,
-                                                                  fontSize: 20,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                e["endTime"],
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontStyle:
-                                                                      FontStyle
-                                                                          .italic,
-                                                                  color: color1,
-                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18,
                                                                 ),
                                                               ),
                                                             ],
@@ -392,7 +459,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                               Icon(
                                                                   FontAwesomeIcons
                                                                       .mapMarkerAlt,
-                                                                  size: 17,
+                                                                  size: 16,
                                                                   color:
                                                                       color1),
                                                               SizedBox(
@@ -407,8 +474,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                                   fontStyle:
                                                                       FontStyle
                                                                           .italic,
-                                                                  color: color1,
-                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18,
                                                                 ),
                                                               ),
                                                             ],
@@ -425,13 +493,16 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       ),
                                       SizedBox(width: 20),
                                       CircularPercentIndicator(
-                                        radius: 100.0,
+                                        animationDuration: 900,
+                                        radius: 90.0,
                                         lineWidth: 6.0,
                                         percent:
                                             double.parse(att.toString()) / 100,
-                                        center: Texts(att.toString() + "%", 20),
+                                        center: Texts(att.toString() + "%", 18),
                                         progressColor: color1,
                                         backgroundColor: color2,
+                                        circularStrokeCap:
+                                            CircularStrokeCap.round,
                                       )
                                     ],
                                   ),
@@ -447,12 +518,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               Container(
                                   child: Texts(
                                       "No Classes today, Sit back and relax.",
-                                      25)),
+                                      22)),
                               SizedBox(height: 40),
                               Divider(color: Colors.grey),
                               Container(
                                 child: Texts(
-                                    "Maybe work on some assignments.", 25),
+                                    "Maybe work on some assignments.", 22),
                                 padding: EdgeInsets.only(top: 15),
                               ),
                               SizedBox(height: 10),
@@ -526,91 +597,145 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                           //     fit: BoxFit.cover),
                           ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                            Color.fromRGBO(13, 50, 77, 100),
-                            Color.fromRGBO(0, 0, 10, 10)
-                          ])),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          ListTile(
-                            title: Texts('Attendance', 20),
-                            onTap: () async {
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        ListTile(
+                          title: Texts('Attendance', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Attendance(widget.attendanceData),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          title: Texts('Time Table', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            //print(widget.timeTableData["Timetable"]["Monday"]);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TimeTable(
+                                    widget.timeTableData,
+                                    widget.attendanceData),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          title: Texts('Marks', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Marks(widget.marksData),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          title: Texts('Academic History', 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AcademicHistory(widget.acadHistoryData),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          title: Texts('Moodle', 20),
+                          onTap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            var moodlePassword =
+                                prefs.getString("moodle-password");
+                            if (moodlePassword == null) {
                               Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      Attendance(widget.attendanceData),
+                                  builder: (context) => MoodleLogin(
+                                      widget.profileData["RegNo"],
+                                      widget.profileData["AppNo"]),
                                 ),
                               );
-                            },
-                          ),
-                          ListTile(
-                            title: Texts('Time Table', 20),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              //print(widget.timeTableData["Timetable"]["Monday"]);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TimeTable(widget.timeTableData),
-                                ),
-                              );
-                            },
-                          ),
-                          ListTile(
-                            title: Texts('Marks', 20),
-                            onTap: () async {
+                            } else {
+                              Map<String, dynamic> mod = await MoodleDAO()
+                                  .getMoodleData(
+                                      widget.profileData["RegNo"] + "-moodle");
+                              pass = widget.password;
                               Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Marks(widget.marksData),
+                                  builder: (context) => Moodle(
+                                    widget.profileData["RegNo"],
+                                    widget.profileData["AppNo"],
+                                    mod,
+                                  ),
                                 ),
                               );
-                            },
-                          ),
-                          ListTile(
-                            title: Texts('Academic History', 20),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      AcademicHistory(widget.acadHistoryData),
-                                ),
-                              );
-                            },
-                          ),
-                          ListTile(
-                            title: Texts('Moodle', 20),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MoodleLogin(),
-                                ),
-                              );
-                            },
-                          ),
-                          ListTile(
-                            title: Texts('Logout', 20),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              logoutUser();
-                            },
-                          ),
-                        ],
-                      ),
+                            }
+                          },
+                        ),
+                        ListTile(
+                          title: Texts(widget.profileData["Name"], 20),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Profile(
+                                    widget.acadHistoryData["CurriculumDetails"]
+                                        ["CGPA"],
+                                    widget.profileData),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          title: Texts('Logout', 20),
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              child: AlertDialog(
+                                backgroundColor: Colors.blue[900],
+                                title: Texts(
+                                    'Are you sure you want to logout?', 19),
+                                content:
+                                    Texts('We hate to see you leave...', 16),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () {
+                                      print("you choose no");
+                                      Navigator.of(context).pop(false);
+                                    },
+                                    child: Texts('No', 15),
+                                  ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      logoutUser();
+                                    },
+                                    child: Texts('Yes', 15),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -630,33 +755,50 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         (Route<dynamic> route) => false);
   }
 
-  Future chalJaoPlease() async {
-    var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 30));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  Future chalJaoPlease(
+      DateTime t, String c, String startTime, String venue) async {
+//    print(t);
+//    print(DateTime.now().add(Duration(seconds: 30)));
+    //var scheduledNotificationDateTime = t.add(Duration(seconds: 30));
+//    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+//        'repeating channel id',
+//        'repeating channel name',
+//        'repeating description');
+//    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+//    NotificationDetails platformChannelSpecifics = NotificationDetails(
+//        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+//    await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
+//        'repeating body', RepeatInterval.EveryMinute, platformChannelSpecifics);
+    //await flutterLocalNotificationsPlugin.
+//    if (DateTime.now().difference(t) == 0)
+    //print(DateTime.now()
+    //  .add(Duration(seconds: t.difference(DateTime.now()).inSeconds)));
+    //print(t.difference(DateTime.now()).inSeconds);
+    if (t.isAfter(DateTime.now())) {
+      var scheduledNotificationDateTime = t.subtract(Duration(seconds: 350));
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your other channel id',
         'your other channel name',
-        'your other channel description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(
-        0,
-        'scheduled title',
-        'scheduled body',
-        scheduledNotificationDateTime,
-        platformChannelSpecifics);
+        'your other channel description',
+        //color: Colors.lightBlue,
+      );
+      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.schedule(count, c + " - " + venue,
+          startTime, scheduledNotificationDateTime, platformChannelSpecifics);
+    }
   }
 
   Future onSelectNotification(String payload) async {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return new AlertDialog(
-          title: Text("PayLoad"),
-          content: Text("Payload : $payload"),
-        );
-      },
-    );
+//    showDialog(
+//      context: context,
+//      builder: (_) {
+//        return new AlertDialog(
+//          title: Text("PayLoad"),
+//          content: Text("Payload : $payload"),
+//        );
+//      },
+//    );
   }
 }

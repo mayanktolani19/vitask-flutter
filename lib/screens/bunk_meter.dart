@@ -77,6 +77,11 @@ class _BunkMeterState extends State<BunkMeter> {
             ])),
         child: Center(
           child: Scaffold(
+            appBar: AppBar(
+              title: Text('Bunk Meter'),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
             backgroundColor: Colors.transparent,
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -97,11 +102,11 @@ class _BunkMeterState extends State<BunkMeter> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Texts(course.toString() + ' - ' + code.toString(), 27),
+                        Texts(course.toString() + ' - ' + code.toString(), 24),
                         SizedBox(height: 20),
-                        Texts(type.toString(), 25),
+                        Texts(type.toString(), 22),
                         SizedBox(height: 20),
-                        Texts(faculty.toString(), 23),
+                        Texts(faculty.toString(), 20),
                       ],
                     ),
                   ),
@@ -127,14 +132,13 @@ class _BunkMeterState extends State<BunkMeter> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Texts("Classes Attended", 25),
+                              Texts("Classes Attended", 22),
                               SizedBox(height: 5),
                               Text(
                                 att.toString() + "/" + total.toString(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,
-                                  color: color1,
                                   fontSize: 20,
                                 ),
                               ),
@@ -166,7 +170,7 @@ class _BunkMeterState extends State<BunkMeter> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
 //                      SizedBox(width: 20),
-                              Texts("Attend + " + a.toString(), 25),
+                              Texts("Attend + " + a.toString(), 22),
                             ],
                           ),
                         ),
@@ -230,7 +234,7 @@ class _BunkMeterState extends State<BunkMeter> {
                           margin: EdgeInsets.only(left: 20),
                           child: Row(
                             children: <Widget>[
-                              Texts("Bunk + " + b.toString(), 25),
+                              Texts("Bunk + " + b.toString(), 22),
                             ],
                           ),
                         ),
