@@ -42,23 +42,31 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var username = prefs.getString('regNo');
     var password = prefs.getString('password');
+    print(username);
     Map<String, dynamic> p;
     Map<String, dynamic> att;
     Map<String, dynamic> tt;
     Map<String, dynamic> m;
     Map<String, dynamic> ah;
 //    print(status);
-    if (username != null) {
+    if (username != null && password != null) {
       p = (await StudentDao().getData(username + "-profile"));
       att = (await StudentDao().getData(username + "-attendance"));
       tt = (await StudentDao().getData(username + "-timeTable"));
       m = (await StudentDao().getData(username + "-marks"));
       ah = (await StudentDao().getData(username + "-acadHistory"));
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  MenuDashboardPage(p, att, tt, m, ah, password)));
+      if (p != null && att != null && tt != null && m != null && ah != null) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    MenuDashboardPage(p, att, tt, m, ah, password)));
+      } else {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      }
     } else {
       Navigator.pushReplacement(
           context,

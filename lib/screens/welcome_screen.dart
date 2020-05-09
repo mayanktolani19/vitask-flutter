@@ -8,7 +8,6 @@ import 'dashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
-import 'timetable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -26,6 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool hidePassword = true;
   var passwordIcon = [FontAwesomeIcons.eyeSlash, FontAwesomeIcons.eye];
   var c = 0;
+  int x = 0;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FadeAnimatedTextKit(
-                    text: ['VITASK'],
+                    text: ['VITask'],
                     textAlign: TextAlign.center,
                     textStyle: TextStyle(
                       fontSize: 45.0,
@@ -66,13 +66,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Container(
                     alignment: Alignment.topLeft,
                     child: TextField(
+                      textCapitalization: TextCapitalization.sentences,
                       textAlign: TextAlign.center,
                       onChanged: (value) {
                         regNo = value;
                       },
                       decoration: kTextFieldDecoration.copyWith(
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 26.0),
                         prefixIcon: Icon(
                           FontAwesomeIcons.userAlt,
                           color: Colors.redAccent,
@@ -143,14 +142,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 //                          regNo = "18BLC1095";
 //                          password = "Durjanatoz2000";
                           //Run this part to get the data from all the APIs and store it in the database.
-                          regNo = regNo.toUpperCase();
+                          regNo = regNo.trim();
+                          print(regNo);
+//                          regNo = regNo.toUpperCase();
+//                          print(regNo);
+//                          print(password);
                           url =
                               'https://vitask.me/authenticate?username=$regNo&password=$password';
                           API api = API();
                           Map<String, dynamic> profileData =
                               await api.getAPIData(url);
                           if (profileData != null &&
-                              profileData["Error"] == null) {
+                              profileData["Error"] == null &&
+                              regNo.length == 9) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.setString(
+                                "regNo", profileData["RegNo"]);
+                            await prefs.setString("password", password);
                             String t = profileData['APItoken'].toString();
                             String u = profileData['RegNo'].toString();
                             Map<String, dynamic> attendanceData =
@@ -173,6 +182,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 timeTableData != null &&
                                 marksData != null &&
                                 acadHistoryData != null) {
+                              x = 1;
                               Student student = Student(
                                   profileKey: (u + "-profile"),
                                   profile: profileData,
@@ -184,32 +194,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   marks: marksData,
                                   acadHistoryKey: (u + "-acadHistory"),
                                   acadHistory: acadHistoryData);
-                              var a = StudentDao().getData(regNo + "-profile");
-                              if (a != null)
-                                StudentDao().deleteStudent(student);
+                              StudentDao().deleteStudent(student);
                               StudentDao().insertStudent(student);
+//                              var a =
+//                                  await StudentDao().getData(u + "-profile");
+//                              var b =
+//                                  await StudentDao().getData(u + "-attendance");
+//                              var c =
+//                                  await StudentDao().getData(u + "-timeTable");
+//                              var d = await StudentDao().getData(u + "-marks");
+//                              var e = await StudentDao()
+//                                  .getData(u + "-acadHistory");
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          MenuDashboardPage(
+                                              profileData,
+                                              attendanceData,
+                                              timeTableData,
+                                              marksData,
+                                              acadHistoryData,
+                                              password)));
                             }
-                            //Run this part for fetching the stored data from the database. Note the key value,i.e, "18BLC1082-profile, etc."
-                            Map<String, dynamic> p = (await StudentDao()
-                                .getData(regNo + "-profile"));
-                            Map<String, dynamic> att = (await StudentDao()
-                                .getData(regNo + "-attendance"));
-                            Map<String, dynamic> tt = (await StudentDao()
-                                .getData(regNo + "-timeTable"));
-                            Map<String, dynamic> m =
-                                (await StudentDao().getData(regNo + "-marks"));
-                            Map<String, dynamic> ah = (await StudentDao()
-                                .getData(regNo + "-acadHistory"));
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            await prefs.setString("regNo", regNo);
-                            await prefs.setString("password", password);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        MenuDashboardPage(
-                                            p, att, tt, m, ah, password)));
                             setState(() {
                               showSpinner = false;
                             });

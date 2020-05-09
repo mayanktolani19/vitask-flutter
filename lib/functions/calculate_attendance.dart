@@ -1,8 +1,11 @@
+import 'package:vitask/database/Student_DAO.dart';
+
 class CalculateAttendance {
-  CalculateAttendance(this.att);
-  var att;
+  CalculateAttendance(this.att, this.reg);
+  var att, reg;
 
   List<String> attendanceDetails() {
+    StudentDao().getData(reg + "-attendance");
     att = att["Attended"];
     int attend = 0;
     int total = 0;

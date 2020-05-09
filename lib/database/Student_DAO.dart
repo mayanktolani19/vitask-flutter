@@ -27,6 +27,12 @@ class StudentDao {
   }
 
   Future deleteStudent(Student student) async {
-    await store.record(student.profileKey).delete(await _db);
+    if (getData(student.marksKey) != null) {
+      await store.record(student.profileKey).delete(await _db);
+      await store.record(student.attendanceKey).delete(await _db);
+      await store.record(student.timeTableKey).delete(await _db);
+      await store.record(student.marksKey).delete(await _db);
+      await store.record(student.acadHistoryKey).delete(await _db);
+    }
   }
 }
