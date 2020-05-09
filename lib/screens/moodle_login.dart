@@ -7,6 +7,7 @@ import 'package:vitask/database/MoodleModel.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
 import 'moodle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MoodleLogin extends StatefulWidget {
   MoodleLogin(this.regNo, this.appNo);
@@ -17,12 +18,10 @@ class MoodleLogin extends StatefulWidget {
 }
 
 class _MoodleLoginState extends State<MoodleLogin> {
-  String password;
-  String url;
-  String profile;
-  bool showSpinner = false;
-  var reg;
-  var a;
+  String password, url, profile;
+  bool showSpinner = false, loginFail = false, hidePassword = true;
+  var reg, a, c = 0;
+  var passwordIcon = [FontAwesomeIcons.eyeSlash, FontAwesomeIcons.eye];
   @override
   void initState() {
     super.initState();
@@ -66,13 +65,32 @@ class _MoodleLoginState extends State<MoodleLogin> {
                       height: 30.0,
                     ),
                     TextField(
+                      obscureText: hidePassword,
                       textAlign: TextAlign.center,
                       onChanged: (value) {
                         password = value;
                       },
                       decoration: kTextFieldDecorationMoodle.copyWith(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Password'),
+                        prefixIcon: Icon(FontAwesomeIcons.lock,
+                            color: Colors.orangeAccent, size: 18),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              hidePassword = !hidePassword;
+                              if (c == 0)
+                                c = 1;
+                              else
+                                c = 0;
+                            });
+                          },
+                          icon: Icon(passwordIcon[c]),
+                          color: Colors.orangeAccent,
+                          iconSize: 19,
+                        ),
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter your Password',
+                        errorText: loginFail ? 'Invalid Password' : null,
+                      ),
                     ),
                     SizedBox(
                       height: 30,
@@ -90,6 +108,9 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             });
                             reg = widget.regNo;
                             a = widget.appNo;
+                            print(reg);
+                            print(a);
+                            print(password);
                             url =
                                 "https://vitask.me/moodleapi?username=$reg&password=$password&appno=$a";
                             API api = API();
@@ -98,10 +119,10 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             if (moodleData != null) {
                               MoodleData m =
                                   MoodleData(reg + "-moodle", moodleData);
-                              MoodleDAO().deleteStudent(m);
+                              var h =
+                                  MoodleDAO().getMoodleData(reg + "-moodle");
+                              if (h != null) MoodleDAO().deleteStudent(m);
                               MoodleDAO().insertMoodleData(m);
-                              Map<String, dynamic> mod = await MoodleDAO()
-                                  .getMoodleData(reg + "-moodle");
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               await prefs.setString(
@@ -110,7 +131,11 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          Moodle(reg, a, mod)));
+                                          Moodle(reg, a, moodleData)));
+                            } else {
+                              setState(() {
+                                loginFail = true;
+                              });
                             }
                             setState(() {
                               showSpinner = false;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitask/constants.dart';
 
 class Profile extends StatefulWidget {
   Profile(this.cgpa, this.profileData);
@@ -22,6 +23,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -104,53 +106,37 @@ class _ProfileState extends State<Profile> {
             Positioned(
               top: 420,
               left: 35,
-              child: Container(
-                width: width / 1.2,
-                height: 110,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.indigo,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
+              child: SingleChildScrollView(
                 child: Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'Proctor',
-                      style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontSize: 22,
-                      ),
-                    )),
+                  width: width / 1.2,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.indigo,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                            alignment: Alignment.topCenter,
+                            child: Texts('Proctor Information', 22)),
+                        SizedBox(height: 5),
+                        Texts(
+                            "Name - " + widget.profileData["ProctorName"], 19),
+                        SizedBox(height: 5),
+                        Texts("Email - " + widget.profileData["ProctorEmail"],
+                            19),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
 //
-            Positioned(
-              left: 60,
-              top: 470,
-              child: Text(
-                widget.profileData["ProctorName"],
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 22,
-                ),
-              ),
-            ),
-
-            Positioned(
-              left: 60,
-              top: 490,
-              child: Text(
-                widget.profileData["ProctorEmail"],
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 17,
-                ),
-              ),
-            ),
 
 //
             Positioned(

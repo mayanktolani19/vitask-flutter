@@ -150,7 +150,7 @@ class _TimeTableState extends State<TimeTable> {
                                     fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic,
                                     color: Colors.white,
-                                    fontSize: 24,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 SizedBox(height: 10),
@@ -172,7 +172,7 @@ class _TimeTableState extends State<TimeTable> {
                                     child: Text("${e.startTime} - ${e.endTime}",
                                         style: TextStyle(
                                           color: Colors.lightBlue,
-                                          fontSize: 20,
+                                          fontSize: 18,
                                         )),
                                   ),
                                 ],
@@ -197,7 +197,7 @@ class _TimeTableState extends State<TimeTable> {
                                       child: Text("${e.slot}",
                                           style: TextStyle(
                                             color: Colors.lightBlue,
-                                            fontSize: 20,
+                                            fontSize: 18,
                                           )),
                                     ),
                                   ],
@@ -225,7 +225,7 @@ class _TimeTableState extends State<TimeTable> {
                                           child: Center(
                                               child: Text(e.loc,
                                                   style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 17,
                                                   ))),
                                         ),
                                       ),
@@ -236,7 +236,7 @@ class _TimeTableState extends State<TimeTable> {
                             ),
                             SizedBox(height: 15),
                             Padding(
-                              padding: const EdgeInsets.all(15.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: LinearPercentIndicator(
                                 animation: true,
                                 width: MediaQuery.of(context).size.width / 1.4,
@@ -308,11 +308,11 @@ class _TimeTableState extends State<TimeTable> {
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Align(
                                 alignment: Alignment.topLeft,
-                                child: Texts(mr.day, 38),
+                                child: Texts(mr.day, 28),
                               ),
                             ),
                             Positioned(
-                              top: 50,
+                              top: 36,
                               right: 10,
                               child: Container(
                                 padding: EdgeInsets.all(15),

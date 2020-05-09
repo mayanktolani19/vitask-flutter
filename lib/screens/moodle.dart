@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:vitask/api.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:vitask/database/MoodleModel.dart';
 import 'package:flutter/animation.dart';
+import 'dart:async';
 
 class Moodle extends StatefulWidget {
   Moodle(this.reg, this.appNo, this.moodle);
@@ -15,62 +17,55 @@ class Moodle extends StatefulWidget {
   _MoodleState createState() => _MoodleState();
 }
 
-class _MoodleState extends State<Moodle> with SingleTickerProviderStateMixin {
-  AnimationController animationController;
+class _MoodleState extends State<Moodle> {
   List<dynamic> assignments;
-  bool clicked = false;
+  bool refresh = false;
   var r, p, a;
   @override
   void initState() {
-    super.initState();
-    animationController = new AnimationController(
-      vsync: this,
-      duration: new Duration(seconds: 7),
-    );
     getData();
+    super.initState();
   }
 
   void getData() {
     assignments = [];
-    for (var i = 0; i < widget.moodle["Assignments"].length; i++) {
-      assignments.add(widget.moodle["Assignments"][i]);
+    if (widget.moodle != null) {
+      for (var i = 0; i < widget.moodle["Assignments"].length; i++) {
+        assignments.add(widget.moodle["Assignments"][i]);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-              title: Text('Moodle'),
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              actions: <Widget>[
-                AnimatedBuilder(
-                  animation: animationController,
-                  builder: (BuildContext context, Widget _widget) {
-                    return new Transform.rotate(
-                      angle: animationController.value * 6.3,
-                      child: _widget,
-                    );
-                  },
-                  child: IconButton(
+      child: ModalProgressHUD(
+        inAsyncCall: refresh,
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                Color.fromRGBO(13, 50, 77, 100),
+                Color.fromRGBO(0, 0, 10, 10)
+              ])),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+                title: Text('Moodle'),
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                actions: <Widget>[
+                  IconButton(
                       icon: Icon(
                         Icons.refresh,
                         color: Colors.white,
                       ),
                       onPressed: () async {
-                        setState(() {});
+                        setState(() {
+                          refresh = true;
+                        });
                         r = widget.reg;
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
@@ -82,82 +77,84 @@ class _MoodleState extends State<Moodle> with SingleTickerProviderStateMixin {
                         Map<String, dynamic> moodleData =
                             await api.getAPIData(url);
                         if (moodleData != null) {
+                          widget.moodle = moodleData;
                           print("Moodle");
                           MoodleData m = MoodleData(r + "-moodle", moodleData);
                           MoodleDAO().deleteStudent(m);
                           MoodleDAO().insertMoodleData(m);
-                          widget.moodle =
-                              await MoodleDAO().getMoodleData(r + "-moodle");
                           getData();
                         }
-                      }),
-                )
-              ]),
-          body: SingleChildScrollView(
-            child: Column(
-                children: assignments.map((e) {
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.indigo,
+                        setState(() {
+                          refresh = false;
+                        });
+                      })
+                ]),
+            body: SingleChildScrollView(
+              child: Column(
+                  children: assignments.map((e) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.indigo,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.all(9),
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      color: Colors.transparent,
-                      elevation: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(FontAwesomeIcons.graduationCap,
-                                          size: 20, color: Colors.indigo),
-                                      SizedBox(width: 8),
-                                      Texts(e["course"], 20),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(FontAwesomeIcons.clock,
-                                          size: 20, color: Colors.indigo),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        e["time"],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic,
-                                          color: Colors.white,
-                                          fontSize: 18,
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.all(9),
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                        color: Colors.transparent,
+                        elevation: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Icon(FontAwesomeIcons.graduationCap,
+                                            size: 20, color: Colors.indigo),
+                                        SizedBox(width: 8),
+                                        Texts(e["course"], 20),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: <Widget>[
+                                        Icon(FontAwesomeIcons.clock,
+                                            size: 20, color: Colors.indigo),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          e["time"],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                ],
+                                      ],
+                                    ),
+                                    SizedBox(height: 8),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 20),
-                        ],
+                            SizedBox(width: 20),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList()),
+                    ],
+                  ),
+                );
+              }).toList()),
+            ),
           ),
         ),
       ),
