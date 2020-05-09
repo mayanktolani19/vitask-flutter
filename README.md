@@ -2,7 +2,9 @@
 
 # Caution! Work in progress. 
 
-VITask flutter application made for the students of VIT Chennai for their VTOP login.
+## Now moved into the beta testing mode.
+
+VITask mobile application made for the students of VIT Chennai for their VTOP login.
 
 # Installation
 
