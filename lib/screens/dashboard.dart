@@ -554,8 +554,41 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       color: Colors.indigo,
                                       borderRadius: BorderRadius.circular(30.0),
                                       child: MaterialButton(
-                                        onPressed: () {
-                                          print("Moodle button was pressed.");
+                                        onPressed: () async {
+                                          SharedPreferences prefs =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          var moodlePassword = prefs
+                                              .getString("moodle-password");
+                                          if (moodlePassword == null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MoodleLogin(
+                                                        widget.profileData[
+                                                            "RegNo"],
+                                                        widget.profileData[
+                                                            "AppNo"]),
+                                              ),
+                                            );
+                                          } else {
+                                            Map<String, dynamic> mod =
+                                                await MoodleDAO().getMoodleData(
+                                                    widget.profileData[
+                                                            "RegNo"] +
+                                                        "-moodle");
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => Moodle(
+                                                  widget.profileData["RegNo"],
+                                                  widget.profileData["AppNo"],
+                                                  mod,
+                                                ),
+                                              ),
+                                            );
+                                          }
                                         },
                                         minWidth: 200.0,
                                         height: 42.0,
@@ -742,7 +775,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 Map<String, dynamic> mod = await MoodleDAO()
                                     .getMoodleData(widget.profileData["RegNo"] +
                                         "-moodle");
-                                pass = widget.password;
                                 Navigator.pop(context);
                                 Navigator.push(
                                   context,

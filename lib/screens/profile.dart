@@ -62,29 +62,15 @@ class _ProfileState extends State<Profile> {
             Positioned(
               top: 190,
               left: 60,
-              child: Text(
-                widget.profileData["RegNo"],
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.normal,
-                  //color: Colors.blue,
-                  fontSize: 20,
-                ),
-              ),
+              child: Texts(widget.profileData["RegNo"], 20),
             ),
 
 //
             Positioned(
               left: 60,
               top: 220,
-              child: Text(
-                'Application Number: ' + widget.profileData["AppNo"],
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 18,
-                ),
-              ),
+              child: Texts(
+                  'Application Number: ' + widget.profileData["AppNo"], 19),
             ),
 //
 
@@ -92,14 +78,7 @@ class _ProfileState extends State<Profile> {
               top: 250,
               left: 60,
               right: 60,
-              child: Text(
-                widget.profileData["Branch"],
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 20,
-                ),
-              ),
+              child: Texts(widget.profileData["Branch"], 19),
             ),
 //
 //
