@@ -18,6 +18,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -40,45 +41,43 @@ class _ProfileState extends State<Profile> {
           body: Stack(
             children: <Widget>[
               Positioned(
-                left: width / 8.5,
                 top: 150,
-                right: 40,
-                child: Text(
-                  widget.profileData["Name"],
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 22,
+                left: width / 40,
+                right: width / 40,
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        widget.profileData["Name"],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 22,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Texts(widget.profileData["RegNo"], 20),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Texts(
+                          'Application Number: ' + widget.profileData["AppNo"],
+                          18),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Texts(widget.profileData["Branch"], 16),
+                    ],
                   ),
                 ),
               ),
 
-              //
               Positioned(
-                top: 190,
-                left: width / 8.5,
-                child: Texts(widget.profileData["RegNo"], 20),
-              ),
-
-//
-              Positioned(
-                left: width / 8.5,
-                top: 220,
-                child: Texts(
-                    'Application Number: ' + widget.profileData["AppNo"], 19),
-              ),
-//
-
-              Positioned(
-                top: 250,
-                left: width / 8.5,
-                right: 60,
-                child: Texts(widget.profileData["Branch"], 19),
-              ),
-//
-//
-              Positioned(
-                top: 420,
+                top: height / 1.8,
                 left: 35,
                 child: SingleChildScrollView(
                   child: Container(
@@ -98,12 +97,12 @@ class _ProfileState extends State<Profile> {
                           Container(
                               alignment: Alignment.topCenter,
                               child: Texts('Proctor Information', 22)),
-                          SizedBox(height: 8),
+                          SizedBox(height: 10),
                           Texts("Name - " + widget.profileData["ProctorName"],
-                              19),
-                          SizedBox(height: 5),
+                              16),
+                          SizedBox(height: 10),
                           Texts("Email - " + widget.profileData["ProctorEmail"],
-                              19),
+                              16),
                         ],
                       ),
                     ),
@@ -131,7 +130,7 @@ class _ProfileState extends State<Profile> {
               ///
               ///
               Positioned(
-                top: 320,
+                top: height / 2.3,
                 left: width / 3.2,
                 child: Container(
                   margin: EdgeInsets.all(10),
