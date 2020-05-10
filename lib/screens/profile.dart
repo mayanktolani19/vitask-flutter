@@ -135,7 +135,9 @@ class _ProfileState extends State<Profile> {
             ///
             ///
             ///
-            Center(
+            Positioned(
+              top: 320,
+              left: width / 3.2,
               child: Container(
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.all(10),
