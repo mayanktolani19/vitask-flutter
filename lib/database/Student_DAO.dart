@@ -17,17 +17,19 @@ class StudentDao {
     await store
         .record(student.acadHistoryKey)
         .put(await _db, student.acadHistory);
-    print('Student Inserted successfully !!');
   }
 
   Future<Map<String, dynamic>> getData(String key) async {
     var settings = await store.record(key).get(await _db) as Map;
     return settings;
-    //print(finder);
   }
 
   Future deleteStudent(Student student) async {
-    if (getData(student.marksKey) != null) {
+    if (getData(student.marksKey) != null &&
+        getData(student.attendanceKey) != null &&
+        getData(student.profileKey) != null &&
+        getData(student.timeTableKey) != null &&
+        getData(student.acadHistoryKey) != null) {
       await store.record(student.profileKey).delete(await _db);
       await store.record(student.attendanceKey).delete(await _db);
       await store.record(student.timeTableKey).delete(await _db);

@@ -29,130 +29,129 @@ class _MoodleLoginState extends State<MoodleLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-            Color.fromRGBO(13, 50, 77, 100),
-            Color.fromRGBO(0, 0, 10, 10)
-          ])),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Moodle'),
-          elevation: 0,
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+              Color.fromRGBO(13, 50, 77, 100),
+              Color.fromRGBO(0, 0, 10, 10)
+            ])),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Moodle'),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
           backgroundColor: Colors.transparent,
-        ),
-        backgroundColor: Colors.transparent,
-        body: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 100,
-                      child: Image.asset(
-                        'images/icon1.png',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30.0,
-                    ),
-                    TextField(
-                      obscureText: hidePassword,
-                      textAlign: TextAlign.center,
-                      onChanged: (value) {
-                        password = value;
-                      },
-                      decoration: kTextFieldDecorationMoodle.copyWith(
-                        prefixIcon: Icon(FontAwesomeIcons.lock,
-                            color: Colors.orangeAccent, size: 18),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              hidePassword = !hidePassword;
-                              if (c == 0)
-                                c = 1;
-                              else
-                                c = 0;
-                            });
-                          },
-                          icon: Icon(passwordIcon[c]),
-                          color: Colors.orangeAccent,
-                          iconSize: 19,
+          body: ModalProgressHUD(
+            inAsyncCall: showSpinner,
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 100,
+                        child: Image.asset(
+                          'images/icon1.png',
                         ),
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter your Password',
-                        errorText: loginFail ? 'Invalid Password' : null,
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Material(
-                        elevation: 5.0,
-                        color: Colors.indigo,
-                        borderRadius: BorderRadius.circular(30.0),
-                        child: MaterialButton(
-                          onPressed: () async {
-                            setState(() {
-                              showSpinner = true;
-                            });
-                            reg = widget.regNo;
-                            a = widget.appNo;
-                            print(reg);
-                            print(a);
-                            print(password);
-                            url =
-                                "https://vitask.me/moodleapi?username=$reg&password=$password&appno=$a";
-                            API api = API();
-                            Map<String, dynamic> moodleData =
-                                await api.getAPIData(url);
-                            if (moodleData != null) {
-                              MoodleData m =
-                                  MoodleData(reg + "-moodle", moodleData);
-                              var h =
-                                  MoodleDAO().getMoodleData(reg + "-moodle");
-                              if (h != null) MoodleDAO().deleteStudent(m);
-                              MoodleDAO().insertMoodleData(m);
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              await prefs.setString(
-                                  "moodle-password", password);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Moodle(reg, a, moodleData)));
-                            } else {
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      TextField(
+                        obscureText: hidePassword,
+                        textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          password = value;
+                        },
+                        decoration: kTextFieldDecorationMoodle.copyWith(
+                          prefixIcon: Icon(FontAwesomeIcons.lock,
+                              color: Colors.orangeAccent, size: 18),
+                          suffixIcon: IconButton(
+                            onPressed: () {
                               setState(() {
-                                loginFail = true;
+                                hidePassword = !hidePassword;
+                                if (c == 0)
+                                  c = 1;
+                                else
+                                  c = 0;
                               });
-                            }
-                            setState(() {
-                              showSpinner = false;
-                            });
-                          },
-                          minWidth: 200.0,
-                          height: 42.0,
-                          child: Text(
-                            'Log In',
-                            style: TextStyle(
-                              color: Colors.white,
+                            },
+                            icon: Icon(passwordIcon[c]),
+                            color: Colors.orangeAccent,
+                            iconSize: 19,
+                          ),
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter your Password',
+                          errorText: loginFail ? 'Invalid Password' : null,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Material(
+                          elevation: 5.0,
+                          color: Colors.indigo,
+                          borderRadius: BorderRadius.circular(30.0),
+                          child: MaterialButton(
+                            onPressed: () async {
+                              setState(() {
+                                showSpinner = true;
+                              });
+                              reg = widget.regNo;
+                              a = widget.appNo;
+                              url =
+                                  "https://vitask.me/moodleapi?username=$reg&password=$password&appno=$a";
+                              API api = API();
+                              Map<String, dynamic> moodleData =
+                                  await api.getAPIData(url);
+                              if (moodleData != null) {
+                                MoodleData m =
+                                    MoodleData(reg + "-moodle", moodleData);
+                                var h =
+                                    MoodleDAO().getMoodleData(reg + "-moodle");
+                                if (h != null) MoodleDAO().deleteStudent(m);
+                                MoodleDAO().insertMoodleData(m);
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString(
+                                    "moodle-password", password);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Moodle(reg, a, moodleData)));
+                              } else {
+                                setState(() {
+                                  loginFail = true;
+                                });
+                              }
+                              setState(() {
+                                showSpinner = false;
+                              });
+                            },
+                            minWidth: 200.0,
+                            height: 42.0,
+                            child: Text(
+                              'Log In',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

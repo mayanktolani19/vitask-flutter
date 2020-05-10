@@ -6,8 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:vitask/database/MoodleModel.dart';
-import 'package:flutter/animation.dart';
-import 'dart:async';
 
 class Moodle extends StatefulWidget {
   Moodle(this.reg, this.appNo, this.moodle);
@@ -78,7 +76,6 @@ class _MoodleState extends State<Moodle> {
                             await api.getAPIData(url);
                         if (moodleData != null) {
                           widget.moodle = moodleData;
-                          print("Moodle");
                           MoodleData m = MoodleData(r + "-moodle", moodleData);
                           MoodleDAO().deleteStudent(m);
                           MoodleDAO().insertMoodleData(m);

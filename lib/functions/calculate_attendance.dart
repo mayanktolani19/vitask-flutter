@@ -14,11 +14,9 @@ class CalculateAttendance {
       attend = attend + (att[i]["attended"]);
       total = total + (att[i]["total"]);
     }
-
     a.add(total.toString());
     a.add(attend.toString());
     a.add((attend / total * 100).toStringAsFixed(2));
-    //print(att["Attended"]);
     return a;
   }
 }

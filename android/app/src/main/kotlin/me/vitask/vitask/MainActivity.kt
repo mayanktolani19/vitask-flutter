@@ -1,4 +1,4 @@
-package com.mayanktolani.vitask
+package me.vitask.vitask
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
