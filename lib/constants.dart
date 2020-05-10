@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GlobalWidget {
   GlobalKey<AnimatedCircularChartState> chartKey =
@@ -70,11 +71,12 @@ class Texts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$text',
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.italic,
+      style: GoogleFonts.comfortaa(
+        //fontWeight: FontWeight.bold,
+        textStyle: TextStyle(
+          letterSpacing: .5,
+          fontSize: fontSize,
+        ),
       ),
     );
   }

@@ -188,9 +188,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     color: Colors.white,
                   ),
                   onPressed: () async {
-                    setState(() {
-                      refresh = true;
-                    });
+                    setState(
+                      () {
+                        refresh = true;
+                      },
+                    );
                     API api = API();
                     pass = widget.password;
                     regNo = widget.profileData["RegNo"];
@@ -249,6 +251,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               ],
             ),
             body: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: <Widget>[
                   Column(
@@ -624,14 +627,18 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               topRight: Radius.circular(40),
                               bottomRight: Radius.circular(40)),
                           border: Border.all(
-                            color: Colors.indigo,
+                            color: Colors.indigo[900],
                           ),
                           gradient: LinearGradient(
                               end: Alignment.centerLeft,
                               begin: Alignment.centerRight,
                               colors: [
-                                Color.fromRGBO(13, 50, 77, 10),
-                                Color.fromRGBO(0, 0, 10, 10)
+                                //old
+                                // Color.fromRGBO(28, 50, 92, 100),
+                                // Color.fromRGBO(0, 0, 10, 30)
+
+                                Color.fromRGBO(28, 50, 92, 3),
+                                Color.fromRGBO(0, 0, 10, 1)
                               ])),
                       child: ListView(
                         // Important: Remove any padding from the ListView.
@@ -655,7 +662,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             ),
                           ),
                           Divider(
-                            color: Colors.indigo,
+                            color: Colors.indigo[800],
                             thickness: 5,
                           ),
 
@@ -815,10 +822,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             },
                           ),
                           Divider(
-                            thickness: 5,
+                            thickness: 1,
                             color: Colors.indigo,
                           ),
-
                           //
                           ListTile(
                             leading: Icon(Icons.power_settings_new),
