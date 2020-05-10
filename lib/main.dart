@@ -13,6 +13,7 @@ class Vitask extends StatelessWidget {
       title: 'VITask',
       theme: ThemeData.dark(),
       home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 

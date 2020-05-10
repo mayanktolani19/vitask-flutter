@@ -155,42 +155,44 @@ class _MarksState extends State<Marks> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomLeft,
-          colors: [
-            Color.fromRGBO(13, 50, 77, 100),
-            Color.fromRGBO(0, 0, 10, 10)
-          ],
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomLeft,
+            colors: [
+              Color.fromRGBO(13, 50, 77, 100),
+              Color.fromRGBO(0, 0, 10, 10)
+            ],
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              title: Text(
-                "Marks",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                title: Text(
+                  "Marks",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                floating: true,
+                pinned: false,
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(11.0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    marlist(),
+                  ]),
                 ),
               ),
-              floating: true,
-              pinned: false,
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.all(11.0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  marlist(),
-                ]),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

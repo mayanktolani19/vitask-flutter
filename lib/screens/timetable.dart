@@ -144,15 +144,7 @@ class _TimeTableState extends State<TimeTable> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Text(
-                                  e.codes + " - " + e.courseName,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
+                                Texts(e.codes + " - " + e.courseName, 20),
                                 SizedBox(height: 10),
                               ],
                             ),
@@ -267,70 +259,80 @@ class _TimeTableState extends State<TimeTable> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              //centerTitle: true,
-              backgroundColor: Colors.transparent,
-              expandedHeight: 10,
-              //centerTitle: true,
-              floating: true,
-              pinned: false,
-              title: Text(
-                "Timetable",
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                //height of the main box
-                height: height,
-                padding: EdgeInsets.all(9),
-
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: dayele.map(
-                    (mr) {
-                      return Container(
-                        width: width,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Texts(mr.day, 28),
-                              ),
-                            ),
-                            Positioned(
-                              top: 36,
-                              right: 10,
-                              child: Container(
-                                padding: EdgeInsets.all(15),
-                                height: height / 1.2,
-                                width: width,
-                                child: minimar(mr.list),
-                              ),
-                            ),
-                          ],
-                          overflow: Overflow.visible,
-                        ),
-                      );
-                    },
-                  ).toList(),
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                Color.fromRGBO(13, 50, 77, 100),
+                Color.fromRGBO(0, 0, 10, 10)
+              ])),
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                //centerTitle: true,
+                backgroundColor: Colors.transparent,
+                expandedHeight: 10,
+                //centerTitle: true,
+                floating: true,
+                pinned: false,
+                title: Text(
+                  "Timetable",
                 ),
               ),
-            ),
-          ],
+              SliverToBoxAdapter(
+                child: Container(
+                  //height of the main box
+                  height: height,
+                  padding: EdgeInsets.all(9),
+
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: dayele.map(
+                      (mr) {
+                        return Container(
+                          width: width,
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    mr.day,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.white,
+                                      fontSize: 28,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 36,
+                                right: 10,
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  height: height / 1.2,
+                                  width: width,
+                                  child: minimar(mr.list),
+                                ),
+                              ),
+                            ],
+                            overflow: Overflow.visible,
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

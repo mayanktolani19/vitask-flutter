@@ -7,10 +7,7 @@ class API {
     print(response.statusCode);
     if (response.statusCode == 200) {
       String data = response.body;
-      //print(json.decode(data));
       return json.decode(data);
-    } else {
-      //print(response.statusCode);
     }
   }
 }

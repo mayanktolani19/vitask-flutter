@@ -155,7 +155,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: ModalProgressHUD(
         inAsyncCall: refresh,
@@ -339,7 +338,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               timeNotifications.length > 0 &&
                               now.weekday < 6 &&
                               tt.length > 1) {
-                            chalJaoPlease(timeNotifications[count++],
+                            scheduleNotification(timeNotifications[count++],
                                 e["courseName"], e["startTime"], e["class"]);
                             var att = 80;
                             for (var i = 0;
@@ -544,6 +543,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         22)),
                                 SizedBox(height: 40),
                                 Divider(color: Colors.grey),
+                                SizedBox(height: 10),
                                 Container(
                                   child: Texts(
                                       "Maybe work on some assignments.", 22),
@@ -603,7 +603,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         ),
                                       )),
                                 ),
-                                SizedBox(height: 15),
+                                SizedBox(height: 12),
                                 Divider(color: Colors.grey),
                               ],
                             );
@@ -665,7 +665,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             color: Colors.indigo[800],
                             thickness: 5,
                           ),
-
                           ListTile(
                             leading: Icon(Icons.assessment),
                             dense: true,
@@ -822,7 +821,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             },
                           ),
                           Divider(
-                            thickness: 1,
+                            thickness: 5,
                             color: Colors.indigo,
                           ),
                           //
@@ -845,7 +844,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   actions: <Widget>[
                                     FlatButton(
                                       onPressed: () {
-                                        print("you choose no");
                                         Navigator.of(context).pop(false);
                                       },
                                       child: Texts('No', 15),
@@ -887,25 +885,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         (Route<dynamic> route) => false);
   }
 
-  Future chalJaoPlease(
+  Future scheduleNotification(
       DateTime t, String c, String startTime, String venue) async {
-//    print(t);
-//    print(DateTime.now().add(Duration(seconds: 30)));
-    //var scheduledNotificationDateTime = t.add(Duration(seconds: 30));
-//    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-//        'repeating channel id',
-//        'repeating channel name',
-//        'repeating description');
-//    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-//    NotificationDetails platformChannelSpecifics = NotificationDetails(
-//        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-//    await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
-//        'repeating body', RepeatInterval.EveryMinute, platformChannelSpecifics);
-    //await flutterLocalNotificationsPlugin.
-//    if (DateTime.now().difference(t) == 0)
-    //print(DateTime.now()
-    //  .add(Duration(seconds: t.difference(DateTime.now()).inSeconds)));
-    //print(t.difference(DateTime.now()).inSeconds);
     if (t.isAfter(DateTime.now())) {
       var scheduledNotificationDateTime = t.subtract(Duration(seconds: 350));
       var androidPlatformChannelSpecifics = AndroidNotificationDetails(

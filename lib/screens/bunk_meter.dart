@@ -47,7 +47,6 @@ class _BunkMeterState extends State<BunkMeter> {
     type = attended[ij[0]]["type"];
     percent = double.parse(attended[ij[0]]["percentage"].toString());
     total = attended[ij[0]]["total"];
-    print(percent);
     color1 = Colors.blue[800];
     color2 = Colors.blue[300];
     if (percent < 80 && percent >= 75) {
@@ -57,7 +56,6 @@ class _BunkMeterState extends State<BunkMeter> {
       color1 = Colors.red[900];
       color2 = Colors.red[300];
     }
-    print(color1.value);
     a = 0;
     b = 0;
   }

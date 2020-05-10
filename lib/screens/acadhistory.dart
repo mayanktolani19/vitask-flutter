@@ -20,21 +20,20 @@ class _AcademicHistoryState extends State<AcademicHistory> {
   @override
   void initState() {
     super.initState();
-    printData();
+    getData();
     setState(() {
       courses.clear();
       numbers.clear();
     });
   }
 
-  void printData() {
+  void getData() {
     acad = widget.acadHistory['AcadHistory'];
     curriculum = widget.acadHistory['CurriculumDetails'];
   }
 
   Widget elelist(Map<String, dynamic> acad) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     grades = [];
     acad.forEach((k, v) => grades.add(v));
     courses = [];
@@ -127,33 +126,35 @@ class _AcademicHistoryState extends State<AcademicHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-            Color.fromRGBO(13, 50, 77, 100),
-            Color.fromRGBO(0, 0, 10, 10)
-          ])),
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            expandedHeight: 10,
-            floating: true,
-            pinned: false,
-            title: Text(
-              "Academic History",
-              style: TextStyle(
-                fontSize: 20,
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+              Color.fromRGBO(13, 50, 77, 100),
+              Color.fromRGBO(0, 0, 10, 10)
+            ])),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
+              expandedHeight: 10,
+              floating: true,
+              pinned: false,
+              title: Text(
+                "Academic History",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(child: elelist(acad)),
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: Container(child: elelist(acad)),
+            ),
+          ],
+        ),
       ),
     );
   }
