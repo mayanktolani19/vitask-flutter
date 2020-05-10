@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vitask/constants.dart';
 
@@ -71,11 +72,12 @@ class _ProfileState extends State<Profile> {
                         height: 10,
                       ),
                       Texts(widget.profileData["Branch"], 16),
+                      SizedBox(height: 10),
+                      Texts(widget.profileData["School"], 16),
                     ],
                   ),
                 ),
               ),
-
               Positioned(
                 top: height / 1.8,
                 left: 35,
@@ -109,28 +111,8 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-//
-
-//
               Positioned(
-                bottom: 69,
-                left: width / 9,
-                child: Text(
-                  widget.profileData["School"],
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 23,
-                  ),
-                ),
-              ),
-
-              ///
-              ///
-              ///
-              ///
-              Positioned(
-                top: height / 2.3,
+                top: 350,
                 left: width / 3.2,
                 child: Container(
                   margin: EdgeInsets.all(10),
@@ -147,22 +129,17 @@ class _ProfileState extends State<Profile> {
                       fontWeight: FontWeight.w300,
                       fontStyle: FontStyle.normal,
                       color: Colors.greenAccent,
-                      fontSize: 22,
+                      fontSize: 20,
                     ),
                   ),
                 ),
               ),
-
-              ///
-              ///
               Container(
                 alignment: Alignment.topCenter,
                 child: Image.asset(
                   'images/blue.png',
                 ),
               ),
-
-              ///
             ],
           ),
         ),

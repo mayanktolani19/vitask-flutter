@@ -649,7 +649,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             child: Container(
                               child: Column(
                                 children: <Widget>[
-                                  Texts('VITask', 35),
+                                  Texts('VITask', 28),
                                   Container(
                                     child: SafeArea(
                                       child: Image.asset(
@@ -657,10 +657,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: 10),
                                 ],
                               ),
                             ),
                           ),
+
                           Divider(
                             color: Colors.indigo[800],
                             thickness: 5,
