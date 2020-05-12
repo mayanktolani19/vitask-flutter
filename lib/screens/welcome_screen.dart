@@ -152,6 +152,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             if (profileData != null &&
                                 profileData["Error"] == null &&
                                 regNo.length == 9) {
+                              print("here");
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               await prefs.setString(
