@@ -56,7 +56,7 @@ class _TimeTableState extends State<TimeTable> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Center(
-                      child: Texts(mr.day, 18),
+                      child: Texts(mr.day, 16),
                     ),
                     Container(
                         width: double.infinity,
@@ -144,7 +144,7 @@ class _TimeTableState extends State<TimeTable> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Texts(e.codes + " - " + e.courseName, 20),
+                                Texts(e.codes + " - " + e.courseName, 18),
                                 SizedBox(height: 10),
                               ],
                             ),
@@ -156,7 +156,7 @@ class _TimeTableState extends State<TimeTable> {
                                 children: <Widget>[
                                   Icon(
                                     FontAwesomeIcons.clock,
-                                    size: 17,
+                                    size: 16,
                                     color: Colors.lightBlue,
                                   ),
                                   Container(
@@ -164,7 +164,7 @@ class _TimeTableState extends State<TimeTable> {
                                     child: Text("${e.startTime} - ${e.endTime}",
                                         style: TextStyle(
                                           color: Colors.lightBlue,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                         )),
                                   ),
                                 ],
@@ -181,7 +181,7 @@ class _TimeTableState extends State<TimeTable> {
                                     ),
                                     Icon(
                                       FontAwesomeIcons.tag,
-                                      size: 17,
+                                      size: 16,
                                       color: Colors.lightBlue,
                                     ),
                                     Container(
@@ -189,7 +189,7 @@ class _TimeTableState extends State<TimeTable> {
                                       child: Text("${e.slot}",
                                           style: TextStyle(
                                             color: Colors.lightBlue,
-                                            fontSize: 18,
+                                            fontSize: 16,
                                           )),
                                     ),
                                   ],
@@ -198,7 +198,7 @@ class _TimeTableState extends State<TimeTable> {
                                   children: <Widget>[
                                     Icon(
                                       FontAwesomeIcons.mapMarkerAlt,
-                                      size: 18,
+                                      size: 16,
                                       color: Colors.lightBlue,
                                     ),
                                     ClipRect(
@@ -214,11 +214,8 @@ class _TimeTableState extends State<TimeTable> {
                                         child: Card(
                                           color: Colors.transparent,
                                           elevation: 20,
-                                          child: Center(
-                                              child: Text(e.loc,
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                  ))),
+                                          child:
+                                              Center(child: Texts(e.loc, 12)),
                                         ),
                                       ),
                                     ),
@@ -238,7 +235,7 @@ class _TimeTableState extends State<TimeTable> {
                                 backgroundColor: Colors.blue[300],
                                 progressColor: Colors.blue[800],
                                 linearStrokeCap: LinearStrokeCap.roundAll,
-                                center: Texts(e.attendance + "%", 15),
+                                center: Texts(e.attendance + "%", 14),
                               ),
                             )
                           ],
@@ -307,7 +304,7 @@ class _TimeTableState extends State<TimeTable> {
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                       color: Colors.white,
-                                      fontSize: 28,
+                                      fontSize: 24,
                                     ),
                                   ),
                                 ),

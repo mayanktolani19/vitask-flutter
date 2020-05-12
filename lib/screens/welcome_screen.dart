@@ -58,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       text: ['VITask Lite'],
                       textAlign: TextAlign.center,
                       textStyle: TextStyle(
-                        fontSize: 45.0,
+                        fontSize: 30.0,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -143,10 +143,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             setState(() {
                               showSpinner = true;
                             });
-                            //Run this part to get the data from all the APIs and store it in the database.
                             regNo = regNo.trim();
                             url =
-                                'https://vitask.me/authenticate?username=$regNo&password=$password';
+                                'http://134.209.150.24/authenticate?username=$regNo&password=$password';
                             API api = API();
                             Map<String, dynamic> profileData =
                                 await api.getAPIData(url);
@@ -162,19 +161,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               String u = profileData['RegNo'].toString();
                               Map<String, dynamic> attendanceData =
                                   await api.getAPIData(
-                                      'https://vitask.me/classesapi?token=$t');
+                                      'http://134.209.150.24/classesapi?token=$t');
                               print('Classes');
                               Map<String, dynamic> timeTableData =
                                   await api.getAPIData(
-                                      'https://vitask.me/timetableapi?token=$t');
+                                      'http://134.209.150.24/timetableapi?token=$t');
                               print('Time Table');
                               Map<String, dynamic> marksData =
                                   await api.getAPIData(
-                                      'https://vitask.me/marksapi?token=$t');
+                                      'http://134.209.150.24/marksapi?token=$t');
                               print('Marks');
                               Map<String, dynamic> acadHistoryData =
                                   await api.getAPIData(
-                                      'https://vitask.me/acadhistoryapi?token=$t');
+                                      'http://134.209.150.24/acadhistoryapi?token=$t');
                               print('AcadHistory');
                               if (attendanceData != null &&
                                   timeTableData != null &&

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'marksheet.dart';
 import 'package:vitask/constants.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Marks extends StatefulWidget {
   Marks(this.marks);
@@ -66,7 +67,7 @@ class _MarksState extends State<Marks> {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 24, horizontal: 20),
-                              child: Texts(mr.subject, 20),
+                              child: Texts(mr.subject, 16),
                             ),
                             Container(
                                 width: double.infinity,
@@ -112,15 +113,7 @@ class _MarksState extends State<Marks> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          e.exname,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 17,
-                            color: Colors.grey[300],
-                          ),
-                        ),
+                        AutoSizeText(e.exname),
                         ClipOval(
                           child: Container(
                             width: 40,
@@ -135,7 +128,7 @@ class _MarksState extends State<Marks> {
                                   child: Text(e.val["scored"],
                                       style: TextStyle(
                                         color: Colors.greenAccent[100],
-                                        fontSize: 18,
+                                        fontSize: 15,
                                       )),
                                 ),
                               ),

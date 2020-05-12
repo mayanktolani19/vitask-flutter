@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:vitask/database/MoodleModel.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Moodle extends StatefulWidget {
   Moodle(this.reg, this.appNo, this.moodle);
@@ -118,7 +119,7 @@ class _MoodleState extends State<Moodle> {
                                         Icon(FontAwesomeIcons.graduationCap,
                                             size: 20, color: Colors.indigo),
                                         SizedBox(width: 8),
-                                        Texts(e["course"], 18),
+                                        AutoSizeText(e["course"]),
                                       ],
                                     ),
                                     SizedBox(height: 10),
@@ -127,7 +128,7 @@ class _MoodleState extends State<Moodle> {
                                         Icon(FontAwesomeIcons.clock,
                                             size: 20, color: Colors.indigo),
                                         SizedBox(width: 8),
-                                        Texts(e["time"], 16),
+                                        Texts(e["time"], 14),
                                       ],
                                     ),
                                     SizedBox(height: 8),

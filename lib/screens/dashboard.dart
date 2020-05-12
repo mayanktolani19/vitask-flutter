@@ -54,7 +54,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   List<dynamic> tt, tt1;
   List<DateTime> time, timeNotifications;
   var now;
-  int count;
+  int count, h, g;
   bool refresh = false;
   var regNo, token, pass;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -68,6 +68,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     getAttendance();
     getTimeTable();
     count = 0;
+    h = 1;
+    g = 1;
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings();
@@ -90,6 +92,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     pie["Absent"] = 100 - double.parse(a[2]);
   }
 
+  void setValue() {
+    h = 1;
+  }
+
   void getTimeTable() {
     days = [
       "Monday",
@@ -109,8 +115,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       for (var j = 0; j < tt.length; j++) {
         tt1.add({"startTime": "xx"});
       }
-      //print(DateTime.now());
-      //print(tt.length);
       for (var i = 0; i < tt.length; i++) {
         if (int.parse(tt[i]["startTime"].split(':')[0]) >= 1 &&
             int.parse(tt[i]["startTime"].split(':')[0]) < 8) {
@@ -155,6 +159,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    h = 1;
     return SafeArea(
       child: ModalProgressHUD(
         inAsyncCall: refresh,
@@ -196,7 +201,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     pass = widget.password;
                     regNo = widget.profileData["RegNo"];
                     String url =
-                        'https://vitask.me/authenticate?username=$regNo&password=$pass';
+                        'http://134.209.150.24/authenticate?username=$regNo&password=$pass';
                     Map<String, dynamic> newProfileData =
                         await api.getAPIData(url);
                     if (newProfileData != null)
@@ -204,24 +209,25 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     if (newProfileData != null) {
                       String t = widget.profileData['APItoken'].toString();
                       String u = widget.profileData['RegNo'].toString();
-                      Map<String, dynamic> newAttendanceData = await api
-                          .getAPIData('https://vitask.me/classesapi?token=$t');
+                      Map<String, dynamic> newAttendanceData =
+                          await api.getAPIData(
+                              'http://134.209.150.24/classesapi?token=$t');
                       if (newAttendanceData != null)
                         widget.attendanceData = newAttendanceData;
                       print('Classes');
                       Map<String, dynamic> newTimeTableData =
                           await api.getAPIData(
-                              'https://vitask.me/timetableapi?token=$t');
+                              'http://134.209.150.24/timetableapi?token=$t');
                       if (newTimeTableData != null)
                         widget.timeTableData = newTimeTableData;
                       print('Time Table');
-                      Map<String, dynamic> newMarksData = await api
-                          .getAPIData('https://vitask.me/marksapi?token=$t');
+                      Map<String, dynamic> newMarksData = await api.getAPIData(
+                          'http://134.209.150.24/marksapi?token=$t');
                       if (newMarksData != null) widget.marksData = newMarksData;
                       print('Marks');
                       Map<String, dynamic> newAcadHistoryData =
                           await api.getAPIData(
-                              'https://vitask.me/acadhistoryapi?token=$t');
+                              'http://134.209.150.24/acadhistoryapi?token=$t');
                       if (newAcadHistoryData != null)
                         widget.acadHistoryData = newAcadHistoryData;
                       print('AcadHistory');
@@ -273,12 +279,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Texts("Average Attendance", 22),
+                                    Texts("Average Attendance", 18),
                                     Texts(
                                         attDetails["Attended"].toString() +
                                             "/" +
                                             attDetails["Total"].toString(),
-                                        17),
+                                        16),
                                   ],
                                 ),
                               ),
@@ -311,7 +317,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 labelStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18.0,
+                                  fontSize: 16.0,
                                 ),
                               )
                             ],
@@ -323,7 +329,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                   ),
                   Container(
                       padding: EdgeInsets.symmetric(vertical: 1),
-                      child: Texts(days[now.weekday - 1].toString(), 25)),
+                      child: Texts(
+                          days[now.weekday - 1].toString() + " - TimeTable",
+                          20)),
                   // /SizedBox(height: 10),
                   Expanded(
                     flex: 2,
@@ -334,12 +342,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       child: SingleChildScrollView(
                           child: Column(
                         children: tt.map((e) {
-                          if (count < tt.length &&
-                              timeNotifications.length > 0 &&
-                              now.weekday < 6 &&
-                              tt.length > 1) {
-                            scheduleNotification(timeNotifications[count++],
-                                e["courseName"], e["startTime"], e["class"]);
+                          if (now.weekday < 6) {
+                            if (count < timeNotifications.length)
+                              scheduleNotification(timeNotifications[count++],
+                                  e["courseName"], e["startTime"], e["class"]);
                             var att = 80;
                             for (var i = 0;
                                 i < widget.attendanceData["Attended"].length;
@@ -370,7 +376,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     BorderRadius.all(Radius.circular(20)),
                               ),
                               padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.all(9),
+                              margin: EdgeInsets.only(bottom: 5, top: 5),
                               child: Column(
                                 children: <Widget>[
                                   Card(
@@ -390,129 +396,45 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                   e["code"] +
                                                       " - " +
                                                       e["courseName"],
-                                                  18),
+                                                  16),
+                                              SizedBox(height: 10),
+                                              Row(
+                                                children: <Widget>[
+                                                  Icon(
+                                                      FontAwesomeIcons
+                                                          .mapMarkerAlt,
+                                                      size: 16,
+                                                      color: color1),
+                                                  SizedBox(width: 5),
+                                                  Texts(e["class"], 14),
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Row(
+                                                children: <Widget>[
+                                                  Icon(FontAwesomeIcons.clock,
+                                                      size: 16, color: color1),
+                                                  SizedBox(width: 5),
+                                                  Texts(
+                                                      e["startTime"] +
+                                                          " - " +
+                                                          e["endTime"],
+                                                      14),
+                                                ],
+                                              ),
                                               SizedBox(height: 8),
                                               Row(
                                                 children: <Widget>[
                                                   Icon(FontAwesomeIcons.tag,
-                                                      size: 18, color: color1),
+                                                      size: 16, color: color1),
                                                   SizedBox(width: 8),
-                                                  Text(
-                                                    e["slot"],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
+                                                  Texts(e["slot"], 14),
                                                 ],
-                                              ),
-                                              SizedBox(height: 8),
-                                              Container(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: color1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20)),
-                                                  ),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  margin: EdgeInsets.only(
-                                                    left: 60,
-                                                    right: 60,
-                                                  ),
-                                                  child: Card(
-                                                    color: Colors.transparent,
-                                                    elevation: 0,
-                                                    child: Center(
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Row(
-                                                              children: <
-                                                                  Widget>[
-                                                                Icon(
-                                                                    FontAwesomeIcons
-                                                                        .clock,
-                                                                    size: 18,
-                                                                    color:
-                                                                        color1),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Text(
-                                                                  e["startTime"] +
-                                                                      " - " +
-                                                                      e["endTime"],
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontStyle:
-                                                                        FontStyle
-                                                                            .italic,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        18,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 5),
-                                                            Row(
-                                                              children: <
-                                                                  Widget>[
-                                                                Icon(
-                                                                    FontAwesomeIcons
-                                                                        .mapMarkerAlt,
-                                                                    size: 16,
-                                                                    color:
-                                                                        color1),
-                                                                SizedBox(
-                                                                    width: 5),
-                                                                Text(
-                                                                  e["class"],
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontStyle:
-                                                                        FontStyle
-                                                                            .italic,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        18,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 20),
+//                                        SizedBox(width: 20),
                                         CircularPercentIndicator(
                                           animationDuration: 900,
                                           radius: 90.0,
@@ -521,7 +443,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                               double.parse(att.toString()) /
                                                   100,
                                           center:
-                                              Texts(att.toString() + "%", 18),
+                                              Texts(att.toString() + "%", 15),
                                           progressColor: color1,
                                           backgroundColor: color2,
                                           circularStrokeCap:
@@ -533,20 +455,21 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 ],
                               ),
                             );
-                          } else {
+                          } else if (h == 1) {
+                            h++;
                             return Column(
                               children: <Widget>[
                                 SizedBox(height: 10),
                                 Container(
                                     child: Texts(
                                         "No Classes today, Sit back and relax.",
-                                        22)),
+                                        18)),
                                 SizedBox(height: 40),
                                 Divider(color: Colors.grey),
                                 SizedBox(height: 10),
                                 Container(
                                   child: Texts(
-                                      "Maybe work on some assignments.", 22),
+                                      "Maybe work on some assignments.", 18),
                                   padding: EdgeInsets.only(top: 15),
                                 ),
                                 SizedBox(height: 10),
@@ -596,7 +519,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         minWidth: 200.0,
                                         height: 42.0,
                                         child: Text(
-                                          'Log In To Moodle',
+                                          'Proceed To Moodle',
                                           style: TextStyle(
                                             color: Colors.white,
                                           ),
@@ -608,6 +531,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               ],
                             );
                           }
+                          return Container();
                         }).toList(),
                       )),
                     ),
@@ -649,7 +573,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             child: Container(
                               child: Column(
                                 children: <Widget>[
-                                  Texts('VITask', 28),
                                   Container(
                                     child: SafeArea(
                                       child: Image.asset(
@@ -658,6 +581,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     ),
                                   ),
                                   SizedBox(height: 10),
+                                  Texts('VITask Lite', 22),
                                 ],
                               ),
                             ),
@@ -673,7 +597,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             title: Text(
                               'Attendance',
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               Navigator.pop(context);
@@ -695,7 +619,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             title: Text(
                               'TimeTable',
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               Navigator.pop(context);
@@ -719,7 +643,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             title: Text(
                               'Marks',
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               Navigator.pop(context);
@@ -740,7 +664,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             title: Text(
                               'Academic History',
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               Navigator.pop(context);
@@ -762,7 +686,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             title: Text(
                               'Moodle',
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               SharedPreferences prefs =
@@ -807,7 +731,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               "Profile",
                               //widget.profileData["Name"],
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               Navigator.pop(context);
@@ -832,7 +756,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             title: Text(
                               'Logout',
                               style: TextStyle(
-                                  fontSize: 18, fontStyle: FontStyle.normal),
+                                  fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
                               showDialog(
@@ -840,22 +764,22 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 child: AlertDialog(
                                   backgroundColor: Colors.blue[900],
                                   title: Texts(
-                                      'Are you sure you want to logout?', 19),
+                                      'Are you sure you want to logout?', 16),
                                   content:
-                                      Texts('We hate to see you leave...', 16),
+                                      Texts('We hate to see you leave...', 14),
                                   actions: <Widget>[
                                     FlatButton(
                                       onPressed: () {
                                         Navigator.of(context).pop(false);
                                       },
-                                      child: Texts('No', 15),
+                                      child: Texts('No', 12),
                                     ),
                                     FlatButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                         logoutUser();
                                       },
-                                      child: Texts('Yes', 15),
+                                      child: Texts('Yes', 12),
                                     ),
                                   ],
                                 ),

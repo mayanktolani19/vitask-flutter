@@ -48,6 +48,7 @@ class _ProfileState extends State<Profile> {
                 child: Container(
                   padding: EdgeInsets.all(20),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
@@ -55,82 +56,39 @@ class _ProfileState extends State<Profile> {
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontStyle: FontStyle.normal,
-                          fontSize: 22,
+                          fontSize: 18,
                         ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Texts(widget.profileData["RegNo"], 20),
+                      Texts(widget.profileData["RegNo"], 16),
                       SizedBox(
                         height: 10,
                       ),
                       Texts(
                           'Application Number: ' + widget.profileData["AppNo"],
-                          18),
+                          16),
                       SizedBox(
                         height: 10,
                       ),
-                      Texts(widget.profileData["Branch"], 16),
+                      Texts(widget.profileData["Branch"], 15),
                       SizedBox(height: 10),
-                      Texts(widget.profileData["School"], 16),
+                      Texts(widget.profileData["School"], 15),
+                      SizedBox(height: 10),
+                      Texts("CGPA : " + widget.cgpa, 15),
+                      SizedBox(height: 5),
+                      Divider(color: Colors.grey),
+                      SizedBox(height: 10),
+                      Texts(
+                          "Proctor Name : " + widget.profileData["ProctorName"],
+                          15),
+                      SizedBox(height: 10),
+                      Texts(
+                          "Proctor Email : " +
+                              widget.profileData["ProctorEmail"],
+                          15),
                     ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: height / 1.8,
-                left: 35,
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: width / 1.2,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.indigo,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              alignment: Alignment.topCenter,
-                              child: Texts('Proctor Information', 22)),
-                          SizedBox(height: 10),
-                          Texts("Name - " + widget.profileData["ProctorName"],
-                              16),
-                          SizedBox(height: 10),
-                          Texts("Email - " + widget.profileData["ProctorEmail"],
-                              16),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 350,
-                left: width / 3.2,
-                child: Container(
-                  margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.indigo,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Text(
-                    "CGPA : " + widget.cgpa,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.greenAccent,
-                      fontSize: 20,
-                    ),
                   ),
                 ),
               ),
