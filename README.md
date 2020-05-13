@@ -8,7 +8,7 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 
 ## Screenshots
 
-<img src="images/dashboard.jpg" width="250" height="250">
+<img src="images/dashboard.jpg" width="360" height="640">
 
 # Installation
 
