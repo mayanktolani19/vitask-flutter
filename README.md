@@ -6,6 +6,10 @@
 
 VITask mobile application made for the students of VIT Chennai for their VTOP login.
 
+## Screenshots
+
+![Dashboard](images/dashboard.jpg)
+
 # Installation
 
 * Download the Flutter SDK from https://flutter.dev/docs/get-started/install/windows
