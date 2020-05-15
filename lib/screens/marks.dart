@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'marksheet.dart';
 import 'package:vitask/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Marks extends StatefulWidget {
   Marks(this.marks);
@@ -125,7 +126,7 @@ class _MarksState extends State<Marks> {
                                 color: Colors.transparent,
                                 elevation: 0,
                                 child: Center(
-                                  child: Text(e.val["scored"],
+                                  child: AutoSizeText(e.val["scored"],
                                       style: TextStyle(
                                         color: Colors.greenAccent[100],
                                         fontSize: 15,
