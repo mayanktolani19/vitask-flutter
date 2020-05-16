@@ -41,8 +41,8 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 
 ## Our Team
 
-#### Mayank K Tolani                     Abhishek TK
-<img src="images/abhishek.jpeg"> <img src="images/mayank.png">
+#### Mayank K Tolani --------------------- Abhishek TK
+<img src="images/mayank.png"> <img src="images/abhishek.jpeg"> 
 
 
 
