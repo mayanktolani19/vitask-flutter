@@ -45,4 +45,4 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 <img src="images/mayank.png">
 
 #### Abhishek Tk
-<img src="images/abhishek.jpg">
+<img src="images/abhishek.jpeg">
