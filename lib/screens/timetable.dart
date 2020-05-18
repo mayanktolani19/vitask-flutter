@@ -119,8 +119,8 @@ class _TimeTableState extends State<TimeTable> {
             child: Column(
       children: exeele.map((e) {
         return Container(
-          margin: EdgeInsets.all(7),
-          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.all(8),
+          padding: EdgeInsets.all(9),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(
@@ -205,17 +205,21 @@ class _TimeTableState extends State<TimeTable> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                             gradient: LinearGradient(
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
+                                                begin: Alignment.centerRight,
+                                                end: Alignment.centerLeft,
                                                 colors: [
                                               Color.fromRGBO(14, 14, 160, 10),
-                                              Color.fromRGBO(31, 28, 24, 120)
+                                              Color.fromRGBO(0, 0, 20, 120)
                                             ])),
                                         child: Card(
                                           color: Colors.transparent,
                                           elevation: 20,
-                                          child:
-                                              Center(child: Texts(e.loc, 12)),
+                                          child: Center(
+                                              child: Text(e.loc,
+                                                  style: TextStyle(
+                                                    color: Colors.lightBlue,
+                                                    fontSize: 16,
+                                                  ))),
                                         ),
                                       ),
                                     ),
@@ -225,7 +229,8 @@ class _TimeTableState extends State<TimeTable> {
                             ),
                             SizedBox(height: 15),
                             Padding(
-                              padding: const EdgeInsets.all(10.0),
+                              padding:
+                                  const EdgeInsets.only(top: 7.0, left: 20),
                               child: LinearPercentIndicator(
                                 animation: true,
                                 width: MediaQuery.of(context).size.width / 1.4,

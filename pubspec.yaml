@@ -24,6 +24,7 @@ dependencies:
   intl: ^0.15.8
   google_fonts: 0.7.0
   auto_size_text: ^2.1.0
+  progress_indicators: ^0.1.5
 
 
 dev_dependencies:
