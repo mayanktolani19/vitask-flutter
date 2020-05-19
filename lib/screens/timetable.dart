@@ -39,39 +39,6 @@ class _TimeTableState extends State<TimeTable> {
     }
   }
 
-  Widget marlist() {
-    return Column(
-      children: dayele.map((mr) {
-        return Container(
-          width: double.infinity,
-          child:
-              //main card
-              Card(
-            color: Colors.transparent,
-            elevation: 0,
-            child: Container(
-              child: Card(
-                //color: Colors.transparent,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Center(
-                      child: Texts(mr.day, 16),
-                    ),
-                    Container(
-                        width: double.infinity,
-                        //padding: EdgeInsets.all(15.0),
-                        child: minimar(mr.list)),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
   Widget minimar(List<dynamic> list) {
     var codes = [];
     var loc = [];
@@ -144,7 +111,7 @@ class _TimeTableState extends State<TimeTable> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Texts(e.codes + " - " + e.courseName, 18),
+                                Texts(e.codes + " - " + e.courseName, 17),
                                 SizedBox(height: 10),
                               ],
                             ),
@@ -290,11 +257,20 @@ class _TimeTableState extends State<TimeTable> {
                   //height of the main box
                   height: height,
                   padding: EdgeInsets.all(9),
-
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: dayele.map(
                       (mr) {
+                        int labs = 0;
+                        int theory = 0;
+                        for (var i = 0; i < mr.list.length; i++) {
+                          if ((mr.list[i]["slot"]).contains("L")) {
+                            labs++;
+                          } else {
+                            theory++;
+                          }
+                        }
+                        labs = labs ~/ 2;
                         return Container(
                           width: width,
                           child: Stack(
@@ -315,7 +291,48 @@ class _TimeTableState extends State<TimeTable> {
                                 ),
                               ),
                               Positioned(
-                                top: 36,
+                                top: 33,
+                                child: Row(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 20, right: 5),
+                                          child: Texts(
+                                              theory.toString() + " Theory ",
+                                              15),
+                                        ),
+                                        Icon(
+                                          FontAwesomeIcons.bookOpen,
+                                          size: 16,
+                                          color: Colors.lightBlue,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 5, right: 5),
+                                              child: Texts(
+                                                  "  |  " +
+                                                      labs.toString() +
+                                                      " Lab(s) ",
+                                                  15),
+                                            ),
+                                            Icon(
+                                              FontAwesomeIcons.laptopCode,
+                                              size: 16,
+                                              color: Colors.lightBlue,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: 41,
                                 right: 10,
                                 child: Container(
                                   padding: EdgeInsets.all(15),
