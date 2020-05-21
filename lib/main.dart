@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitask/screens/splash_screen2.dart';
 import 'package:vitask/screens/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +14,6 @@ class Vitask extends StatelessWidget {
       title: 'VITask',
       theme: ThemeData.dark(),
       home: SplashScreen(),
-      debugShowCheckedModeBanner: false,
     );
   }
 

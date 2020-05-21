@@ -39,39 +39,6 @@ class _TimeTableState extends State<TimeTable> {
     }
   }
 
-  Widget marlist() {
-    return Column(
-      children: dayele.map((mr) {
-        return Container(
-          width: double.infinity,
-          child:
-              //main card
-              Card(
-            color: Colors.transparent,
-            elevation: 0,
-            child: Container(
-              child: Card(
-                //color: Colors.transparent,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Center(
-                      child: Texts(mr.day, 18),
-                    ),
-                    Container(
-                        width: double.infinity,
-                        //padding: EdgeInsets.all(15.0),
-                        child: minimar(mr.list)),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
   Widget minimar(List<dynamic> list) {
     var codes = [];
     var loc = [];
@@ -119,8 +86,8 @@ class _TimeTableState extends State<TimeTable> {
             child: Column(
       children: exeele.map((e) {
         return Container(
-          margin: EdgeInsets.all(7),
-          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.all(8),
+          padding: EdgeInsets.all(9),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(
@@ -144,7 +111,7 @@ class _TimeTableState extends State<TimeTable> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Texts(e.codes + " - " + e.courseName, 20),
+                                Texts(e.codes + " - " + e.courseName, 17),
                                 SizedBox(height: 10),
                               ],
                             ),
@@ -156,7 +123,7 @@ class _TimeTableState extends State<TimeTable> {
                                 children: <Widget>[
                                   Icon(
                                     FontAwesomeIcons.clock,
-                                    size: 17,
+                                    size: 16,
                                     color: Colors.lightBlue,
                                   ),
                                   Container(
@@ -164,7 +131,7 @@ class _TimeTableState extends State<TimeTable> {
                                     child: Text("${e.startTime} - ${e.endTime}",
                                         style: TextStyle(
                                           color: Colors.lightBlue,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                         )),
                                   ),
                                 ],
@@ -181,7 +148,7 @@ class _TimeTableState extends State<TimeTable> {
                                     ),
                                     Icon(
                                       FontAwesomeIcons.tag,
-                                      size: 17,
+                                      size: 16,
                                       color: Colors.lightBlue,
                                     ),
                                     Container(
@@ -189,7 +156,7 @@ class _TimeTableState extends State<TimeTable> {
                                       child: Text("${e.slot}",
                                           style: TextStyle(
                                             color: Colors.lightBlue,
-                                            fontSize: 18,
+                                            fontSize: 16,
                                           )),
                                     ),
                                   ],
@@ -198,18 +165,18 @@ class _TimeTableState extends State<TimeTable> {
                                   children: <Widget>[
                                     Icon(
                                       FontAwesomeIcons.mapMarkerAlt,
-                                      size: 18,
+                                      size: 16,
                                       color: Colors.lightBlue,
                                     ),
                                     ClipRect(
                                       child: Container(
                                         decoration: BoxDecoration(
                                             gradient: LinearGradient(
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
+                                                begin: Alignment.centerRight,
+                                                end: Alignment.centerLeft,
                                                 colors: [
                                               Color.fromRGBO(14, 14, 160, 10),
-                                              Color.fromRGBO(31, 28, 24, 120)
+                                              Color.fromRGBO(0, 0, 20, 120)
                                             ])),
                                         child: Card(
                                           color: Colors.transparent,
@@ -217,7 +184,8 @@ class _TimeTableState extends State<TimeTable> {
                                           child: Center(
                                               child: Text(e.loc,
                                                   style: TextStyle(
-                                                    fontSize: 17,
+                                                    color: Colors.lightBlue,
+                                                    fontSize: 16,
                                                   ))),
                                         ),
                                       ),
@@ -228,7 +196,8 @@ class _TimeTableState extends State<TimeTable> {
                             ),
                             SizedBox(height: 15),
                             Padding(
-                              padding: const EdgeInsets.all(10.0),
+                              padding:
+                                  const EdgeInsets.only(top: 7.0, left: 20),
                               child: LinearPercentIndicator(
                                 animation: true,
                                 width: MediaQuery.of(context).size.width / 1.4,
@@ -238,7 +207,7 @@ class _TimeTableState extends State<TimeTable> {
                                 backgroundColor: Colors.blue[300],
                                 progressColor: Colors.blue[800],
                                 linearStrokeCap: LinearStrokeCap.roundAll,
-                                center: Texts(e.attendance + "%", 15),
+                                center: Texts(e.attendance + "%", 14),
                               ),
                             )
                           ],
@@ -288,11 +257,20 @@ class _TimeTableState extends State<TimeTable> {
                   //height of the main box
                   height: height,
                   padding: EdgeInsets.all(9),
-
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: dayele.map(
                       (mr) {
+                        int labs = 0;
+                        int theory = 0;
+                        for (var i = 0; i < mr.list.length; i++) {
+                          if ((mr.list[i]["slot"]).contains("L")) {
+                            labs++;
+                          } else {
+                            theory++;
+                          }
+                        }
+                        labs = labs ~/ 2;
                         return Container(
                           width: width,
                           child: Stack(
@@ -307,13 +285,54 @@ class _TimeTableState extends State<TimeTable> {
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                       color: Colors.white,
-                                      fontSize: 28,
+                                      fontSize: 24,
                                     ),
                                   ),
                                 ),
                               ),
                               Positioned(
-                                top: 36,
+                                top: 33,
+                                child: Row(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 20, right: 5),
+                                          child: Texts(
+                                              theory.toString() + " Theory ",
+                                              15),
+                                        ),
+                                        Icon(
+                                          FontAwesomeIcons.bookOpen,
+                                          size: 16,
+                                          color: Colors.lightBlue,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 5, right: 5),
+                                              child: Texts(
+                                                  "  |  " +
+                                                      labs.toString() +
+                                                      " Lab(s) ",
+                                                  15),
+                                            ),
+                                            Icon(
+                                              FontAwesomeIcons.laptopCode,
+                                              size: 16,
+                                              color: Colors.lightBlue,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: 41,
                                 right: 10,
                                 child: Container(
                                   padding: EdgeInsets.all(15),

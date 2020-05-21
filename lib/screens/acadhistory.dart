@@ -75,7 +75,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         bottom: 10,
                         left: 10,
                         right: 50,
-                        child: Texts(e.subject, 19),
+                        child: Texts(e.subject, 15),
                       ),
                       Positioned(
                         top: 10,
@@ -103,7 +103,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                                   child: Text(
                                     e.grade,
                                     style: TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 15,
                                       color: Colors.greenAccent,
                                     ),
                                   ),
@@ -126,6 +126,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(

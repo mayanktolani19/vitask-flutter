@@ -102,11 +102,11 @@ class _BunkMeterState extends State<BunkMeter> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Texts(
-                              course.toString() + ' - ' + code.toString(), 24),
+                              course.toString() + ' - ' + code.toString(), 18),
                           SizedBox(height: 20),
-                          Texts(type.toString(), 22),
+                          Texts(type.toString(), 16),
                           SizedBox(height: 20),
-                          Texts(faculty.toString(), 20),
+                          Texts(faculty.toString(), 14),
                         ],
                       ),
                     ),
@@ -125,28 +125,22 @@ class _BunkMeterState extends State<BunkMeter> {
                       color: Colors.transparent,
                       elevation: 0,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Texts("Classes Attended", 22),
+                              Texts("Classes Attended", 16),
                               SizedBox(height: 5),
-                              Text(
-                                att.toString() + "/" + total.toString(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 20,
-                                ),
-                              ),
+                              Texts(
+                                  att.toString() + "/" + total.toString(), 16),
                             ],
                           ),
                           CircularPercentIndicator(
                             radius: 100.0,
                             lineWidth: 6.0,
                             percent: double.parse(percent.toString()) / 100,
-                            center: Texts(percent.ceil().toString() + "%", 20),
+                            center: Texts(percent.ceil().toString() + "%", 16),
                             progressColor: color1,
                             backgroundColor: color2,
                           ),
@@ -166,7 +160,7 @@ class _BunkMeterState extends State<BunkMeter> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
 //                      SizedBox(width: 20),
-                                Texts("Attend + " + a.toString(), 22),
+                                Texts("Attend + " + a.toString(), 17),
                               ],
                             ),
                           ),
@@ -230,7 +224,7 @@ class _BunkMeterState extends State<BunkMeter> {
                             margin: EdgeInsets.only(left: 20),
                             child: Row(
                               children: <Widget>[
-                                Texts("Bunk + " + b.toString(), 22),
+                                Texts("Bunk + " + b.toString(), 17),
                               ],
                             ),
                           ),

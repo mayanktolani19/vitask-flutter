@@ -4,6 +4,7 @@ import 'dashboard.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/database/Student_DAO.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

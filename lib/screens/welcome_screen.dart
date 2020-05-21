@@ -9,6 +9,8 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:progress_indicators/progress_indicators.dart';
+import 'splash_screen2.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -35,10 +37,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: Container(
+      child: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        child: Scaffold(
+          body: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -58,7 +60,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       text: ['VITask Lite'],
                       textAlign: TextAlign.center,
                       textStyle: TextStyle(
-                        fontSize: 45.0,
+                        fontSize: 30.0,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -143,10 +145,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             setState(() {
                               showSpinner = true;
                             });
-                            //Run this part to get the data from all the APIs and store it in the database.
                             regNo = regNo.trim();
                             url =
-                                'https://vitask.me/authenticate?username=$regNo&password=$password';
+                                'http://134.209.150.24/authenticate?username=$regNo&password=$password';
                             API api = API();
                             Map<String, dynamic> profileData =
                                 await api.getAPIData(url);
@@ -158,54 +159,61 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               await prefs.setString(
                                   "regNo", profileData["RegNo"]);
                               await prefs.setString("password", password);
+                              print("here");
                               String t = profileData['APItoken'].toString();
                               String u = profileData['RegNo'].toString();
-                              Map<String, dynamic> attendanceData =
-                                  await api.getAPIData(
-                                      'https://vitask.me/classesapi?token=$t');
-                              print('Classes');
-                              Map<String, dynamic> timeTableData =
-                                  await api.getAPIData(
-                                      'https://vitask.me/timetableapi?token=$t');
-                              print('Time Table');
-                              Map<String, dynamic> marksData =
-                                  await api.getAPIData(
-                                      'https://vitask.me/marksapi?token=$t');
-                              print('Marks');
-                              Map<String, dynamic> acadHistoryData =
-                                  await api.getAPIData(
-                                      'https://vitask.me/acadhistoryapi?token=$t');
-                              print('AcadHistory');
-                              if (attendanceData != null &&
-                                  timeTableData != null &&
-                                  marksData != null &&
-                                  acadHistoryData != null) {
-                                x = 1;
-                                Student student = Student(
-                                    profileKey: (u + "-profile"),
-                                    profile: profileData,
-                                    attendanceKey: (u + "-attendance"),
-                                    attendance: attendanceData,
-                                    timeTableKey: (u + "-timeTable"),
-                                    timeTable: timeTableData,
-                                    marksKey: (u + "-marks"),
-                                    marks: marksData,
-                                    acadHistoryKey: (u + "-acadHistory"),
-                                    acadHistory: acadHistoryData);
-                                StudentDao().deleteStudent(student);
-                                StudentDao().insertStudent(student);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            MenuDashboardPage(
-                                                profileData,
-                                                attendanceData,
-                                                timeTableData,
-                                                marksData,
-                                                acadHistoryData,
-                                                password)));
-                              }
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SplashScreen2(
+                                              password, profileData)));
+//                            Map<String, dynamic> attendanceData =
+//                                await api.getAPIData(
+//                                    'http://134.209.150.24/classesapi?token=$t');
+//                            print('Classes');
+//                            Map<String, dynamic> timeTableData =
+//                                await api.getAPIData(
+//                                    'http://134.209.150.24/timetableapi?token=$t');
+//                            print('Time Table');
+//                            Map<String, dynamic> marksData =
+//                                await api.getAPIData(
+//                                    'http://134.209.150.24/marksapi?token=$t');
+//                            print('Marks');
+//                            Map<String, dynamic> acadHistoryData =
+//                                await api.getAPIData(
+//                                    'http://134.209.150.24/acadhistoryapi?token=$t');
+//                            print('AcadHistory');
+//                            if (attendanceData != null &&
+//                                timeTableData != null &&
+//                                marksData != null &&
+//                                acadHistoryData != null) {
+//                              x = 1;
+//                              Student student = Student(
+//                                  profileKey: (u + "-profile"),
+//                                  profile: profileData,
+//                                  attendanceKey: (u + "-attendance"),
+//                                  attendance: attendanceData,
+//                                  timeTableKey: (u + "-timeTable"),
+//                                  timeTable: timeTableData,
+//                                  marksKey: (u + "-marks"),
+//                                  marks: marksData,
+//                                  acadHistoryKey: (u + "-acadHistory"),
+//                                  acadHistory: acadHistoryData);
+//                              StudentDao().deleteStudent(student);
+//                              StudentDao().insertStudent(student);
+//                              Navigator.pushReplacement(
+//                                  context,
+//                                  MaterialPageRoute(
+//                                      builder: (BuildContext context) =>
+//                                          MenuDashboardPage(
+//                                              profileData,
+//                                              attendanceData,
+//                                              timeTableData,
+//                                              marksData,
+//                                              acadHistoryData,
+//                                              password)));
+//                            }
                               setState(() {
                                 showSpinner = false;
                               });

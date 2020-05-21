@@ -72,7 +72,7 @@ class _AttendanceState extends State<Attendance>
                 int t = current["total"];
                 String ty = current["type"];
                 IconData iconUsed;
-                if (ty.contains("Theory"))
+                if (ty.contains("Theory") || ty.contains("Soft"))
                   iconUsed = i[0];
                 else
                   iconUsed = i[1];
@@ -111,18 +111,18 @@ class _AttendanceState extends State<Attendance>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Texts(c.toString(), 19),
+                                    Texts(c.toString(), 16),
                                     SizedBox(height: 4),
                                     Row(
                                       children: <Widget>[
-                                        Texts(ty, 17),
+                                        Texts(ty, 15),
                                         SizedBox(width: 8),
-                                        Icon(iconUsed, size: 16, color: color1),
+                                        Icon(iconUsed, size: 15, color: color1),
                                       ],
                                     ),
                                     SizedBox(height: 4),
                                     Texts(
-                                        a.toString() + "/" + t.toString(), 19),
+                                        a.toString() + "/" + t.toString(), 15),
                                   ],
                                 ),
                               ),
@@ -130,7 +130,7 @@ class _AttendanceState extends State<Attendance>
                                 radius: 90.0,
                                 lineWidth: 6.0,
                                 percent: double.parse(pie.toString()) / 100,
-                                center: Texts(p.toString() + "%", 20),
+                                center: Texts(p.toString() + "%", 16),
                                 progressColor: color1,
                                 backgroundColor: color2,
                               ),
