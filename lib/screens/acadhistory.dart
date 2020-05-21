@@ -32,6 +32,159 @@ class _AcademicHistoryState extends State<AcademicHistory> {
     curriculum = widget.acadHistory['CurriculumDetails'];
   }
 
+  Widget summary(Map<String, dynamic> curriculum) {
+    double width = MediaQuery.of(context).size.width;
+
+    double height = MediaQuery.of(context).size.height;
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.blue[900],
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        border: Border.all(
+          color: Colors.blue[700],
+        ),
+      ),
+      height: height / 4,
+      width: width / 1.09,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Texts("CGPA", 20),
+                Texts(curriculum['CGPA'], 20),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Texts("Credits Earned", 20),
+                Texts(
+                    "${curriculum['CreditsEarned']}/${curriculum['CreditsRegistered']}",
+                    20),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(33, 35, 87, 100),
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Texts("S", 20),
+                  Texts("A", 20),
+                  Texts("B", 20),
+                  Texts("C", 20),
+                  Texts("D", 20),
+                  Texts("E", 20),
+                  Texts("F", 20),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.greenAccent,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['S'], 20),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['A'], 20),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.purpleAccent[100],
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['B'], 20),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.yellowAccent,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['C'], 20),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.orangeAccent,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['D'], 20),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.deepOrange,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['E'], 20),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Texts(curriculum['F'], 20),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget elelist(Map<String, dynamic> acad) {
     double width = MediaQuery.of(context).size.width;
     grades = [];
@@ -126,6 +279,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Container(
@@ -152,7 +306,37 @@ class _AcademicHistoryState extends State<AcademicHistory> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Container(child: elelist(acad)),
+              child: Container(
+                  child: Column(
+                children: <Widget>[
+                  Material(
+                    type: MaterialType.transparency,
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(50, 57, 250, 170),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      //
+                      height: height / 3,
+                      width: width / 1.09,
+                      child: Stack(
+                        children: <Widget>[
+                          Align(
+                              alignment: Alignment.topCenter,
+                              child: Texts('Your Curriculum Details', 20)),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: summary(curriculum),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  elelist(acad),
+                ],
+              )),
             ),
           ],
         ),

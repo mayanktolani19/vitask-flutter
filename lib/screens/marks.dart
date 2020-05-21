@@ -27,6 +27,7 @@ class _MarksState extends State<Marks> {
   void getData() {
     courses = widget.marks["Marks"].keys.toList();
     mark = widget.marks["Marks"].values.toList();
+
     marele = [];
     var num = 0;
     while (num < courses.length) {
@@ -90,6 +91,7 @@ class _MarksState extends State<Marks> {
     List<dynamic> examnames = [];
     List<dynamic> examvalues = [];
     List<Exam> exeele = [];
+
     group.forEach((k, v) => examnames.add(k));
 
     group.forEach((k, v) => examvalues.add(v));
@@ -115,10 +117,11 @@ class _MarksState extends State<Marks> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         AutoSizeText(e.exname),
-                        ClipOval(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
                           child: Container(
-                            width: 40,
-                            height: 40,
+                            // width: 40,
+                            // height: 40,
                             //color: Color.fromRGBO(450, 0, 0, 5),
                             color: Colors.indigo,
                             child: Container(
@@ -126,10 +129,11 @@ class _MarksState extends State<Marks> {
                                 color: Colors.transparent,
                                 elevation: 0,
                                 child: Center(
-                                  child: AutoSizeText(e.val["scored"],
+                                  child: AutoSizeText(
+                                      '${e.val["scored"]}/${e.val["max"]}',
                                       style: TextStyle(
                                         color: Colors.greenAccent[100],
-                                        fontSize: 15,
+                                        fontSize: 17,
                                       )),
                                 ),
                               ),
