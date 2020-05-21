@@ -2,7 +2,7 @@
 
 # Caution! Work in progress. 
 
-## Now moved into the beta testing mode.
+## Beta version launched on Play Store!
 
 VITask mobile application made for the students of VIT Chennai for their VTOP login.
 
@@ -40,6 +40,9 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 * `git commit -m"<Describe your changes>"`
 * `git push`
 * After committing your changes, make Pull Request.
+
+### To Do:
+* GPA Calculator
 
 ## Our Team
 
