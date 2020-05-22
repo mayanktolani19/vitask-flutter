@@ -10,9 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MoodleLogin extends StatefulWidget {
-  MoodleLogin(this.regNo, this.appNo);
+  MoodleLogin(this.regNo, this.token);
   String regNo;
-  String appNo;
+  String token;
   @override
   _MoodleLoginState createState() => _MoodleLoginState();
 }
@@ -108,12 +108,16 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                 showSpinner = true;
                               });
                               reg = widget.regNo;
-                              a = widget.appNo;
-                              url =
-                                  "https://vitask.me/moodleapi?username=$reg&password=$password&appno=$a";
+                              a = widget.token;
+                              url = "https://vitask.me/api/moodle/login";
                               API api = API();
+                              Map<String, String> data = {
+                                "username": reg,
+                                "password": password,
+                                "token": a
+                              };
                               Map<String, dynamic> moodleData =
-                                  await api.getAPIData(url);
+                                  await api.getAPIData(url, data);
                               if (moodleData != null) {
                                 MoodleData m =
                                     MoodleData(reg + "-moodle", moodleData);

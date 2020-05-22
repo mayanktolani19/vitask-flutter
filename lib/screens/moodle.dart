@@ -20,6 +20,7 @@ class _MoodleState extends State<Moodle> {
   List<dynamic> assignments;
   bool refresh = false;
   var r, p, a;
+
   @override
   void initState() {
     getData();
@@ -70,11 +71,11 @@ class _MoodleState extends State<Moodle> {
                             await SharedPreferences.getInstance();
                         p = prefs.getString("moodle-password");
                         a = widget.appNo;
-                        String url =
-                            "https://vitask.me/moodleapi?username=$r&password=$p&appno=$a";
+                        String url = "https://vitask.me/api/moodle/sync";
                         API api = API();
+                        Map<String, String> data = {"token": a};
                         Map<String, dynamic> moodleData =
-                            await api.getAPIData(url);
+                            await api.getAPIData(url, data);
                         if (moodleData != null) {
                           widget.moodle = moodleData;
                           MoodleData m = MoodleData(r + "-moodle", moodleData);
@@ -90,27 +91,30 @@ class _MoodleState extends State<Moodle> {
             body: SingleChildScrollView(
               child: Column(
                   children: assignments.map((e) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.indigo,
+                return MaterialButton(
+                  onPressed: () {
+//                    launchURL(e["url"]);
+                  },
+                  padding: EdgeInsets.all(0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.indigo,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.all(9),
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                        color: Colors.transparent,
-                        elevation: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(9),
+                    child: Column(
+                      children: <Widget>[
+                        Card(
+                          color: Colors.transparent,
+                          elevation: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -119,8 +123,23 @@ class _MoodleState extends State<Moodle> {
                                         Icon(FontAwesomeIcons.graduationCap,
                                             size: 20, color: Colors.indigo),
                                         SizedBox(width: 8),
-                                        AutoSizeText(e["course"]),
+                                        AutoSizeText(
+                                          e["course"],
+                                          maxFontSize: 18,
+                                          minFontSize: 16,
+                                        ),
                                       ],
+                                    ),
+                                    SizedBox(height: 6),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 29.0),
+                                      child: AutoSizeText(
+                                        e["name"] + ".",
+                                        maxLines: 8,
+                                        maxFontSize: 17,
+                                        minFontSize: 15,
+                                      ),
                                     ),
                                     SizedBox(height: 10),
                                     Row(
@@ -128,19 +147,19 @@ class _MoodleState extends State<Moodle> {
                                         Icon(FontAwesomeIcons.clock,
                                             size: 20, color: Colors.indigo),
                                         SizedBox(width: 8),
-                                        Texts(e["time"], 14),
+                                        Texts(e["time"].toString(), 14),
                                       ],
                                     ),
                                     SizedBox(height: 8),
                                   ],
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 20),
-                          ],
+                              SizedBox(width: 20),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               }).toList()),
@@ -150,4 +169,12 @@ class _MoodleState extends State<Moodle> {
       ),
     );
   }
+
+//  void launchURL(String url) async {
+//    if (await canLaunch('https://flutter.dev')) {
+//      await launch('https://flutter.dev');
+//    } else {
+//      throw 'Could not launch $url';
+//    }
+//  }
 }

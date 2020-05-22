@@ -145,84 +145,39 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             setState(() {
                               showSpinner = true;
                             });
+                            regNo = "18blc1082";
                             regNo = regNo.trim();
-                            url =
-                                'http://134.209.150.24/authenticate?username=$regNo&password=$password';
+                            password = "St.franciscollege1";
+                            url = 'http://134.209.150.24/api/gettoken';
                             API api = API();
+                            Map<String, String> data = {
+                              "username": regNo,
+                              "password": password
+                            };
                             Map<String, dynamic> profileData =
-                                await api.getAPIData(url);
+                                await api.getAPIData(url, data);
                             if (profileData != null &&
-                                profileData["Error"] == null &&
-                                regNo.length == 9) {
+                                profileData["Error"] == null) {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               await prefs.setString(
                                   "regNo", profileData["RegNo"]);
                               await prefs.setString("password", password);
                               print("here");
-                              String t = profileData['APItoken'].toString();
-                              String u = profileData['RegNo'].toString();
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           SplashScreen2(
                                               password, profileData)));
-//                            Map<String, dynamic> attendanceData =
-//                                await api.getAPIData(
-//                                    'http://134.209.150.24/classesapi?token=$t');
-//                            print('Classes');
-//                            Map<String, dynamic> timeTableData =
-//                                await api.getAPIData(
-//                                    'http://134.209.150.24/timetableapi?token=$t');
-//                            print('Time Table');
-//                            Map<String, dynamic> marksData =
-//                                await api.getAPIData(
-//                                    'http://134.209.150.24/marksapi?token=$t');
-//                            print('Marks');
-//                            Map<String, dynamic> acadHistoryData =
-//                                await api.getAPIData(
-//                                    'http://134.209.150.24/acadhistoryapi?token=$t');
-//                            print('AcadHistory');
-//                            if (attendanceData != null &&
-//                                timeTableData != null &&
-//                                marksData != null &&
-//                                acadHistoryData != null) {
-//                              x = 1;
-//                              Student student = Student(
-//                                  profileKey: (u + "-profile"),
-//                                  profile: profileData,
-//                                  attendanceKey: (u + "-attendance"),
-//                                  attendance: attendanceData,
-//                                  timeTableKey: (u + "-timeTable"),
-//                                  timeTable: timeTableData,
-//                                  marksKey: (u + "-marks"),
-//                                  marks: marksData,
-//                                  acadHistoryKey: (u + "-acadHistory"),
-//                                  acadHistory: acadHistoryData);
-//                              StudentDao().deleteStudent(student);
-//                              StudentDao().insertStudent(student);
-//                              Navigator.pushReplacement(
-//                                  context,
-//                                  MaterialPageRoute(
-//                                      builder: (BuildContext context) =>
-//                                          MenuDashboardPage(
-//                                              profileData,
-//                                              attendanceData,
-//                                              timeTableData,
-//                                              marksData,
-//                                              acadHistoryData,
-//                                              password)));
-//                            }
-                              setState(() {
-                                showSpinner = false;
-                              });
                             } else {
                               setState(() {
                                 loginFail = true;
-                                showSpinner = false;
                               });
                             }
+                            setState(() {
+                              showSpinner = false;
+                            });
                           },
                           minWidth: 200.0,
                           height: 42.0,

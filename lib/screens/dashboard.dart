@@ -198,55 +198,42 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       },
                     );
                     API api = API();
-                    pass = widget.password;
+
+                    String t = widget.profileData['APItoken'].toString();
                     regNo = widget.profileData["RegNo"];
-                    String url =
-                        'http://134.209.150.24/authenticate?username=$regNo&password=$pass';
-                    Map<String, dynamic> newProfileData =
-                        await api.getAPIData(url);
-                    if (newProfileData != null)
-                      widget.profileData = newProfileData;
-                    if (newProfileData != null) {
-                      String t = widget.profileData['APItoken'].toString();
-                      String u = widget.profileData['RegNo'].toString();
-                      Map<String, dynamic> newAttendanceData =
-                          await api.getAPIData(
-                              'http://134.209.150.24/classesapi?token=$t');
-                      if (newAttendanceData != null)
-                        widget.attendanceData = newAttendanceData;
-                      print('Classes');
-                      Map<String, dynamic> newTimeTableData =
-                          await api.getAPIData(
-                              'http://134.209.150.24/timetableapi?token=$t');
-                      if (newTimeTableData != null)
-                        widget.timeTableData = newTimeTableData;
-                      print('Time Table');
-                      Map<String, dynamic> newMarksData = await api.getAPIData(
-                          'http://134.209.150.24/marksapi?token=$t');
-                      if (newMarksData != null) widget.marksData = newMarksData;
-                      print('Marks');
-                      Map<String, dynamic> newAcadHistoryData =
-                          await api.getAPIData(
-                              'http://134.209.150.24/acadhistoryapi?token=$t');
-                      if (newAcadHistoryData != null)
-                        widget.acadHistoryData = newAcadHistoryData;
-                      print('AcadHistory');
-                      Student student = Student(
-                          profileKey: (u + "-profile"),
-                          profile: widget.profileData,
-                          attendanceKey: (u + "-attendance"),
-                          attendance: widget.attendanceData,
-                          timeTableKey: (u + "-timeTable"),
-                          timeTable: widget.timeTableData,
-                          marksKey: (u + "-marks"),
-                          marks: widget.marksData,
-                          acadHistoryKey: (u + "-acadHistory"),
-                          acadHistory: widget.acadHistoryData);
-                      StudentDao().deleteStudent(student);
-                      StudentDao().insertStudent(student);
-                      getAttendance();
-                      getTimeTable();
-                    }
+                    pass = widget.password;
+                    Map<String, String> data = {
+                      "token": t,
+                      "username": regNo,
+                      "password": pass
+                    };
+                    String url = 'http://134.209.150.24/api/vtop/sync';
+                    Map<String, dynamic> newData =
+                        await api.getAPIData(url, data);
+                    String u = widget.profileData['RegNo'].toString();
+                    Map<String, dynamic> newAttendanceData =
+                        newData["Attendance"];
+                    if (newAttendanceData != null)
+                      widget.attendanceData = newAttendanceData;
+                    print('Classes');
+                    Map<String, dynamic> newMarksData = newData["Marks"];
+                    if (newMarksData != null) widget.marksData = newMarksData;
+                    print('Marks');
+                    Student student = Student(
+                        profileKey: (u + "-profile"),
+                        profile: widget.profileData,
+                        attendanceKey: (u + "-attendance"),
+                        attendance: widget.attendanceData,
+                        timeTableKey: (u + "-timeTable"),
+                        timeTable: widget.timeTableData,
+                        marksKey: (u + "-marks"),
+                        marks: widget.marksData,
+                        acadHistoryKey: (u + "-acadHistory"),
+                        acadHistory: widget.acadHistoryData);
+                    StudentDao().deleteStudent(student);
+                    StudentDao().insertStudent(student);
+                    getAttendance();
+                    getTimeTable();
                     setState(() {
                       refresh = false;
                     });
@@ -495,7 +482,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                         widget.profileData[
                                                             "RegNo"],
                                                         widget.profileData[
-                                                            "AppNo"]),
+                                                            "APItoken"]),
                                               ),
                                             );
                                           } else {
@@ -509,7 +496,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                               MaterialPageRoute(
                                                 builder: (context) => Moodle(
                                                   widget.profileData["RegNo"],
-                                                  widget.profileData["AppNo"],
+                                                  widget
+                                                      .profileData["APItoken"],
                                                   mod,
                                                 ),
                                               ),
@@ -699,8 +687,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => MoodleLogin(
-                                        widget.profileData["RegNo"],
-                                        widget.profileData["AppNo"]),
+                                      widget.profileData["RegNo"],
+                                      widget.profileData["APItoken"],
+                                    ),
                                   ),
                                 );
                               } else {
@@ -713,7 +702,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   MaterialPageRoute(
                                     builder: (context) => Moodle(
                                       widget.profileData["RegNo"],
-                                      widget.profileData["AppNo"],
+                                      widget.profileData["APItoken"],
                                       mod,
                                     ),
                                   ),
@@ -806,6 +795,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   void logoutUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs?.clear();
+    await flutterLocalNotificationsPlugin.cancelAll();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => WelcomeScreen()),
         (Route<dynamic> route) => false);

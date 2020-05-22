@@ -4,6 +4,7 @@ import 'package:vitask/api.dart';
 import 'package:vitask/database/Student_DAO.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'dashboard.dart';
+import 'welcome_screen.dart';
 
 class SplashScreen2 extends StatefulWidget {
   SplashScreen2(this.password, this.profileData);
@@ -24,17 +25,17 @@ class _SplashScreen2State extends State<SplashScreen2> {
     API api = API();
     String t = widget.profileData['APItoken'].toString();
     String u = widget.profileData['RegNo'].toString();
-    Map<String, dynamic> attendanceData =
-        await api.getAPIData('http://134.209.150.24/classesapi?token=$t');
+    Map<String, dynamic> attendanceData = await api
+        .getAPIData('http://134.209.150.24/api/vtop/attendance', {"token": t});
     print('Classes');
-    Map<String, dynamic> timeTableData =
-        await api.getAPIData('http://134.209.150.24/timetableapi?token=$t');
+    Map<String, dynamic> timeTableData = await api
+        .getAPIData('http://134.209.150.24/api/vtop/timetable', {"token": t});
     print('Time Table');
-    Map<String, dynamic> marksData =
-        await api.getAPIData('http://134.209.150.24/marksapi?token=$t');
+    Map<String, dynamic> marksData = await api
+        .getAPIData('http://134.209.150.24/api/vtop/marks', {"token": t});
     print('Marks');
-    Map<String, dynamic> acadHistoryData =
-        await api.getAPIData('http://134.209.150.24/acadhistoryapi?token=$t');
+    Map<String, dynamic> acadHistoryData = await api
+        .getAPIData('http://134.209.150.24/api/vtop/history', {"token": t});
     print('AcadHistory');
     if (attendanceData != null &&
         timeTableData != null &&
@@ -63,6 +64,11 @@ class _SplashScreen2State extends State<SplashScreen2> {
                   marksData,
                   acadHistoryData,
                   widget.password)));
+    } else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => WelcomeScreen()));
     }
   }
 
