@@ -20,6 +20,7 @@ class _AttendanceState extends State<Attendance>
   List<IconData> i = [FontAwesomeIcons.bookOpen, FontAwesomeIcons.laptopCode];
   int icon = 0;
   Map<String, dynamic> current;
+  var attKeys;
   @override
   void initState() {
     super.initState();
@@ -28,8 +29,9 @@ class _AttendanceState extends State<Attendance>
 
   void getAttended() {
     attended = [];
-    for (var i = 0; i < widget.attendance["Attended"].length; i++)
-      attended.add(widget.attendance["Attended"][i]);
+    attKeys = widget.attendance["attendance"].keys.toList();
+    for (var i = 0; i < widget.attendance["attendance"].length; i++)
+      attended.add(widget.attendance["attendance"][attKeys[i]]);
     len = attended.length;
   }
 

@@ -55,19 +55,27 @@ class _AcademicHistoryState extends State<AcademicHistory> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Texts("CGPA", 20),
-                Texts(curriculum['CGPA'], 20),
+                Texts("CGPA", 18),
+                Texts(curriculum['CGPA'], 18),
               ],
             ),
+            SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Texts("Credits Earned", 20),
-                Texts(
-                    "${curriculum['CreditsEarned']}/${curriculum['CreditsRegistered']}",
-                    20),
+                Texts("Credits Registered", 18),
+                Texts("${curriculum['CreditsRegistered']}", 18),
               ],
             ),
+            SizedBox(height: 3),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Texts("Credits Earned", 18),
+                Texts("${curriculum['CreditsEarned']}", 18),
+              ],
+            ),
+            SizedBox(height: 3),
             Container(
               padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
@@ -77,16 +85,17 @@ class _AcademicHistoryState extends State<AcademicHistory> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Texts("S", 20),
-                  Texts("A", 20),
-                  Texts("B", 20),
-                  Texts("C", 20),
-                  Texts("D", 20),
-                  Texts("E", 20),
-                  Texts("F", 20),
+                  Texts("S", 18),
+                  Texts("A", 18),
+                  Texts("B", 18),
+                  Texts("C", 18),
+                  Texts("D", 18),
+                  Texts("E", 18),
+                  Texts("F", 18),
                 ],
               ),
             ),
+            SizedBox(height: 3),
             Padding(
               padding: const EdgeInsets.all(3),
               child: Row(
@@ -98,10 +107,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.greenAccent,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['S'], 20),
+                      Texts(curriculum['S'], 18),
                     ],
                   ),
                   Row(
@@ -110,10 +119,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.green,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['A'], 20),
+                      Texts(curriculum['A'], 18),
                     ],
                   ),
                   Row(
@@ -122,10 +131,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.purpleAccent[100],
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['B'], 20),
+                      Texts(curriculum['B'], 18),
                     ],
                   ),
                   Row(
@@ -134,10 +143,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.yellowAccent,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['C'], 20),
+                      Texts(curriculum['C'], 18),
                     ],
                   ),
                   Row(
@@ -146,10 +155,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.orangeAccent,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['D'], 20),
+                      Texts(curriculum['D'], 18),
                     ],
                   ),
                   Row(
@@ -158,10 +167,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.deepOrange,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['E'], 20),
+                      Texts(curriculum['E'], 18),
                     ],
                   ),
                   Row(
@@ -170,10 +179,10 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                         "*",
                         style: TextStyle(
                           color: Colors.redAccent,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                      Texts(curriculum['F'], 20),
+                      Texts(curriculum['F'], 18),
                     ],
                   ),
                 ],

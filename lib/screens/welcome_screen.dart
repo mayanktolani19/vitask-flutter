@@ -4,12 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'dashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:vitask/database/StudentModel.dart';
-import 'package:vitask/database/Student_DAO.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'splash_screen2.dart';
 
 class WelcomeScreen extends StatefulWidget {

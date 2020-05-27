@@ -51,7 +51,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   Map<String, String> attDetails = {};
   Map<String, double> pie = {};
   List<String> a, days, hours;
-  List<dynamic> tt, tt1;
+  List<dynamic> tt, tt1, attKeys;
   List<DateTime> time, timeNotifications;
   var now;
   int count, h, g;
@@ -82,6 +82,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   }
 
   void getAttendance() async {
+    attKeys = widget.attendanceData["attendance"].keys.toList();
     CalculateAttendance cal =
         CalculateAttendance(widget.attendanceData, widget.profileData["RegNo"]);
     a = cal.attendanceDetails();
@@ -211,12 +212,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     Map<String, dynamic> newData =
                         await api.getAPIData(url, data);
                     String u = widget.profileData['RegNo'].toString();
-                    Map<String, dynamic> newAttendanceData =
-                        newData["Attendance"];
+                    Map<String, dynamic> newAttendanceData = newData[0];
                     if (newAttendanceData != null)
                       widget.attendanceData = newAttendanceData;
                     print('Classes');
-                    Map<String, dynamic> newMarksData = newData["Marks"];
+                    Map<String, dynamic> newMarksData = newData[1];
                     if (newMarksData != null) widget.marksData = newMarksData;
                     print('Marks');
                     Student student = Student(
@@ -335,13 +335,13 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   e["courseName"], e["startTime"], e["class"]);
                             var att = 80;
                             for (var i = 0;
-                                i < widget.attendanceData["Attended"].length;
+                                i < widget.attendanceData["attendance"].length;
                                 i++) {
-                              if (widget.attendanceData["Attended"][i]
-                                      ["courseName"] ==
+                              if (widget.attendanceData["attendance"]
+                                      [attKeys[i]]["courseName"] ==
                                   e["courseName"]) {
-                                att = widget.attendanceData["Attended"][i]
-                                    ["percentage"];
+                                att = widget.attendanceData["attendance"]
+                                    [attKeys[i]]["percentage"];
                                 break;
                               }
                             }

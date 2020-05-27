@@ -6,13 +6,14 @@ class CalculateAttendance {
 
   List<String> attendanceDetails() {
     StudentDao().getData(reg + "-attendance");
-    att = att["Attended"];
+    att = att["attendance"];
+    var keys = att.keys.toList();
     int attend = 0;
     int total = 0;
     List<String> a = [];
     for (var i = 0; i < att.length; i++) {
-      attend = attend + (att[i]["attended"]);
-      total = total + (att[i]["total"]);
+      attend = attend + (att[keys[i]]["attended"]);
+      total = total + (att[keys[i]]["total"]);
     }
     a.add(total.toString());
     a.add(attend.toString());
