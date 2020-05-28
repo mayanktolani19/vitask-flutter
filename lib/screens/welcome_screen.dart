@@ -141,9 +141,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             setState(() {
                               showSpinner = true;
                             });
-                            regNo = "18blc1082";
-                            regNo = regNo.trim();
-                            password = "St.franciscollege1";
+                            if (regNo.length > 0) regNo = regNo.trim();
                             url = 'http://134.209.150.24/api/gettoken';
                             API api = API();
                             Map<String, String> data = {

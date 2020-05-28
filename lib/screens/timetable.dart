@@ -60,13 +60,33 @@ class _TimeTableState extends State<TimeTable> {
       endTime.add(list[num]["endTime"]);
       startTime.add(list[num]["startTime"]);
       slot.add(list[num]["slot"]);
+
       for (var i = 0; i < widget.attendanceData["attendance"].length; i++) {
-        if (widget.attendanceData["attendance"][attKeys[i]]["courseName"] ==
-            list[num]["courseName"]) {
-          attendance.add(widget.attendanceData["attendance"][attKeys[i]]
-                  ["percentage"]
-              .toString());
-          break;
+        var slot = list[num]["slot"];
+        if (slot.contains("L")) {
+          if (widget.attendanceData["attendance"][attKeys[i]]["courseName"] ==
+                  list[num]["courseName"] &&
+              (widget.attendanceData["attendance"][attKeys[i]]["type"]
+                      .contains("Lab") ||
+                  widget.attendanceData["attendance"][attKeys[i]]["type"]
+                      .contains("Soft"))) {
+            attendance.add(widget.attendanceData["attendance"][attKeys[i]]
+                    ["percentage"]
+                .toString());
+            break;
+          }
+        } else {
+          if (widget.attendanceData["attendance"][attKeys[i]]["courseName"] ==
+                  list[num]["courseName"] &&
+              (widget.attendanceData["attendance"][attKeys[i]]["type"]
+                      .contains("Theory") ||
+                  widget.attendanceData["attendance"][attKeys[i]]["type"]
+                      .contains("Soft"))) {
+            attendance.add(widget.attendanceData["attendance"][attKeys[i]]
+                    ["percentage"]
+                .toString());
+            break;
+          }
         }
       }
       num++;
