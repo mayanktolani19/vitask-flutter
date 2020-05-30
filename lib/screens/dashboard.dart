@@ -111,8 +111,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         else
           theory++;
       }
+      labs = labs ~/ 2;
     }
-    labs = labs ~/ 2;
   }
 
   void getTimeTable() {
@@ -609,11 +609,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         },
                                         minWidth: 200.0,
                                         height: 42.0,
-                                        child: Text(
+                                        child: Texts(
                                           'Proceed To Moodle',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
+                                          12
                                         ),
                                       )),
                                 ),
