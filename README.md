@@ -1,4 +1,4 @@
-# VITask
+# VITask Lite
 
 # Caution! Work in progress. 
 
