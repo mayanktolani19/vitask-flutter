@@ -80,8 +80,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             size: 18,
                           ),
                           hintText: 'Enter your Registration No.',
-                          errorText:
-                              loginFail ? 'Invalid UserName or Password' : null,
+                          errorText: loginFail
+                              ? 'Invalid Registration No. or Password'
+                              : null,
                         ),
                       ),
                     ),
@@ -113,8 +114,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             iconSize: 19,
                           ),
                           hintText: 'Enter your Password',
-                          errorText:
-                              loginFail ? 'Invalid UserName or Password' : null,
+                          errorText: loginFail
+                              ? 'Invalid Registration No. or Password'
+                              : null,
                         ),
                       ),
                     ),
@@ -151,7 +153,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             Map<String, dynamic> profileData =
                                 await api.getAPIData(url, data);
                             if (profileData != null &&
-                                profileData["Error"] == null) {
+                                profileData["error"] == null) {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               await prefs.setString(

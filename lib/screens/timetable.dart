@@ -31,7 +31,7 @@ class _TimeTableState extends State<TimeTable> {
     daylist = [];
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
     for (var i = 0; i < days.length; i++) {
-      daylist.add(widget.timeTableData["Timetable"][days[i]]);
+      daylist.add(widget.timeTableData["timetable"][days[i]]);
     }
     dayele = [];
     var num = 0;

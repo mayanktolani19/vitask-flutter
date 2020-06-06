@@ -91,23 +91,22 @@ class _MoodleState extends State<Moodle> {
             body: SingleChildScrollView(
               child: Column(
                   children: assignments.map((e) {
-                return MaterialButton(
-                  onPressed: () {
-//                    launchURL(e["url"]);
-                  },
-                  padding: EdgeInsets.all(0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.indigo,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                int i = assignments.indexOf(e) + 1;
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.indigo,
                     ),
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.all(9),
-                    child: Column(
-                      children: <Widget>[
-                        Card(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.all(9),
+                  child: Column(
+                    children: <Widget>[
+                      MaterialButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: () {},
+                        child: Card(
                           color: Colors.transparent,
                           elevation: 0,
                           child: Row(
@@ -118,48 +117,56 @@ class _MoodleState extends State<Moodle> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
+//                                    Row(
+//                                      children: <Widget>[
+//                                        Icon(FontAwesomeIcons.graduationCap,
+//                                            size: 20, color: Colors.indigo),
+                                    AutoSizeText(
+                                      i.toString() + ". " + e["course"],
+                                      maxFontSize: 18,
+                                      minFontSize: 16,
+                                      maxLines: 10,
+                                      //textAlign: TextAlign.center,
+                                    ),
+//                                      ],
+//                                    ),
+                                    SizedBox(height: 8),
+                                    AutoSizeText(
+                                      e["name"] + ".",
+                                      maxLines: 10,
+                                      maxFontSize: 17,
+                                      minFontSize: 15,
+                                      //textAlign: TextAlign.start,
+                                    ),
+                                    SizedBox(height: 8),
                                     Row(
                                       children: <Widget>[
-                                        Icon(FontAwesomeIcons.graduationCap,
-                                            size: 20, color: Colors.indigo),
-                                        SizedBox(width: 8),
-                                        AutoSizeText(
-                                          e["course"],
-                                          maxFontSize: 18,
-                                          minFontSize: 16,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 6),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 29.0),
-                                      child: AutoSizeText(
-                                        e["name"] + ".",
-                                        maxLines: 8,
-                                        maxFontSize: 17,
-                                        minFontSize: 15,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: <Widget>[
-                                        Icon(FontAwesomeIcons.clock,
-                                            size: 20, color: Colors.indigo),
-                                        SizedBox(width: 8),
-                                        Texts(e["time"].toString(), 14),
+//                                        Icon(FontAwesomeIcons.clock,
+//                                            size: 20, color: Colors.indigo),
+//                                        SizedBox(width: 8),
+                                        Texts(
+                                            "Date: " +
+                                                e["time"]
+                                                    .split(' ')[0]
+                                                    .toString(),
+                                            14),
                                       ],
                                     ),
                                     SizedBox(height: 8),
+                                    Texts(
+                                        "Time: " +
+                                            e["time"].split(' ')[1].toString(),
+                                        14),
+                                    SizedBox(height: 4),
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 20),
+//                              SizedBox(width: 20),
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               }).toList()),

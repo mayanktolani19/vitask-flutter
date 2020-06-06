@@ -28,7 +28,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
   }
 
   void getData() {
-    acad = widget.acadHistory['AcadHistory'];
+    acad = widget.acadHistory['acadHistory'];
     curriculum = widget.acadHistory['CurriculumDetails'];
   }
 

@@ -103,7 +103,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       labs = 0;
       theory = 0;
       for (var j = 0;
-          j < widget.timeTableData["Timetable"][days[now.weekday - 1]].length;
+          j < widget.timeTableData["timetable"][days[now.weekday - 1]].length;
           j++) {
         tt1.add({"startTime": "xx"});
         if (tt[j]["slot"].contains("L"))
@@ -130,7 +130,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     tt1 = [];
     timeNotifications = [];
     if (now.weekday < 6) {
-      tt = widget.timeTableData["Timetable"][days[now.weekday - 1]];
+      tt = widget.timeTableData["timetable"][days[now.weekday - 1]];
       for (var j = 0; j < tt.length; j++) {
         tt1.add({"startTime": "xx"});
       }
@@ -226,16 +226,26 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       "username": regNo,
                       "password": pass
                     };
+                    print("hi");
                     String url = 'http://134.209.150.24/api/vtop/sync';
                     Map<String, dynamic> newData =
                         await api.getAPIData(url, data);
                     String u = widget.profileData['RegNo'].toString();
-                    Map<String, dynamic> newAttendanceData = newData[0];
-                    if (newAttendanceData != null)
-                      widget.attendanceData = newAttendanceData;
+                    Map<String, dynamic> newAttendanceData =
+                        newData['attendance'];
+                    if (newAttendanceData != null) {
+                      setState(() {
+                        widget.attendanceData = newAttendanceData;
+                        print(widget.attendanceData);
+                      });
+                    }
                     print('Classes');
-                    Map<String, dynamic> newMarksData = newData[1];
-                    if (newMarksData != null) widget.marksData = newMarksData;
+                    Map<String, dynamic> newMarksData = newData['marks'];
+                    if (newMarksData != null) {
+                      setState(() {
+                        widget.marksData = newMarksData;
+                      });
+                    }
                     print('Marks');
                     Student student = Student(
                         profileKey: (u + "-profile"),
@@ -609,10 +619,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         },
                                         minWidth: 200.0,
                                         height: 42.0,
-                                        child: Texts(
-                                          'Proceed To Moodle',
-                                          12
-                                        ),
+                                        child: Texts('Proceed To Moodle', 12),
                                       )),
                                 ),
                                 SizedBox(height: 12),
