@@ -48,6 +48,8 @@ class MenuDashboardPage extends StatefulWidget {
 GlobalWidget k = GlobalWidget();
 
 class _MenuDashboardPageState extends State<MenuDashboardPage> {
+  Map<String, dynamic> nextMarks;
+  Map<String, dynamic> nextAttendance;
   String avgAttendance;
   Map<String, String> attDetails = {};
   Map<String, double> pie = {};
@@ -86,12 +88,14 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     attKeys = widget.attendanceData["attendance"].keys.toList();
     CalculateAttendance cal =
         CalculateAttendance(widget.attendanceData, widget.profileData["RegNo"]);
-    a = cal.attendanceDetails();
-    attDetails["Total"] = a[0];
-    attDetails["Attended"] = a[1];
-    attDetails["Percentage"] = a[2];
-    pie["Present"] = double.parse(a[2]);
-    pie["Absent"] = 100 - double.parse(a[2]);
+    setState(() {
+      a = cal.attendanceDetails();
+      attDetails["Total"] = a[0];
+      attDetails["Attended"] = a[1];
+      attDetails["Percentage"] = a[2];
+      pie["Present"] = double.parse(a[2]);
+      pie["Absent"] = 100 - double.parse(a[2]);
+    });
   }
 
   void setValue() {
@@ -226,27 +230,22 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       "username": regNo,
                       "password": pass
                     };
-                    print("hi");
                     String url = 'http://134.209.150.24/api/vtop/sync';
                     Map<String, dynamic> newData =
                         await api.getAPIData(url, data);
-                    String u = widget.profileData['RegNo'].toString();
-                    Map<String, dynamic> newAttendanceData =
-                        newData['attendance'];
-                    if (newAttendanceData != null) {
-                      setState(() {
-                        widget.attendanceData = newAttendanceData;
-                        print(widget.attendanceData);
-                      });
-                    }
                     print('Classes');
-                    Map<String, dynamic> newMarksData = newData['marks'];
-                    if (newMarksData != null) {
-                      setState(() {
-                        widget.marksData = newMarksData;
-                      });
-                    }
                     print('Marks');
+                    Map<String, dynamic> newAtt = {};
+                    newAtt["attendance"] = newData["attendance"];
+                    Map<String, dynamic> newMarks = {};
+                    newMarks["marks"] = newData["marks"];
+                    if (newAtt != null) {
+                      widget.attendanceData = newAtt;
+                    }
+                    if (newMarks != null) {
+                      widget.marksData = newMarks;
+                    }
+                    String u = widget.profileData['RegNo'].toString();
                     Student student = Student(
                         profileKey: (u + "-profile"),
                         profile: widget.profileData,

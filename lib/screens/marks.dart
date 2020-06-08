@@ -13,7 +13,6 @@ class Marks extends StatefulWidget {
 class _MarksState extends State<Marks> {
   List<String> courses;
   List<dynamic> mark;
-  var key;
 
   List<Marksheet> marele = [];
   List<Exam> exeele = [];
@@ -25,9 +24,8 @@ class _MarksState extends State<Marks> {
   }
 
   void getData() {
-    key = widget.marks.keys.toList();
-    courses = widget.marks[key[0]].keys.toList();
-    mark = widget.marks[key[0]].values.toList();
+    courses = widget.marks['marks'].keys.toList();
+    mark = widget.marks['marks'].values.toList();
 
     marele = [];
     var num = 0;

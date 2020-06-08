@@ -143,7 +143,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             setState(() {
                               showSpinner = true;
                             });
-                            if (regNo.length > 0) regNo = regNo.trim();
+                            if (regNo != null) regNo = regNo.trim();
                             url = 'http://134.209.150.24/api/gettoken';
                             API api = API();
                             Map<String, String> data = {
