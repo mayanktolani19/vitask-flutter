@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/screens/attendance.dart';
+import 'package:vitask/screens/gpa_calculator.dart';
 import 'package:vitask/screens/timetable.dart';
 import 'package:vitask/screens/marks.dart';
 import 'package:vitask/screens/acadhistory.dart';
@@ -103,7 +104,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   }
 
   void getSlots() {
-    if (now.weekday < 6) {
+    if (now.weekday < 7) {
       labs = 0;
       theory = 0;
       for (var j = 0;
@@ -115,7 +116,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         else
           theory++;
       }
-      labs = labs ~/ 2;
+      labs = labs ~/ 3;
     }
   }
 
@@ -133,7 +134,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     now = DateTime.now();
     tt1 = [];
     timeNotifications = [];
-    if (now.weekday < 6) {
+    if (now.weekday < 7) {
       tt = widget.timeTableData["timetable"][days[now.weekday - 1]];
       for (var j = 0; j < tt.length; j++) {
         tt1.add({"startTime": "xx"});
@@ -350,7 +351,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             20),
                       ),
                       SizedBox(height: 10),
-                      now.weekday < 6
+                      now.weekday < 7
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -399,7 +400,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                           child: Column(
                         children: tt.map((e) {
                           List<Map<String, dynamic>> bunk = [];
-                          if (now.weekday < 6) {
+                          if (now.weekday < 7) {
                             if (count < timeNotifications.length)
                               scheduleNotification(timeNotifications[count++],
                                   e["courseName"], e["startTime"], e["class"]);
@@ -471,7 +472,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)),
                                 ),
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(8),
                                 margin: EdgeInsets.only(bottom: 5, top: 5),
                                 child: Column(
                                   children: <Widget>[
@@ -768,6 +769,33 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       AcademicHistory(widget.acadHistoryData),
+                                ),
+                              );
+                            },
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: Colors.indigo,
+                          ),
+                          ListTile(
+                            leading: Icon(FontAwesomeIcons.calculator),
+                            title: Text(
+                              'GPA Calculator',
+                              style: TextStyle(
+                                  fontSize: 14, fontStyle: FontStyle.normal),
+                            ),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GPACalculator(
+                                      widget.timeTableData["courses"],
+                                      widget.acadHistoryData[
+                                          "CurriculumDetails"]["CGPA"],
+                                      widget.acadHistoryData[
+                                              "CurriculumDetails"]
+                                          ["CreditsRegistered"]),
                                 ),
                               );
                             },

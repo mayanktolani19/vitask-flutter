@@ -67,11 +67,12 @@ class _MoodleLoginState extends State<MoodleLogin> {
                       ),
                       TextField(
                         obscureText: hidePassword,
-                        textAlign: TextAlign.center,
                         onChanged: (value) {
                           password = value;
                         },
                         decoration: kTextFieldDecorationMoodle.copyWith(
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.white54),
                           prefixIcon: Icon(FontAwesomeIcons.lock,
                               color: Colors.orangeAccent, size: 18),
                           suffixIcon: IconButton(
@@ -88,8 +89,6 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             color: Colors.orangeAccent,
                             iconSize: 19,
                           ),
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Password',
                           errorText: loginFail ? 'Invalid Password' : null,
                         ),
                       ),

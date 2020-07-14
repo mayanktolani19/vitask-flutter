@@ -10,6 +10,7 @@ class Vitask extends StatelessWidget {
   Widget build(BuildContext context) {
 //    hi();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'VITask',
       theme: ThemeData.dark(),
       home: SplashScreen(),

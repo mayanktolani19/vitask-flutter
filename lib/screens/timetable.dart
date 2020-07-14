@@ -27,9 +27,10 @@ class _TimeTableState extends State<TimeTable> {
   }
 
   void getData() {
+//    print(widget.timeTableData["timetable"]["Wednesday"]);
     attKeys = widget.attendanceData["attendance"].keys.toList();
     daylist = [];
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     for (var i = 0; i < days.length; i++) {
       daylist.add(widget.timeTableData["timetable"][days[i]]);
     }
@@ -293,7 +294,7 @@ class _TimeTableState extends State<TimeTable> {
                             theory++;
                           }
                         }
-                        labs = labs ~/ 2;
+                        labs = labs ~/ 3;
                         return Container(
                           width: width,
                           child: Stack(

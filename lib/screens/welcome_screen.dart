@@ -69,7 +69,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Container(
                       child: TextField(
                         textCapitalization: TextCapitalization.sentences,
-                        textAlign: TextAlign.center,
                         onChanged: (value) {
                           regNo = value;
                         },
@@ -79,7 +78,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             color: Colors.redAccent,
                             size: 18,
                           ),
-                          hintText: 'Enter your Registration No.',
+                          labelText: 'Reg No',
+                          labelStyle: TextStyle(color: Colors.white54),
                           errorText: loginFail
                               ? 'Invalid Registration No. or Password'
                               : null,
@@ -92,7 +92,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Container(
                       child: TextField(
                         obscureText: hidePassword,
-                        textAlign: TextAlign.center,
                         onChanged: (value) {
                           password = value;
                         },
@@ -113,7 +112,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             color: Colors.redAccent,
                             iconSize: 19,
                           ),
-                          hintText: 'Enter your Password',
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.white54),
                           errorText: loginFail
                               ? 'Invalid Registration No. or Password'
                               : null,
