@@ -12,7 +12,6 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 
 <img src="screenshots/dashboard.jpg" width="216" height="384"> <img src="screenshots/attendance.jpg" width="216" height="384"> 
 <img src="screenshots/bunk_meter.jpg" width="216" height="384"> <img src="screenshots/timetable.jpg" width="216" height="384">
-<br>
 <img src="screenshots/marks.jpg" width="216" height="384"> <img src="screenshots/moodle.jpg" width="216" height="384"> <img src="screenshots/profile.jpg" width="216" height="384">
 
 # Installation
@@ -40,9 +39,6 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 * `git commit -m"<Describe your changes>"`
 * `git push`
 * After committing your changes, make Pull Request.
-
-### To Do:
-* GPA Calculator
 
 ## Our Team
 
