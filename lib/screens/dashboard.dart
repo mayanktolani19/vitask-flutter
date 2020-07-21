@@ -116,7 +116,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         else
           theory++;
       }
-      labs = labs ~/ 3;
+      labs = labs ~/ 2;
     }
   }
 
@@ -435,7 +435,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                             .contains("Theory") ||
                                         widget.attendanceData["attendance"]
                                                 [attKeys[i]]["type"]
-                                            .contains("Soft"))) {
+                                            .contains("Soft") ||
+                                        !widget.attendanceData["attendance"]
+                                                [attKeys[i]]["type"]
+                                            .contains("Lab"))) {
                                   Map<String, dynamic> bu = widget
                                       .attendanceData["attendance"][attKeys[i]];
                                   bunk.add(bu);
@@ -573,55 +576,55 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   padding: EdgeInsets.only(top: 15),
                                 ),
                                 SizedBox(height: 10),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                                  child: Material(
-                                      elevation: 5.0,
-                                      color: Colors.indigo,
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      child: MaterialButton(
-                                        onPressed: () async {
-                                          SharedPreferences prefs =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          var moodlePassword = prefs
-                                              .getString("moodle-password");
-                                          if (moodlePassword == null) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MoodleLogin(
-                                                        widget.profileData[
-                                                            "RegNo"],
-                                                        widget.profileData[
-                                                            "APItoken"]),
-                                              ),
-                                            );
-                                          } else {
-                                            Map<String, dynamic> mod =
-                                                await MoodleDAO().getMoodleData(
-                                                    widget.profileData[
-                                                            "RegNo"] +
-                                                        "-moodle");
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => Moodle(
-                                                  widget.profileData["RegNo"],
-                                                  widget
-                                                      .profileData["APItoken"],
-                                                  mod,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        minWidth: 200.0,
-                                        height: 42.0,
-                                        child: Texts('Proceed To Moodle', 12),
-                                      )),
-                                ),
+//                                Padding(
+//                                  padding: EdgeInsets.symmetric(vertical: 16.0),
+//                                  child: Material(
+//                                      elevation: 5.0,
+//                                      color: Colors.indigo,
+//                                      borderRadius: BorderRadius.circular(30.0),
+//                                      child: MaterialButton(
+//                                        onPressed: () async {
+//                                          SharedPreferences prefs =
+//                                              await SharedPreferences
+//                                                  .getInstance();
+//                                          var moodlePassword = prefs
+//                                              .getString("moodle-password");
+//                                          if (moodlePassword == null) {
+//                                            Navigator.push(
+//                                              context,
+//                                              MaterialPageRoute(
+//                                                builder: (context) =>
+//                                                    MoodleLogin(
+//                                                        widget.profileData[
+//                                                            "RegNo"],
+//                                                        widget.profileData[
+//                                                            "APItoken"]),
+//                                              ),
+//                                            );
+//                                          } else {
+//                                            Map<String, dynamic> mod =
+//                                                await MoodleDAO().getMoodleData(
+//                                                    widget.profileData[
+//                                                            "RegNo"] +
+//                                                        "-moodle");
+//                                            Navigator.push(
+//                                              context,
+//                                              MaterialPageRoute(
+//                                                builder: (context) => Moodle(
+//                                                  widget.profileData["RegNo"],
+//                                                  widget
+//                                                      .profileData["APItoken"],
+//                                                  mod,
+//                                                ),
+//                                              ),
+//                                            );
+//                                          }
+//                                        },
+//                                        minWidth: 200.0,
+//                                        height: 42.0,
+//                                        child: Texts('Proceed To Moodle', 12),
+//                                      )),
+//                                ),
                                 SizedBox(height: 12),
                                 Divider(color: Colors.grey),
                               ],
@@ -683,10 +686,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             ),
                           ),
 
-                          Divider(
-                            color: Colors.indigo[800],
-                            thickness: 5,
-                          ),
+//                          Divider(
+//                            color: Colors.indigo[800],
+//                            thickness: 5,
+//                          ),
                           ListTile(
                             leading: Icon(Icons.assessment),
                             dense: true,
@@ -804,51 +807,51 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             thickness: 1,
                             color: Colors.indigo,
                           ),
-                          ListTile(
-                            leading: Icon(Icons.assignment),
-                            title: Text(
-                              'Moodle',
-                              style: TextStyle(
-                                  fontSize: 14, fontStyle: FontStyle.normal),
-                            ),
-                            onTap: () async {
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              var moodlePassword =
-                                  prefs.getString("moodle-password");
-                              if (moodlePassword == null) {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MoodleLogin(
-                                      widget.profileData["RegNo"],
-                                      widget.profileData["APItoken"],
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                Map<String, dynamic> mod = await MoodleDAO()
-                                    .getMoodleData(widget.profileData["RegNo"] +
-                                        "-moodle");
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Moodle(
-                                      widget.profileData["RegNo"],
-                                      widget.profileData["APItoken"],
-                                      mod,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.indigo,
-                          ),
+//                          ListTile(
+//                            leading: Icon(Icons.assignment),
+//                            title: Text(
+//                              'Moodle',
+//                              style: TextStyle(
+//                                  fontSize: 14, fontStyle: FontStyle.normal),
+//                            ),
+//                            onTap: () async {
+//                              SharedPreferences prefs =
+//                                  await SharedPreferences.getInstance();
+//                              var moodlePassword =
+//                                  prefs.getString("moodle-password");
+//                              if (moodlePassword == null) {
+//                                Navigator.pop(context);
+//                                Navigator.push(
+//                                  context,
+//                                  MaterialPageRoute(
+//                                    builder: (context) => MoodleLogin(
+//                                      widget.profileData["RegNo"],
+//                                      widget.profileData["APItoken"],
+//                                    ),
+//                                  ),
+//                                );
+//                              } else {
+//                                Map<String, dynamic> mod = await MoodleDAO()
+//                                    .getMoodleData(widget.profileData["RegNo"] +
+//                                        "-moodle");
+//                                Navigator.pop(context);
+//                                Navigator.push(
+//                                  context,
+//                                  MaterialPageRoute(
+//                                    builder: (context) => Moodle(
+//                                      widget.profileData["RegNo"],
+//                                      widget.profileData["APItoken"],
+//                                      mod,
+//                                    ),
+//                                  ),
+//                                );
+//                              }
+//                            },
+//                          ),
+//                          Divider(
+//                            thickness: 1,
+//                            color: Colors.indigo,
+//                          ),
                           ListTile(
                             leading: Icon(Icons.info),
                             title: Text(

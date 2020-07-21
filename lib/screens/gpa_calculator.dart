@@ -153,7 +153,7 @@ class _GPACalculatorState extends State<GPACalculator> {
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 10,
+                                  flex: 11,
                                   child: Slider(
                                     min: 4,
                                     max: 10,
@@ -168,27 +168,172 @@ class _GPACalculatorState extends State<GPACalculator> {
                                     },
                                   ),
                                 ),
+                                Expanded(flex: 1, child: SizedBox()),
                                 Expanded(
-                                  flex: 1,
+                                  flex: 2,
                                   child: values[courses.indexOf(m)] == 10.0
-                                      ? Texts("S", 16)
+                                      ? ClipRect(
+                                          child: Container(
+                                              padding: EdgeInsets.all(5),
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 4),
+                                              decoration: BoxDecoration(
+                                                color: Colors.yellow[800],
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                              ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "S",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black),
+                                              )))
                                       : values[courses.indexOf(m)] == 9.0
-                                          ? Texts("A", 16)
+                                          ? ClipRect(
+                                              child: Container(
+                                                  padding: EdgeInsets.all(5),
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.blue,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    "A",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                  )))
                                           : values[courses.indexOf(m)] == 8.0
-                                              ? Texts("B", 16)
+                                              ? ClipRect(
+                                                  child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                      ),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        "B",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.black),
+                                                      )))
                                               : values[courses.indexOf(m)] ==
                                                       7.0
-                                                  ? Texts("C", 16)
-                                                  : values[courses
-                                                              .indexOf(m)] ==
+                                                  ? ClipRect(
+                                                      child: Container(
+                                                          padding:
+                                                              EdgeInsets.all(5),
+                                                          margin:
+                                                              EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      4),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        30),
+                                                          ),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                            "C",
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                color: Colors
+                                                                    .black),
+                                                          )))
+                                                  : values[courses.indexOf(m)] ==
                                                           6.0
-                                                      ? Texts("D", 16)
-                                                      : values[courses.indexOf(
-                                                                  m)] ==
+                                                      ? ClipRect(
+                                                          child: Container(
+                                                              padding:
+                                                                  EdgeInsets.all(
+                                                                      5),
+                                                              margin: EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      4),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .deepOrange,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            30),
+                                                              ),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                "D",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                    color: Colors
+                                                                        .black),
+                                                              )))
+                                                      : values[courses.indexOf(m)] ==
                                                               5.0
-                                                          ? Texts("E", 16)
-                                                          : Texts("F", 16),
-                                )
+                                                          ? ClipRect(
+                                                              child: Container(
+                                                                  padding: EdgeInsets.all(5),
+                                                                  margin: EdgeInsets.symmetric(horizontal: 4),
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                  ),
+                                                                  alignment: Alignment.center,
+                                                                  child: Text(
+                                                                    "E",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                        color: Colors
+                                                                            .black),
+                                                                  )))
+                                                          : ClipRect(
+                                                              child: Container(
+                                                                  padding: EdgeInsets.all(5),
+                                                                  margin: EdgeInsets.symmetric(horizontal: 4),
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                            .red[
+                                                                        800],
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                  ),
+                                                                  alignment: Alignment.center,
+                                                                  child: Text(
+                                                                    "F",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                        color: Colors
+                                                                            .black),
+                                                                  ))),
+                                ),
+                                Expanded(flex: 1, child: SizedBox())
                               ],
                             ),
                             SizedBox(height: 25),

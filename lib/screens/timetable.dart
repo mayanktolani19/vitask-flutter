@@ -27,7 +27,6 @@ class _TimeTableState extends State<TimeTable> {
   }
 
   void getData() {
-//    print(widget.timeTableData["timetable"]["Wednesday"]);
     attKeys = widget.attendanceData["attendance"].keys.toList();
     daylist = [];
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -82,7 +81,9 @@ class _TimeTableState extends State<TimeTable> {
               (widget.attendanceData["attendance"][attKeys[i]]["type"]
                       .contains("Theory") ||
                   widget.attendanceData["attendance"][attKeys[i]]["type"]
-                      .contains("Soft"))) {
+                      .contains("Soft") ||
+                  !widget.attendanceData["attendance"][attKeys[i]]["type"]
+                      .contains("Lab"))) {
             attendance.add(widget.attendanceData["attendance"][attKeys[i]]
                     ["percentage"]
                 .toString());
@@ -294,7 +295,7 @@ class _TimeTableState extends State<TimeTable> {
                             theory++;
                           }
                         }
-                        labs = labs ~/ 3;
+                        labs = labs ~/ 2;
                         return Container(
                           width: width,
                           child: Stack(
