@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants.dart';
 import 'welcome_screen.dart';
 import 'dashboard.dart';
 import 'dart:async';
@@ -22,10 +23,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("images/side.jpg"), fit: BoxFit.cover),
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color.fromRGBO(0, 0, 0, 30),
+              Color.fromRGBO(70, 10, 10, 10)
+            ])),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 100),
+                child: Image.asset(
+                  'images/blue.png',
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Texts('Made with ❤ by the VITask Team', 14),
+              ),
+            ],
+          ),
         ),
       ),
     );
