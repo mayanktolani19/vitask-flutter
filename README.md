@@ -1,8 +1,6 @@
 # VITask Lite
 
-# Caution! Work in progress. 
-
-## Beta version launched on Play Store!
+## First Stable version launched on Play Store!
 
 VITask mobile application made for the students of VIT Chennai for their VTOP login.
 
