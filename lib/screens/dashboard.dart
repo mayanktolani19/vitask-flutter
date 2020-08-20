@@ -51,11 +51,11 @@ GlobalWidget k = GlobalWidget();
 class _MenuDashboardPageState extends State<MenuDashboardPage> {
   Map<String, dynamic> nextMarks;
   Map<String, dynamic> nextAttendance;
-  String avgAttendance;
+  String avgAttendance, updatedText;
   Map<String, String> attDetails = {};
   Map<String, double> pie = {};
   List<String> a, days, hours;
-  List<dynamic> tt, tt1, attKeys;
+  List<dynamic> tt, tt1, attKeys, updatedOn;
   List<DateTime> time, timeNotifications;
   var now;
   int count, h, g, theory, labs;
@@ -82,6 +82,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
+    refreshData();
     super.initState();
   }
 
@@ -90,6 +91,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     CalculateAttendance cal =
         CalculateAttendance(widget.attendanceData, widget.profileData["RegNo"]);
     setState(() {
+      updatedText = "";
+      updatedOn = widget.attendanceData['attendance'][attKeys[0]]['updatedOn']
+          .split(' ');
+      for (int xy = 0; xy < updatedOn.length - 1; xy++)
+        updatedText += (updatedOn[xy] + " ");
       a = cal.attendanceDetails();
       attDetails["Total"] = a[0];
       attDetails["Attended"] = a[1];
@@ -181,6 +187,51 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     }
   }
 
+  void refreshData() async {
+    API api = API();
+    String t = widget.profileData['APItoken'].toString();
+    regNo = widget.profileData["RegNo"];
+    pass = widget.password;
+    Map<String, String> data = {
+      "token": t,
+      "username": regNo,
+      "password": pass
+    };
+    String url = 'http://134.209.150.24/api/vtop/sync';
+    Map<String, dynamic> newData = await api.getAPIData(url, data);
+    print('Classes');
+    print('Marks');
+    Map<String, dynamic> newAtt = {};
+    newAtt["attendance"] = newData["attendance"];
+    Map<String, dynamic> newMarks = {};
+    newMarks["marks"] = newData["marks"];
+    if (newAtt != null) {
+      widget.attendanceData = newAtt;
+    }
+    if (newMarks != null) {
+      widget.marksData = newMarks;
+    }
+    String u = widget.profileData['RegNo'].toString();
+    Student student = Student(
+        profileKey: (u + "-profile"),
+        profile: widget.profileData,
+        attendanceKey: (u + "-attendance"),
+        attendance: widget.attendanceData,
+        timeTableKey: (u + "-timeTable"),
+        timeTable: widget.timeTableData,
+        marksKey: (u + "-marks"),
+        marks: widget.marksData,
+        acadHistoryKey: (u + "-acadHistory"),
+        acadHistory: widget.acadHistoryData);
+    StudentDao().deleteStudent(student);
+    StudentDao().insertStudent(student);
+    getAttendance();
+    getTimeTable();
+    setState(() {
+      refresh = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     getSlots();
@@ -222,49 +273,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                         refresh = true;
                       },
                     );
-                    API api = API();
-                    String t = widget.profileData['APItoken'].toString();
-                    regNo = widget.profileData["RegNo"];
-                    pass = widget.password;
-                    Map<String, String> data = {
-                      "token": t,
-                      "username": regNo,
-                      "password": pass
-                    };
-                    String url = 'http://134.209.150.24/api/vtop/sync';
-                    Map<String, dynamic> newData =
-                        await api.getAPIData(url, data);
-                    print('Classes');
-                    print('Marks');
-                    Map<String, dynamic> newAtt = {};
-                    newAtt["attendance"] = newData["attendance"];
-                    Map<String, dynamic> newMarks = {};
-                    newMarks["marks"] = newData["marks"];
-                    if (newAtt != null) {
-                      widget.attendanceData = newAtt;
-                    }
-                    if (newMarks != null) {
-                      widget.marksData = newMarks;
-                    }
-                    String u = widget.profileData['RegNo'].toString();
-                    Student student = Student(
-                        profileKey: (u + "-profile"),
-                        profile: widget.profileData,
-                        attendanceKey: (u + "-attendance"),
-                        attendance: widget.attendanceData,
-                        timeTableKey: (u + "-timeTable"),
-                        timeTable: widget.timeTableData,
-                        marksKey: (u + "-marks"),
-                        marks: widget.marksData,
-                        acadHistoryKey: (u + "-acadHistory"),
-                        acadHistory: widget.acadHistoryData);
-                    StudentDao().deleteStudent(student);
-                    StudentDao().insertStudent(student);
-                    getAttendance();
-                    getTimeTable();
-                    setState(() {
-                      refresh = false;
-                    });
+                    refreshData();
                     // do something
                   },
                 )
@@ -634,7 +643,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                         }).toList(),
                       )),
                     ),
-                  )
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Texts("Last Updated On: " + updatedText, 14))
                 ],
               ),
             ),
