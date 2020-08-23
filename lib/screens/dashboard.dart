@@ -407,184 +407,199 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       width: double.infinity,
                       child: SingleChildScrollView(
                           child: Column(
-                        children: tt.map((e) {
-                          List<Map<String, dynamic>> bunk = [];
-                          if (now.weekday < 7) {
-                            if (count < timeNotifications.length)
-                              scheduleNotification(timeNotifications[count++],
-                                  e["courseName"], e["startTime"], e["class"]);
-                            var att = 80;
-                            for (var i = 0;
-                                i < widget.attendanceData["attendance"].length;
-                                i++) {
-                              var slot = e["slot"];
-                              if (slot.contains("L")) {
-                                if (widget.attendanceData["attendance"]
-                                            [attKeys[i]]["courseName"] ==
-                                        e["courseName"] &&
-                                    (widget.attendanceData["attendance"]
-                                                [attKeys[i]]["type"]
-                                            .contains("Lab") ||
+                        children: <Widget>[
+                          Column(
+                            children: tt.map((e) {
+                              List<Map<String, dynamic>> bunk = [];
+                              if (now.weekday < 7) {
+                                if (count < timeNotifications.length)
+                                  scheduleNotification(
+                                      timeNotifications[count++],
+                                      e["courseName"],
+                                      e["startTime"],
+                                      e["class"]);
+                                var att = 80;
+                                for (var i = 0;
+                                    i <
                                         widget.attendanceData["attendance"]
-                                                [attKeys[i]]["type"]
-                                            .contains("Soft"))) {
-                                  Map<String, dynamic> bu = widget
-                                      .attendanceData["attendance"][attKeys[i]];
-                                  bunk.add(bu);
-                                  att = widget.attendanceData["attendance"]
-                                      [attKeys[i]]["percentage"];
-                                  break;
+                                            .length;
+                                    i++) {
+                                  var slot = e["slot"];
+                                  if (slot.contains("L")) {
+                                    if (widget.attendanceData["attendance"]
+                                                [attKeys[i]]["courseName"] ==
+                                            e["courseName"] &&
+                                        (widget.attendanceData["attendance"]
+                                                    [attKeys[i]]["type"]
+                                                .contains("Lab") ||
+                                            widget.attendanceData["attendance"]
+                                                    [attKeys[i]]["type"]
+                                                .contains("Soft"))) {
+                                      Map<String, dynamic> bu =
+                                          widget.attendanceData["attendance"]
+                                              [attKeys[i]];
+                                      bunk.add(bu);
+                                      att = widget.attendanceData["attendance"]
+                                          [attKeys[i]]["percentage"];
+                                      break;
+                                    }
+                                  } else {
+                                    if (widget.attendanceData["attendance"]
+                                                [attKeys[i]]["courseName"] ==
+                                            e["courseName"] &&
+                                        (widget.attendanceData["attendance"]
+                                                    [attKeys[i]]["type"]
+                                                .contains("Theory") ||
+                                            widget.attendanceData["attendance"]
+                                                    [attKeys[i]]["type"]
+                                                .contains("Soft") ||
+                                            !widget.attendanceData["attendance"]
+                                                    [attKeys[i]]["type"]
+                                                .contains("Lab"))) {
+                                      Map<String, dynamic> bu =
+                                          widget.attendanceData["attendance"]
+                                              [attKeys[i]];
+                                      bunk.add(bu);
+                                      att = widget.attendanceData["attendance"]
+                                          [attKeys[i]]["percentage"];
+                                      break;
+                                    }
+                                  }
                                 }
-                              } else {
-                                if (widget.attendanceData["attendance"]
-                                            [attKeys[i]]["courseName"] ==
-                                        e["courseName"] &&
-                                    (widget.attendanceData["attendance"]
-                                                [attKeys[i]]["type"]
-                                            .contains("Theory") ||
-                                        widget.attendanceData["attendance"]
-                                                [attKeys[i]]["type"]
-                                            .contains("Soft") ||
-                                        !widget.attendanceData["attendance"]
-                                                [attKeys[i]]["type"]
-                                            .contains("Lab"))) {
-                                  Map<String, dynamic> bu = widget
-                                      .attendanceData["attendance"][attKeys[i]];
-                                  bunk.add(bu);
-                                  att = widget.attendanceData["attendance"]
-                                      [attKeys[i]]["percentage"];
-                                  break;
+                                var color1 = Colors.blue[800];
+                                var color2 = Colors.blue[300];
+                                if (att < 80 && att >= 75) {
+                                  color1 = Colors.yellow[900];
+                                  color2 = Colors.yellow[400];
+                                } else if (att < 75) {
+                                  color1 = Colors.red[900];
+                                  color2 = Colors.red[300];
                                 }
-                              }
-                            }
-                            var color1 = Colors.blue[800];
-                            var color2 = Colors.blue[300];
-                            if (att < 80 && att >= 75) {
-                              color1 = Colors.yellow[900];
-                              color2 = Colors.yellow[400];
-                            } else if (att < 75) {
-                              color1 = Colors.red[900];
-                              color2 = Colors.red[300];
-                            }
-                            return MaterialButton(
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BunkMeter(bunk, 0),
+                                return MaterialButton(
+                                  padding: EdgeInsets.all(0),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            BunkMeter(bunk, 0),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: color1,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    padding: EdgeInsets.all(8),
+                                    margin: EdgeInsets.only(bottom: 5, top: 5),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Card(
+                                          color: Colors.transparent,
+                                          elevation: 0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Expanded(
+                                                flex: 1,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Texts(
+                                                        e["code"] +
+                                                            " - " +
+                                                            e["courseName"],
+                                                        16),
+                                                    SizedBox(height: 10),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Icon(
+                                                            FontAwesomeIcons
+                                                                .mapMarkerAlt,
+                                                            size: 16,
+                                                            color: color1),
+                                                        SizedBox(width: 5),
+                                                        Texts(e["class"], 14),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 8),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Icon(
+                                                            FontAwesomeIcons
+                                                                .clock,
+                                                            size: 16,
+                                                            color: color1),
+                                                        SizedBox(width: 5),
+                                                        Texts(
+                                                            e["startTime"] +
+                                                                " - " +
+                                                                e["endTime"],
+                                                            14),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 8),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Icon(
+                                                            FontAwesomeIcons
+                                                                .tag,
+                                                            size: 16,
+                                                            color: color1),
+                                                        SizedBox(width: 8),
+                                                        Texts(e["slot"], 14),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+//                                        SizedBox(width: 20),
+                                              CircularPercentIndicator(
+                                                animationDuration: 900,
+                                                radius: 90.0,
+                                                lineWidth: 6.0,
+                                                percent: double.parse(
+                                                        att.toString()) /
+                                                    100,
+                                                center: Texts(
+                                                    att.toString() + "%", 15),
+                                                progressColor: color1,
+                                                backgroundColor: color2,
+                                                circularStrokeCap:
+                                                    CircularStrokeCap.round,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: color1,
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                ),
-                                padding: EdgeInsets.all(8),
-                                margin: EdgeInsets.only(bottom: 5, top: 5),
-                                child: Column(
+                              } else if (h == 1) {
+                                h++;
+                                return Column(
                                   children: <Widget>[
-                                    Card(
-                                      color: Colors.transparent,
-                                      elevation: 0,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Texts(
-                                                    e["code"] +
-                                                        " - " +
-                                                        e["courseName"],
-                                                    16),
-                                                SizedBox(height: 10),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Icon(
-                                                        FontAwesomeIcons
-                                                            .mapMarkerAlt,
-                                                        size: 16,
-                                                        color: color1),
-                                                    SizedBox(width: 5),
-                                                    Texts(e["class"], 14),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 8),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Icon(FontAwesomeIcons.clock,
-                                                        size: 16,
-                                                        color: color1),
-                                                    SizedBox(width: 5),
-                                                    Texts(
-                                                        e["startTime"] +
-                                                            " - " +
-                                                            e["endTime"],
-                                                        14),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 8),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Icon(FontAwesomeIcons.tag,
-                                                        size: 16,
-                                                        color: color1),
-                                                    SizedBox(width: 8),
-                                                    Texts(e["slot"], 14),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-//                                        SizedBox(width: 20),
-                                          CircularPercentIndicator(
-                                            animationDuration: 900,
-                                            radius: 90.0,
-                                            lineWidth: 6.0,
-                                            percent:
-                                                double.parse(att.toString()) /
-                                                    100,
-                                            center:
-                                                Texts(att.toString() + "%", 15),
-                                            progressColor: color1,
-                                            backgroundColor: color2,
-                                            circularStrokeCap:
-                                                CircularStrokeCap.round,
-                                          )
-                                        ],
-                                      ),
+                                    SizedBox(height: 10),
+                                    Container(
+                                        child: Texts(
+                                            "No Classes today, Sit back and relax.",
+                                            18)),
+                                    SizedBox(height: 40),
+                                    Divider(color: Colors.grey),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      child: Texts(
+                                          "Maybe work on some assignments.",
+                                          18),
+                                      padding: EdgeInsets.only(top: 15),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          } else if (h == 1) {
-                            h++;
-                            return Column(
-                              children: <Widget>[
-                                SizedBox(height: 10),
-                                Container(
-                                    child: Texts(
-                                        "No Classes today, Sit back and relax.",
-                                        18)),
-                                SizedBox(height: 40),
-                                Divider(color: Colors.grey),
-                                SizedBox(height: 10),
-                                Container(
-                                  child: Texts(
-                                      "Maybe work on some assignments.", 18),
-                                  padding: EdgeInsets.only(top: 15),
-                                ),
-                                SizedBox(height: 10),
+                                    SizedBox(height: 10),
 //                                Padding(
 //                                  padding: EdgeInsets.symmetric(vertical: 16.0),
 //                                  child: Material(
@@ -634,19 +649,22 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
 //                                        child: Texts('Proceed To Moodle', 12),
 //                                      )),
 //                                ),
-                                SizedBox(height: 12),
-                                Divider(color: Colors.grey),
-                              ],
-                            );
-                          }
-                          return Container();
-                        }).toList(),
+                                    SizedBox(height: 12),
+                                    Divider(color: Colors.grey),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            }).toList(),
+                          ),
+                          Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child:
+                                  Texts("Last Updated On: " + updatedText, 14))
+                        ],
                       )),
                     ),
                   ),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      child: Texts("Last Updated On: " + updatedText, 14))
                 ],
               ),
             ),
