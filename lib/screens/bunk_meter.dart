@@ -30,7 +30,6 @@ class _BunkMeterState extends State<BunkMeter> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(attended);
     getData();
   }
 

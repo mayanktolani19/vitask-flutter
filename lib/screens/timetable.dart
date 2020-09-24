@@ -3,7 +3,6 @@ import 'tt.dart';
 import 'package:vitask/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TimeTable extends StatefulWidget {
   TimeTable(this.timeTableData, this.attendanceData);

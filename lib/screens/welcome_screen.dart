@@ -159,7 +159,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               await prefs.setString(
                                   "regNo", profileData["RegNo"]);
                               await prefs.setString("password", password);
-                              print("here");
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

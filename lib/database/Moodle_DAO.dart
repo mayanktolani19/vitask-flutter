@@ -9,12 +9,10 @@ class MoodleDAO {
     await store
         .record(moodleData.moodleKey)
         .put(await _db, moodleData.moodleData);
-    print('Moodle Data Inserted successfully !!');
   }
 
   Future<Map<String, dynamic>> getMoodleData(String key) async {
     var settings = await store.record(key).get(await _db) as Map;
-//    print(settings);
     return settings;
   }
 

@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vitask/Widgets/drawer_tile.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
+import 'package:vitask/functions/logout.dart';
+import 'package:vitask/functions/navigate_moodle.dart';
+import 'package:vitask/functions/notifications.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/gpa_calculator.dart';
 import 'package:vitask/screens/timetable.dart';
 import 'package:vitask/screens/marks.dart';
 import 'package:vitask/screens/acadhistory.dart';
-import 'welcome_screen.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:vitask/constants.dart';
 import 'moodle_login.dart';
@@ -24,7 +27,6 @@ import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'dart:async';
 import 'bunk_meter.dart';
 
 class MenuDashboardPage extends StatefulWidget {
@@ -68,8 +70,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         widget.acadHistoryData != null &&
         widget.marksData != null &&
         widget.timeTableData != null &&
-        widget.attendanceData != null) print("YESSS");
-    getAttendance();
+        widget.attendanceData != null) getAttendance();
     getTimeTable();
     count = 0;
     h = 1;
@@ -91,11 +92,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     CalculateAttendance cal =
         CalculateAttendance(widget.attendanceData, widget.profileData["RegNo"]);
     setState(() {
-      updatedText = "";
-      updatedOn = widget.attendanceData['attendance'][attKeys[0]]['updatedOn']
-          .split(' ');
-      for (int xy = 0; xy < updatedOn.length - 1; xy++)
-        updatedText += (updatedOn[xy] + " ");
       a = cal.attendanceDetails();
       attDetails["Total"] = a[0];
       attDetails["Attended"] = a[1];
@@ -188,28 +184,59 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   }
 
   void refreshData() async {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyy-MMMM-dd-HH-mm');
+    String update = formatter.format(now);
+    List<String> updated = update.split('-');
+    updatedText = "";
+    setState(() {
+      updatedText = updated[2] +
+          " " +
+          updated[1].substring(0, 3) +
+          " " +
+          updated[3] +
+          ":" +
+          updated[4];
+    });
     API api = API();
     String t = widget.profileData['APItoken'].toString();
     regNo = widget.profileData["RegNo"];
     pass = widget.password;
-    Map<String, String> data = {
-      "token": t,
-      "username": regNo,
-      "password": pass
-    };
+    Map<String, String> data;
+    if (refresh) {
+      data = {
+        "token": t,
+        "username": regNo,
+        "password": pass,
+        "hardRefresh": "True"
+      };
+    } else
+      data = {"token": t, "username": regNo, "password": pass};
     String url = 'http://134.209.150.24/api/vtop/sync';
     Map<String, dynamic> newData = await api.getAPIData(url, data);
-    print('Classes');
-    print('Marks');
     Map<String, dynamic> newAtt = {};
     newAtt["attendance"] = newData["attendance"];
     Map<String, dynamic> newMarks = {};
     newMarks["marks"] = newData["marks"];
     if (newAtt != null) {
-      widget.attendanceData = newAtt;
+      setState(() {
+        widget.attendanceData = newAtt;
+      });
     }
     if (newMarks != null) {
-      widget.marksData = newMarks;
+      setState(() {
+        widget.marksData = newMarks;
+      });
+    }
+    if (refresh) {
+      Map<String, dynamic> newAcad = {};
+      newAcad["acadHistory"] = newData["acadHistory"]["subjects"];
+      newAcad["CurriculumDetails"] = newData["acadHistory"]["summary"];
+      if (newAcad != null) {
+        setState(() {
+          widget.acadHistoryData = newAcad;
+        });
+      }
     }
     String u = widget.profileData['RegNo'].toString();
     Student student = Student(
@@ -263,6 +290,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
               backgroundColor: Colors.transparent,
               actions: <Widget>[
                 IconButton(
+                  tooltip: "Refresh",
                   icon: Icon(
                     Icons.refresh,
                     color: Colors.white,
@@ -274,7 +302,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       },
                     );
                     refreshData();
-                    // do something
                   },
                 )
               ],
@@ -417,7 +444,9 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       timeNotifications[count++],
                                       e["courseName"],
                                       e["startTime"],
-                                      e["class"]);
+                                      e["class"],
+                                      flutterLocalNotificationsPlugin,
+                                      count);
                                 var att = 80;
                                 for (var i = 0;
                                     i <
@@ -600,55 +629,25 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       padding: EdgeInsets.only(top: 15),
                                     ),
                                     SizedBox(height: 10),
-//                                Padding(
-//                                  padding: EdgeInsets.symmetric(vertical: 16.0),
-//                                  child: Material(
-//                                      elevation: 5.0,
-//                                      color: Colors.indigo,
-//                                      borderRadius: BorderRadius.circular(30.0),
-//                                      child: MaterialButton(
-//                                        onPressed: () async {
-//                                          SharedPreferences prefs =
-//                                              await SharedPreferences
-//                                                  .getInstance();
-//                                          var moodlePassword = prefs
-//                                              .getString("moodle-password");
-//                                          if (moodlePassword == null) {
-//                                            Navigator.push(
-//                                              context,
-//                                              MaterialPageRoute(
-//                                                builder: (context) =>
-//                                                    MoodleLogin(
-//                                                        widget.profileData[
-//                                                            "RegNo"],
-//                                                        widget.profileData[
-//                                                            "APItoken"]),
-//                                              ),
-//                                            );
-//                                          } else {
-//                                            Map<String, dynamic> mod =
-//                                                await MoodleDAO().getMoodleData(
-//                                                    widget.profileData[
-//                                                            "RegNo"] +
-//                                                        "-moodle");
-//                                            Navigator.push(
-//                                              context,
-//                                              MaterialPageRoute(
-//                                                builder: (context) => Moodle(
-//                                                  widget.profileData["RegNo"],
-//                                                  widget
-//                                                      .profileData["APItoken"],
-//                                                  mod,
-//                                                ),
-//                                              ),
-//                                            );
-//                                          }
-//                                        },
-//                                        minWidth: 200.0,
-//                                        height: 42.0,
-//                                        child: Texts('Proceed To Moodle', 12),
-//                                      )),
-//                                ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16.0),
+                                      child: Material(
+                                          elevation: 5.0,
+                                          color: Colors.indigo,
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                          child: MaterialButton(
+                                            onPressed: () async {
+                                              navigateMoodle(
+                                                  context, widget.profileData);
+                                            },
+                                            minWidth: 200.0,
+                                            height: 42.0,
+                                            child:
+                                                Texts('Proceed To Moodle', 12),
+                                          )),
+                                    ),
                                     SizedBox(height: 12),
                                     Divider(color: Colors.grey),
                                   ],
@@ -715,199 +714,81 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                               ),
                             ),
                           ),
-
-//                          Divider(
-//                            color: Colors.indigo[800],
-//                            thickness: 5,
-//                          ),
+                          drawerTile(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Attendance(widget.attendanceData),
+                              ),
+                              Icon(Icons.assessment),
+                              'Attendance'),
+                          div(),
+                          drawerTile(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TimeTable(
+                                  widget.timeTableData, widget.attendanceData),
+                            ),
+                            Icon(Icons.event_note),
+                            'TimeTable',
+                          ),
+                          div(),
+                          drawerTile(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Marks(widget.marksData),
+                              ),
+                              Icon(Icons.warning),
+                              'Marks'),
+                          div(),
+                          drawerTile(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AcademicHistory(widget.acadHistoryData),
+                              ),
+                              Icon(Icons.book),
+                              'Academic History'),
+                          div(),
+                          drawerTile(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GPACalculator(
+                                    widget.timeTableData["courses"],
+                                    widget.acadHistoryData["CurriculumDetails"]
+                                        ["CGPA"],
+                                    widget.acadHistoryData["CurriculumDetails"]
+                                        ["CreditsRegistered"]),
+                              ),
+                              Icon(FontAwesomeIcons.calculator),
+                              'GPA Calculator'),
+                          div(),
                           ListTile(
-                            leading: Icon(Icons.assessment),
-                            dense: true,
+                            leading: Icon(Icons.assignment),
                             title: Text(
-                              'Attendance',
+                              'Moodle',
                               style: TextStyle(
                                   fontSize: 14, fontStyle: FontStyle.normal),
                             ),
                             onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      Attendance(widget.attendanceData),
-                                ),
-                              );
+                              navigateMoodle(context, widget.profileData);
                             },
                           ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.indigo,
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.event_note),
-                            title: Text(
-                              'TimeTable',
-                              style: TextStyle(
-                                  fontSize: 14, fontStyle: FontStyle.normal),
-                            ),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              //print(widget.timeTableData["Timetable"]["Monday"]);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TimeTable(
-                                      widget.timeTableData,
-                                      widget.attendanceData),
-                                ),
-                              );
-                            },
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.indigo,
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.warning),
-                            title: Text(
-                              'Marks',
-                              style: TextStyle(
-                                  fontSize: 14, fontStyle: FontStyle.normal),
-                            ),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Marks(widget.marksData),
-                                ),
-                              );
-                            },
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.indigo,
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.book),
-                            title: Text(
-                              'Academic History',
-                              style: TextStyle(
-                                  fontSize: 14, fontStyle: FontStyle.normal),
-                            ),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      AcademicHistory(widget.acadHistoryData),
-                                ),
-                              );
-                            },
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.indigo,
-                          ),
-                          ListTile(
-                            leading: Icon(FontAwesomeIcons.calculator),
-                            title: Text(
-                              'GPA Calculator',
-                              style: TextStyle(
-                                  fontSize: 14, fontStyle: FontStyle.normal),
-                            ),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GPACalculator(
-                                      widget.timeTableData["courses"],
-                                      widget.acadHistoryData[
-                                          "CurriculumDetails"]["CGPA"],
-                                      widget.acadHistoryData[
-                                              "CurriculumDetails"]
-                                          ["CreditsRegistered"]),
-                                ),
-                              );
-                            },
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.indigo,
-                          ),
-//                          ListTile(
-//                            leading: Icon(Icons.assignment),
-//                            title: Text(
-//                              'Moodle',
-//                              style: TextStyle(
-//                                  fontSize: 14, fontStyle: FontStyle.normal),
-//                            ),
-//                            onTap: () async {
-//                              SharedPreferences prefs =
-//                                  await SharedPreferences.getInstance();
-//                              var moodlePassword =
-//                                  prefs.getString("moodle-password");
-//                              if (moodlePassword == null) {
-//                                Navigator.pop(context);
-//                                Navigator.push(
-//                                  context,
-//                                  MaterialPageRoute(
-//                                    builder: (context) => MoodleLogin(
-//                                      widget.profileData["RegNo"],
-//                                      widget.profileData["APItoken"],
-//                                    ),
-//                                  ),
-//                                );
-//                              } else {
-//                                Map<String, dynamic> mod = await MoodleDAO()
-//                                    .getMoodleData(widget.profileData["RegNo"] +
-//                                        "-moodle");
-//                                Navigator.pop(context);
-//                                Navigator.push(
-//                                  context,
-//                                  MaterialPageRoute(
-//                                    builder: (context) => Moodle(
-//                                      widget.profileData["RegNo"],
-//                                      widget.profileData["APItoken"],
-//                                      mod,
-//                                    ),
-//                                  ),
-//                                );
-//                              }
-//                            },
-//                          ),
-//                          Divider(
-//                            thickness: 1,
-//                            color: Colors.indigo,
-//                          ),
-                          ListTile(
-                            leading: Icon(Icons.info),
-                            title: Text(
-                              "Profile",
-                              //widget.profileData["Name"],
-                              style: TextStyle(
-                                  fontSize: 14, fontStyle: FontStyle.normal),
-                            ),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Profile(
-                                      widget.acadHistoryData[
-                                          "CurriculumDetails"]["CGPA"],
-                                      widget.profileData),
-                                ),
-                              );
-                            },
-                          ),
+                          div(),
+                          drawerTile(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Profile(
+                                    widget.acadHistoryData["CurriculumDetails"]
+                                        ["CGPA"],
+                                    widget.profileData),
+                              ),
+                              Icon(Icons.info),
+                              "Profile"),
                           Divider(
                             thickness: 5,
                             color: Colors.indigo,
                           ),
-                          //
                           ListTile(
                             leading: Icon(Icons.power_settings_new),
                             title: Text(
@@ -934,7 +815,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     FlatButton(
                                       onPressed: () {
                                         Navigator.pop(context);
-                                        logoutUser();
+                                        logoutUser(context,
+                                            flutterLocalNotificationsPlugin);
                                       },
                                       child: Texts('Yes', 12),
                                     ),
@@ -958,44 +840,5 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         ),
       ),
     );
-  }
-
-  void logoutUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
-    await flutterLocalNotificationsPlugin.cancelAll();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => WelcomeScreen()),
-        (Route<dynamic> route) => false);
-  }
-
-  Future scheduleNotification(
-      DateTime t, String c, String startTime, String venue) async {
-    if (t.isAfter(DateTime.now())) {
-      var scheduledNotificationDateTime = t.subtract(Duration(seconds: 350));
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your other channel id',
-        'your other channel name',
-        'your other channel description',
-        //color: Colors.lightBlue,
-      );
-      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-      NotificationDetails platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.schedule(count, c + " - " + venue,
-          startTime, scheduledNotificationDateTime, platformChannelSpecifics);
-    }
-  }
-
-  Future onSelectNotification(String payload) async {
-//    showDialog(
-//      context: context,
-//      builder: (_) {
-//        return new AlertDialog(
-//          title: Text("PayLoad"),
-//          content: Text("Payload : $payload"),
-//        );
-//      },
-//    );
   }
 }

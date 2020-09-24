@@ -27,16 +27,12 @@ class _SplashScreen2State extends State<SplashScreen2> {
     String u = widget.profileData['RegNo'].toString();
     Map<String, dynamic> attendanceData = await api
         .getAPIData('http://134.209.150.24/api/vtop/attendance', {"token": t});
-    print('Classes');
     Map<String, dynamic> timeTableData = await api
         .getAPIData('http://134.209.150.24/api/vtop/timetable', {"token": t});
-    print('Time Table');
     Map<String, dynamic> marksData = await api
         .getAPIData('http://134.209.150.24/api/vtop/marks', {"token": t});
-    print('Marks');
     Map<String, dynamic> acadHistoryData = await api
         .getAPIData('http://134.209.150.24/api/vtop/history', {"token": t});
-    print('AcadHistory');
     if (attendanceData != null &&
         timeTableData != null &&
         marksData != null &&
