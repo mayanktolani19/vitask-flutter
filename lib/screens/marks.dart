@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'marksheet.dart';
 import 'package:vitask/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -154,16 +155,7 @@ class _MarksState extends State<Marks> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: gradient()),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: CustomScrollView(

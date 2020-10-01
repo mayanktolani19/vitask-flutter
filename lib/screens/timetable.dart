@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'tt.dart';
 import 'package:vitask/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -260,16 +261,7 @@ class _TimeTableState extends State<TimeTable> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color.fromRGBO(13, 50, 77, 100),
-                Color.fromRGBO(0, 0, 10, 10)
-              ],
-            ),
-          ),
+          decoration: BoxDecoration(gradient: gradient()),
           child: Container(
             height: height,
             width: width,

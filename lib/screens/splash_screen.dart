@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'welcome_screen.dart';
 import 'dashboard.dart';
-import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/database/Student_DAO.dart';
 
@@ -53,13 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
-  }
-
-  void startTimer() {
-    Timer(Duration(seconds: 2), () {
-      navigateUser();
-      //It will redirect  after 3 seconds
-    });
   }
 
   void navigateUser() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/constants.dart';
 
 class GPACalculator extends StatefulWidget {
@@ -56,14 +57,7 @@ class _GPACalculatorState extends State<GPACalculator> {
     return SafeArea(
       child: Container(
         alignment: Alignment.topLeft,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
+        decoration: BoxDecoration(gradient: gradient()),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(

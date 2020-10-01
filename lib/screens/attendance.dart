@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/constants.dart';
 import 'package:vitask/screens/bunk_meter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -40,14 +41,7 @@ class _AttendanceState extends State<Attendance>
     super.build(context);
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
+        decoration: BoxDecoration(gradient: gradient()),
         child: Scaffold(
           appBar: AppBar(
             title: Text('Attendance'),

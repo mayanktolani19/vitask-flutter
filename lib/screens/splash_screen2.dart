@@ -1,5 +1,6 @@
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/database/Student_DAO.dart';
 import 'package:vitask/database/StudentModel.dart';
@@ -25,14 +26,19 @@ class _SplashScreen2State extends State<SplashScreen2> {
     API api = API();
     String t = widget.profileData['APItoken'].toString();
     String u = widget.profileData['RegNo'].toString();
+    print("Start fetching");
     Map<String, dynamic> attendanceData = await api
         .getAPIData('http://134.209.150.24/api/vtop/attendance', {"token": t});
+    print("Attendance");
     Map<String, dynamic> timeTableData = await api
         .getAPIData('http://134.209.150.24/api/vtop/timetable', {"token": t});
+    print("Time table");
     Map<String, dynamic> marksData = await api
         .getAPIData('http://134.209.150.24/api/vtop/marks', {"token": t});
+    print("Marks");
     Map<String, dynamic> acadHistoryData = await api
         .getAPIData('http://134.209.150.24/api/vtop/history', {"token": t});
+    print("History");
     if (attendanceData != null &&
         timeTableData != null &&
         marksData != null &&
@@ -72,14 +78,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-              Color.fromRGBO(13, 40, 130, 100),
-              Color.fromRGBO(5, 10, 40, 10)
-            ])),
+        decoration: BoxDecoration(gradient: gradient()),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
@@ -93,7 +92,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
                     ),
                   ),
                   SizedBox(height: 32.0),
-                  JumpingText('Fetching Your Data...'),
+                  JumpingText('Fetching Your Data....'),
                 ]),
           ),
         ),

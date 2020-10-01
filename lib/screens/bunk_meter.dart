@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/constants.dart';
 
 class BunkMeter extends StatefulWidget {
@@ -15,17 +16,9 @@ class BunkMeter extends StatefulWidget {
 class _BunkMeterState extends State<BunkMeter> {
   static List<Map<String, dynamic>> attended;
   static List<int> ij;
-  static var att;
-  static var course;
-  static var faculty;
-  static var code;
+  static var att, course, faculty, code;
   static double percent;
-  static var total;
-  static var a = 0;
-  static var b = 0;
-  static var color1;
-  static var color2;
-  static var type;
+  static var total, a = 0, b = 0, color1, color2, type;
   @override
   void initState() {
     // TODO: implement initState
@@ -65,14 +58,7 @@ class _BunkMeterState extends State<BunkMeter> {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
+        decoration: BoxDecoration(gradient: gradient()),
         child: Center(
           child: Scaffold(
             appBar: AppBar(

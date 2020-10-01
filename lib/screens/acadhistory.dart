@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/screens/classacad.dart';
 import 'package:vitask/constants.dart';
 
@@ -292,14 +293,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
+        decoration: BoxDecoration(gradient: gradient()),
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(

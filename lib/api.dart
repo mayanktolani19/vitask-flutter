@@ -18,7 +18,7 @@ class API {
     } catch (e) {
       print(e);
     }
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode < 300 && response.statusCode > 100) {
       String data = response.body;
       return json.decode(data);
     }

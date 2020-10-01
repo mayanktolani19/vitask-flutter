@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -11,8 +12,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MoodleLogin extends StatefulWidget {
   MoodleLogin(this.regNo, this.token);
-  String regNo;
-  String token;
+  final String regNo;
+  final String token;
   @override
   _MoodleLoginState createState() => _MoodleLoginState();
 }
@@ -31,14 +32,7 @@ class _MoodleLoginState extends State<MoodleLogin> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-              Color.fromRGBO(13, 50, 77, 100),
-              Color.fromRGBO(0, 0, 10, 10)
-            ])),
+        decoration: BoxDecoration(gradient: gradient()),
         child: Scaffold(
           appBar: AppBar(
             title: Text('Moodle'),

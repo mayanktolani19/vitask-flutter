@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/Widgets/drawer_tile.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/functions/logout.dart';
 import 'package:vitask/functions/navigate_moodle.dart';
@@ -15,15 +16,11 @@ import 'package:vitask/screens/marks.dart';
 import 'package:vitask/screens/acadhistory.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:vitask/constants.dart';
-import 'moodle_login.dart';
 import 'profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/database/StudentModel.dart';
 import 'package:vitask/database/Student_DAO.dart';
-import 'moodle.dart';
-import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -267,14 +264,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       child: ModalProgressHUD(
         inAsyncCall: refresh,
         child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                Color.fromRGBO(13, 50, 77, 100),
-                Color.fromRGBO(0, 0, 10, 10)
-              ])),
+          decoration: BoxDecoration(gradient: gradient()),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
