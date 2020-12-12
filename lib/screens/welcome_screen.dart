@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vitask/Widgets/show_toast.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vitask/functions/test_internet.dart';
 import 'splash_screen2.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -140,9 +142,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            setState(() {
-                              showSpinner = true;
-                            });
                             if (regNo != null) regNo = regNo.trim();
                             url = 'http://134.209.150.24/api/gettoken';
                             API api = API();
@@ -150,30 +149,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               "username": regNo,
                               "password": password
                             };
-                            Map<String, dynamic> profileData =
-                                await api.getAPIData(url, data);
-                            if (profileData != null &&
-                                profileData["error"] == null) {
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              await prefs.setString(
-                                  "regNo", profileData["RegNo"]);
-                              await prefs.setString("password", password);
-                              print("Login");
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          SplashScreen2(
-                                              password, profileData)));
-                            } else {
+                            bool internet = await testInternet();
+                            if (internet) {
                               setState(() {
-                                loginFail = true;
+                                showSpinner = true;
                               });
+                              Map<String, dynamic> profileData =
+                                  await api.getAPIData(url, data);
+                              if (profileData != null &&
+                                  profileData["error"] == null) {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString(
+                                    "regNo", profileData["RegNo"]);
+                                await prefs.setString("password", password);
+                                print("Login");
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            SplashScreen2(
+                                                password, profileData)));
+                              } else {
+                                setState(() {
+                                  loginFail = true;
+                                });
+                              }
+                              setState(() {
+                                showSpinner = false;
+                              });
+                            } else {
+                              showToast('Connection failed!', Colors.redAccent);
                             }
-                            setState(() {
-                              showSpinner = false;
-                            });
                           },
                           minWidth: 200.0,
                           height: 42.0,

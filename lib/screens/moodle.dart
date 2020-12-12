@@ -25,7 +25,8 @@ class _MoodleState extends State<Moodle> {
   @override
   void initState() {
     getData();
-    updateAssignments();
+    // updateAssignments();
+    updateDate();
     super.initState();
   }
 
@@ -38,19 +39,24 @@ class _MoodleState extends State<Moodle> {
     }
   }
 
-  void updateAssignments() async {
+  void updateDate() {
     updatedText = " ";
     DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('yyyy-MMMM-dd-HH-mm');
     String update = formatter.format(now);
     List<String> updated = update.split('-');
-    updatedText = updated[2] +
-        " " +
-        updated[1].substring(0, 3) +
-        " " +
-        updated[3] +
-        ":" +
-        updated[4];
+    setState(() {
+      updatedText = updated[2] +
+          " " +
+          updated[1].substring(0, 3) +
+          " " +
+          updated[3] +
+          ":" +
+          updated[4];
+    });
+  }
+
+  void updateAssignments() async {
     r = widget.reg;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     p = prefs.getString("moodle-password");
@@ -168,9 +174,23 @@ class _MoodleState extends State<Moodle> {
                   );
                 }).toList()),
               ),
-              Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  child: Texts("Last Updated On: " + updatedText, 14))
+              widget.moodle["Assignments"].length != 0
+                  ? Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      child: Texts("Last Updated On: " + updatedText, 14))
+                  : Column(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            alignment: Alignment.center,
+                            child:
+                                Texts("You currently have no assignments", 14)),
+                        Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            alignment: Alignment.center,
+                            child: Texts("Last Updated On: " + updatedText, 14))
+                      ],
+                    )
             ],
           ),
         ),

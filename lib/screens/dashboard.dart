@@ -5,10 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vitask/Widgets/drawer_tile.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
+import 'package:vitask/Widgets/show_toast.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/functions/logout.dart';
 import 'package:vitask/functions/navigate_moodle.dart';
 import 'package:vitask/functions/notifications.dart';
+import 'package:vitask/functions/test_internet.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/gpa_calculator.dart';
 import 'package:vitask/screens/timetable.dart';
@@ -81,6 +83,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
     refreshData();
+    getMoodleData(widget.profileData);
     super.initState();
   }
 
@@ -209,51 +212,58 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       };
     } else
       data = {"token": t, "username": regNo, "password": pass};
-    String url = 'http://134.209.150.24/api/vtop/sync';
-    Map<String, dynamic> newData = await api.getAPIData(url, data);
-    Map<String, dynamic> newAtt = {};
-    newAtt["attendance"] = newData["attendance"];
-    Map<String, dynamic> newMarks = {};
-    newMarks["marks"] = newData["marks"];
-    if (newAtt != null) {
-      setState(() {
-        widget.attendanceData = newAtt;
-      });
-    }
-    if (newMarks != null) {
-      setState(() {
-        widget.marksData = newMarks;
-      });
-    }
-    if (refresh) {
-      Map<String, dynamic> newAcad = {};
-      newAcad["acadHistory"] = newData["acadHistory"]["subjects"];
-      newAcad["CurriculumDetails"] = newData["acadHistory"]["summary"];
-      if (newAcad != null) {
+    bool internet = await testInternet();
+    if (internet) {
+      showToast('Refreshing....', Colors.green);
+      String url = 'http://134.209.150.24/api/vtop/sync';
+      Map<String, dynamic> newData = await api.getAPIData(url, data);
+      Map<String, dynamic> newAtt = {};
+      newAtt["attendance"] = newData["attendance"];
+      Map<String, dynamic> newMarks = {};
+      newMarks["marks"] = newData["marks"];
+      if (newAtt != null) {
         setState(() {
-          widget.acadHistoryData = newAcad;
+          widget.attendanceData = newAtt;
         });
       }
+      if (newMarks != null) {
+        setState(() {
+          widget.marksData = newMarks;
+        });
+      }
+      if (refresh) {
+        Map<String, dynamic> newAcad = {};
+        newAcad["acadHistory"] = newData["acadHistory"]["subjects"];
+        newAcad["CurriculumDetails"] = newData["acadHistory"]["summary"];
+        if (newAcad != null) {
+          setState(() {
+            widget.acadHistoryData = newAcad;
+          });
+        }
+      }
+      String u = widget.profileData['RegNo'].toString();
+      Student student = Student(
+          profileKey: (u + "-profile"),
+          profile: widget.profileData,
+          attendanceKey: (u + "-attendance"),
+          attendance: widget.attendanceData,
+          timeTableKey: (u + "-timeTable"),
+          timeTable: widget.timeTableData,
+          marksKey: (u + "-marks"),
+          marks: widget.marksData,
+          acadHistoryKey: (u + "-acadHistory"),
+          acadHistory: widget.acadHistoryData);
+      StudentDao().deleteStudent(student);
+      StudentDao().insertStudent(student);
+      getAttendance();
+      getTimeTable();
+      showToast('Resynced ✅', Colors.green);
+      setState(() {
+        refresh = false;
+      });
+    } else {
+      showToast('Connection failed', Colors.red);
     }
-    String u = widget.profileData['RegNo'].toString();
-    Student student = Student(
-        profileKey: (u + "-profile"),
-        profile: widget.profileData,
-        attendanceKey: (u + "-attendance"),
-        attendance: widget.attendanceData,
-        timeTableKey: (u + "-timeTable"),
-        timeTable: widget.timeTableData,
-        marksKey: (u + "-marks"),
-        marks: widget.marksData,
-        acadHistoryKey: (u + "-acadHistory"),
-        acadHistory: widget.acadHistoryData);
-    StudentDao().deleteStudent(student);
-    StudentDao().insertStudent(student);
-    getAttendance();
-    getTimeTable();
-    setState(() {
-      refresh = false;
-    });
   }
 
   @override
@@ -286,12 +296,17 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                     color: Colors.white,
                   ),
                   onPressed: () async {
-                    setState(
-                      () {
-                        refresh = true;
-                      },
-                    );
-                    refreshData();
+                    bool internet = await testInternet();
+                    if (internet) {
+                      setState(
+                        () {
+                          refresh = true;
+                        },
+                      );
+                      refreshData();
+                    } else {
+                      showToast('Connection failed', Colors.red);
+                    }
                   },
                 )
               ],

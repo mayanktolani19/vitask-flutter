@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
+import 'package:vitask/Widgets/show_toast.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/MoodleModel.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
+import 'package:vitask/functions/test_internet.dart';
 import 'moodle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -97,44 +99,53 @@ class _MoodleLoginState extends State<MoodleLogin> {
                           borderRadius: BorderRadius.circular(30.0),
                           child: MaterialButton(
                             onPressed: () async {
-                              setState(() {
-                                showSpinner = true;
-                              });
-                              reg = widget.regNo;
-                              a = widget.token;
-                              url = "https://vitask.me/api/moodle/login";
-                              API api = API();
-                              Map<String, String> data = {
-                                "username": reg,
-                                "password": password,
-                                "token": a
-                              };
-                              Map<String, dynamic> moodleData =
-                                  await api.getAPIData(url, data);
-                              if (moodleData['error'] == null) {
-                                MoodleData m =
-                                    MoodleData(reg + "-moodle", moodleData);
-                                var h =
-                                    MoodleDAO().getMoodleData(reg + "-moodle");
-                                if (h != null) MoodleDAO().deleteStudent(m);
-                                MoodleDAO().insertMoodleData(m);
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setString(
-                                    "moodle-password", password);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            Moodle(reg, a, moodleData)));
+                              bool internet = await testInternet();
+                              if (internet) {
+                                if (password != null) {
+                                  setState(() {
+                                    showSpinner = true;
+                                  });
+                                  reg = widget.regNo;
+                                  a = widget.token;
+                                  url = "https://vitask.me/api/moodle/login";
+                                  API api = API();
+                                  Map<String, String> data = {
+                                    "username": reg,
+                                    "password": password,
+                                    "token": a
+                                  };
+                                  Map<String, dynamic> moodleData =
+                                      await api.getAPIData(url, data);
+                                  if (moodleData['error'] == null) {
+                                    MoodleData m =
+                                        MoodleData(reg + "-moodle", moodleData);
+                                    var h = MoodleDAO()
+                                        .getMoodleData(reg + "-moodle");
+                                    if (h != null) MoodleDAO().deleteStudent(m);
+                                    MoodleDAO().insertMoodleData(m);
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    await prefs.setString(
+                                        "moodle-password", password);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                Moodle(reg, a, moodleData)));
+                                  } else {
+                                    setState(() {
+                                      loginFail = true;
+                                    });
+                                  }
+                                  setState(() {
+                                    showSpinner = false;
+                                  });
+                                } else
+                                  showToast(
+                                      'Please provide a password', Colors.red);
                               } else {
-                                setState(() {
-                                  loginFail = true;
-                                });
+                                showToast('Connection failed', Colors.red);
                               }
-                              setState(() {
-                                showSpinner = false;
-                              });
                             },
                             minWidth: 200.0,
                             height: 42.0,

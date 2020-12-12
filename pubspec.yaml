@@ -1,7 +1,7 @@
 name: vitask
 description: A new Flutter application.
 
-version: 2.0.0+3
+version: 2.0.0+5
 
 environment:
   sdk: ">=2.1.0<3.0.0"
@@ -25,6 +25,7 @@ dependencies:
   google_fonts: 0.7.0
   auto_size_text: ^2.1.0
   progress_indicators: ^0.1.5
+  fluttertoast: ^7.1.5
 
 dev_dependencies:
   flutter_test:
