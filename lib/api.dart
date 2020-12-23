@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'Widgets/show_toast.dart';
 
 class API {
   Future getAPIData(String url, Map<String, String> body) async {
@@ -16,6 +19,7 @@ class API {
         },
       );
     } catch (e) {
+      showToast('Something went wrong', Colors.red);
       print(e);
     }
     if (response.statusCode < 300 && response.statusCode > 100) {

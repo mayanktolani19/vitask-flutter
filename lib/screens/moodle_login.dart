@@ -116,7 +116,9 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                   };
                                   Map<String, dynamic> moodleData =
                                       await api.getAPIData(url, data);
-                                  if (moodleData['error'] == null) {
+                                  print(moodleData);
+                                  if (moodleData != null &&
+                                      moodleData['error'] == null) {
                                     MoodleData m =
                                         MoodleData(reg + "-moodle", moodleData);
                                     var h = MoodleDAO()

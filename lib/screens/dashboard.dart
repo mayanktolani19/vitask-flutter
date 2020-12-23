@@ -214,7 +214,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       data = {"token": t, "username": regNo, "password": pass};
     bool internet = await testInternet();
     if (internet) {
-      showToast('Refreshing....', Colors.green);
+      showToast('Refreshing....', Colors.blue[500]);
       String url = 'http://134.209.150.24/api/vtop/sync';
       Map<String, dynamic> newData = await api.getAPIData(url, data);
       Map<String, dynamic> newAtt = {};
@@ -257,7 +257,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       StudentDao().insertStudent(student);
       getAttendance();
       getTimeTable();
-      showToast('Resynced ✅', Colors.green);
+      showToast('Resynced ✅', Colors.blue[500]);
       setState(() {
         refresh = false;
       });
