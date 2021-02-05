@@ -38,17 +38,17 @@ class _AcademicHistoryState extends State<AcademicHistory> {
 
     double height = MediaQuery.of(context).size.height;
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.blue[900],
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        border: Border.all(
-          color: Colors.blue[700],
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.blue[900],
+      //   borderRadius: BorderRadius.all(Radius.circular(20)),
+      //   border: Border.all(
+      //     color: Colors.blue[700],
+      //   ),
+      // ),
       height: height / 4,
       width: width / 1.09,
       child: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -76,13 +76,14 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                 Texts("${curriculum['CreditsEarned']}", 18),
               ],
             ),
-            SizedBox(height: 3),
+            // SizedBox(height: 3),
+            Divider(color: Colors.white),
             Container(
-              padding: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(33, 35, 87, 100),
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-              ),
+              // padding: EdgeInsets.all(4),
+              // decoration: BoxDecoration(
+              //   color: Color.fromRGBO(33, 35, 87, 100),
+              //   borderRadius: BorderRadius.all(Radius.circular(5)),
+              // ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -96,93 +97,45 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                 ],
               ),
             ),
-            SizedBox(height: 3),
+            Divider(color: Colors.white),
+            // SizedBox(height: 3),
             Padding(
-              padding: const EdgeInsets.all(3),
+              padding: const EdgeInsets.all(0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.greenAccent,
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['S'], 18),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['A'], 18),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.purpleAccent[100],
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['B'], 18),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.yellowAccent,
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['C'], 18),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.orangeAccent,
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['D'], 18),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['E'], 18),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 18,
-                        ),
-                      ),
                       Texts(curriculum['F'], 18),
                     ],
                   ),

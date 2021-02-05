@@ -14,7 +14,7 @@ class Vitask extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-//    hi();
+    // hi();
     return KeyboardDismissOnTap(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -25,8 +25,8 @@ class Vitask extends StatelessWidget {
     );
   }
 
-//  void hi() async {
-//    SharedPreferences preferences = await SharedPreferences.getInstance();
-//    preferences.clear();
-//  }
+  // void hi() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   preferences.clear();
+  // }
 }

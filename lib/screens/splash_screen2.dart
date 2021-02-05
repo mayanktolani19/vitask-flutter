@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
@@ -31,22 +33,85 @@ class _SplashScreen2State extends State<SplashScreen2> {
     print("Start fetching");
     bool internet = await testInternet();
     if (internet) {
-      Map<String, dynamic> attendanceData = await api.getAPIData(
-          'http://134.209.150.24/api/vtop/attendance', {"token": t});
-      print("Attendance");
-      Map<String, dynamic> timeTableData = await api
-          .getAPIData('http://134.209.150.24/api/vtop/timetable', {"token": t});
-      print("Time table");
-      Map<String, dynamic> marksData = await api
-          .getAPIData('http://134.209.150.24/api/vtop/marks', {"token": t});
-      print("Marks");
-      Map<String, dynamic> acadHistoryData = await api
-          .getAPIData('http://134.209.150.24/api/vtop/history', {"token": t});
-      print("History");
-      if (attendanceData != null &&
-          timeTableData != null &&
-          marksData != null &&
-          acadHistoryData != null) {
+      Map<String, dynamic> attendanceData = {};
+      try {
+        attendanceData = await api.getAPIData(
+            'http://134.209.150.24/api/vtop/attendance',
+            {"token": t}).timeout(Duration(seconds: 8));
+        print("Attendance");
+      } on TimeoutException catch (_) {
+        showToast('Something went wrong, please try again later', Colors.red);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      } catch (e) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      }
+      Map<String, dynamic> timeTableData = {};
+      try {
+        timeTableData = await api.getAPIData(
+            'http://134.209.150.24/api/vtop/timetable',
+            {"token": t}).timeout(Duration(seconds: 8));
+        print("Time table");
+      } on TimeoutException catch (_) {
+        showToast('Something went wrong, please try again later', Colors.red);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      } catch (e) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      }
+      Map<String, dynamic> marksData = {};
+      try {
+        marksData = await api.getAPIData('http://134.209.150.24/api/vtop/marks',
+            {"token": t}).timeout(Duration(seconds: 8));
+        print("Marks");
+      } on TimeoutException catch (_) {
+        showToast('Something went wrong, please try again later', Colors.red);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      } catch (e) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      }
+      Map<String, dynamic> acadHistoryData = {};
+      try {
+        acadHistoryData = await api.getAPIData(
+            'http://134.209.150.24/api/vtop/history',
+            {"token": t}).timeout(Duration(seconds: 8));
+        print("History");
+      } on TimeoutException catch (_) {
+        showToast('Something went wrong, please try again later', Colors.red);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      } catch (e) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => WelcomeScreen()));
+      }
+      if ((attendanceData.isNotEmpty &&
+              timeTableData.isNotEmpty &&
+              marksData.isNotEmpty &&
+              acadHistoryData.isNotEmpty) &&
+          (acadHistoryData != null &&
+              marksData != null &&
+              timeTableData != null &&
+              attendanceData != null)) {
         Student student = Student(
             profileKey: (u + "-profile"),
             profile: widget.profileData,

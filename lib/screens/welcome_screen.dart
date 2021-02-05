@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -154,8 +156,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               setState(() {
                                 showSpinner = true;
                               });
-                              Map<String, dynamic> profileData =
-                                  await api.getAPIData(url, data);
+                              Map<String, dynamic> profileData = {};
+                              try {
+                                profileData = await api
+                                    .getAPIData(url, data)
+                                    .timeout(Duration(seconds: 12));
+                              } on TimeoutException catch (_) {
+                                showToast('Something went wrong', Colors.red);
+                                setState(() {
+                                  showSpinner = false;
+                                });
+                              } catch (e) {
+                                setState(() {
+                                  showSpinner = false;
+                                });
+                              }
                               if (profileData != null &&
                                   profileData["error"] == null) {
                                 SharedPreferences prefs =

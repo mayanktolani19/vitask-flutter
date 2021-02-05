@@ -30,10 +30,11 @@ class _TimeTableState extends State<TimeTable> {
   void getData() {
     attKeys = widget.attendanceData["attendance"].keys.toList();
     daylist = [];
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
     for (var i = 0; i < days.length; i++) {
       daylist.add(widget.timeTableData["timetable"][days[i]]);
     }
+    print(daylist[0]);
     dayele = [];
     var num = 0;
     while (num < days.length) {
@@ -303,11 +304,6 @@ class _TimeTableState extends State<TimeTable> {
               icon: Icon(FontAwesomeIcons.calendar),
               title: Text('Fri'),
             ),
-            BottomNavigationBarItem(
-              backgroundColor: Color.fromRGBO(4, 30, 53, 100),
-              icon: Icon(FontAwesomeIcons.calendar),
-              title: Text('Sat'),
-            ),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.blueAccent,
@@ -330,14 +326,16 @@ class _TimeTableState extends State<TimeTable> {
       (mr) {
         int labs = 0;
         int theory = 0;
-        for (var i = 0; i < mr.list.length; i++) {
-          if ((mr.list[i]["slot"]).contains("L")) {
-            labs++;
-          } else {
-            theory++;
+        if (mr.list != null) {
+          for (var i = 0; i < mr.list.length; i++) {
+            if ((mr.list[i]["slot"]).contains("L")) {
+              labs++;
+            } else {
+              theory++;
+            }
           }
+          labs = labs ~/ 2;
         }
-        labs = labs ~/ 2;
         return Container(
           width: width,
           child: Stack(

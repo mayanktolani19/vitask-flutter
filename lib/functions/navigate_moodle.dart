@@ -40,7 +40,7 @@ void getMoodleData(Map<String, dynamic> profileData) async {
   String a = profileData["APItoken"];
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var moodlePassword = prefs.getString("moodle-password");
-  String url = "https://vitask.me/api/moodle/login";
+  if(moodlePassword!=null){String url = "https://vitask.me/api/moodle/login";
   API api = API();
   Map<String, String> data = {
     "username": r,
@@ -54,5 +54,6 @@ void getMoodleData(Map<String, dynamic> profileData) async {
       MoodleData m = MoodleData(r + "-moodle", moodleData);
       MoodleDAO().insertMoodleData(m);
     }
-  }
+  }}
+
 }
