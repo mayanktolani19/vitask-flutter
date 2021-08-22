@@ -1,12 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
-import 'package:vitask/constants.dart';
 import 'package:vitask/api.dart';
-import 'package:vitask/database/Moodle_DAO.dart';
+import 'package:vitask/constants.dart';
 import 'package:vitask/database/MoodleModel.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:intl/intl.dart';
+import 'package:vitask/database/Moodle_DAO.dart';
 
 class Moodle extends StatefulWidget {
   Moodle(this.reg, this.appNo, this.moodle);
@@ -32,7 +32,7 @@ class _MoodleState extends State<Moodle> {
 
   void getData() {
     assignments = [];
-    if (widget.moodle != null) {
+    if (widget.moodle.isNotEmpty) {
       for (var i = 0; i < widget.moodle["Assignments"].length; i++) {
         assignments.add(widget.moodle["Assignments"][i]);
       }
@@ -65,7 +65,7 @@ class _MoodleState extends State<Moodle> {
     API api = API();
     Map<String, String> data = {"token": a};
     Map<String, dynamic> moodleData = await api.getAPIData(url, data);
-    if (moodleData != null) {
+    if (moodleData.isNotEmpty) {
       widget.moodle = moodleData;
       MoodleData m = MoodleData(r + "-moodle", moodleData);
       MoodleDAO().deleteStudent(m);

@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/Widgets/show_toast.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:vitask/database/MoodleModel.dart';
 import 'package:vitask/database/Moodle_DAO.dart';
 import 'package:vitask/functions/test_internet.dart';
+
 import 'moodle.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MoodleLogin extends StatefulWidget {
   MoodleLogin(this.regNo, this.token);
@@ -101,7 +102,7 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             onPressed: () async {
                               bool internet = await testInternet();
                               if (internet) {
-                                if (password != null) {
+                                if (password.isNotEmpty) {
                                   setState(() {
                                     showSpinner = true;
                                   });
@@ -117,7 +118,7 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                   Map<String, dynamic> moodleData =
                                       await api.getAPIData(url, data);
                                   print(moodleData);
-                                  if (moodleData != null &&
+                                  if (moodleData.isNotEmpty &&
                                       moodleData['error'] == null) {
                                     MoodleData m =
                                         MoodleData(reg + "-moodle", moodleData);

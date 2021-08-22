@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vitask/Widgets/linear_gradient.dart';
-import 'tt.dart';
-import 'package:vitask/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:vitask/Widgets/linear_gradient.dart';
+import 'package:vitask/constants.dart';
+
+import 'tt.dart';
 
 class TimeTable extends StatefulWidget {
   TimeTable(this.timeTableData, this.attendanceData);
@@ -397,7 +398,7 @@ class _TimeTableState extends State<TimeTable> {
                   padding: EdgeInsets.all(10),
                   height: height / 1.32,
                   width: width,
-                  child: minimar(mr.list),
+                  child: mr.list != null ? minimar(mr.list) : Container(),
                 ),
               ),
             ],

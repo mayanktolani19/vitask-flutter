@@ -1,15 +1,16 @@
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/Widgets/show_toast.dart';
 import 'package:vitask/api.dart';
 import 'package:vitask/constants.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitask/functions/test_internet.dart';
+
 import 'splash_screen2.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -144,8 +145,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            if (regNo != null) regNo = regNo.trim();
-                            url = 'http://134.209.150.24/api/gettoken';
+                            if (regNo.isNotEmpty) regNo = regNo.trim();
+                            url = 'https://vitask.me/api/gettoken';
                             API api = API();
                             Map<String, String> data = {
                               "username": regNo,
@@ -171,8 +172,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   showSpinner = false;
                                 });
                               }
-                              if (profileData != null &&
+                              if (profileData.isNotEmpty &&
                                   profileData["error"] == null) {
+                                print(profileData);
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 await prefs.setString(

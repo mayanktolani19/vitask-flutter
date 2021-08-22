@@ -1,18 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'Widgets/show_toast.dart';
 
 class API {
   Future getAPIData(String url, Map<String, String> body) async {
     String msg = jsonEncode(body);
+    var UriUrl = Uri.parse(url);
     http.Response response;
     try {
       response = await http.post(
-        url,
+        UriUrl,
         body: msg,
         headers: {
           'Content-Type': 'application/json',

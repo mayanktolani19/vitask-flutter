@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/Widgets/show_toast.dart';
 import 'package:vitask/api.dart';
-import 'package:vitask/database/Student_DAO.dart';
 import 'package:vitask/database/StudentModel.dart';
+import 'package:vitask/database/Student_DAO.dart';
 import 'package:vitask/functions/test_internet.dart';
+
 import 'dashboard.dart';
 import 'welcome_screen.dart';
 
@@ -36,7 +37,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
       Map<String, dynamic> attendanceData = {};
       try {
         attendanceData = await api.getAPIData(
-            'http://134.209.150.24/api/vtop/attendance',
+            'https://vitask.me/api/vtop/attendance',
             {"token": t}).timeout(Duration(seconds: 8));
         print("Attendance");
       } on TimeoutException catch (_) {
@@ -54,7 +55,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
       Map<String, dynamic> timeTableData = {};
       try {
         timeTableData = await api.getAPIData(
-            'http://134.209.150.24/api/vtop/timetable',
+            'https://vitask.me/api/vtop/timetable',
             {"token": t}).timeout(Duration(seconds: 8));
         print("Time table");
       } on TimeoutException catch (_) {
@@ -71,7 +72,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
       }
       Map<String, dynamic> marksData = {};
       try {
-        marksData = await api.getAPIData('http://134.209.150.24/api/vtop/marks',
+        marksData = await api.getAPIData('https://vitask.me/api/vtop/marks',
             {"token": t}).timeout(Duration(seconds: 8));
         print("Marks");
       } on TimeoutException catch (_) {
@@ -89,7 +90,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
       Map<String, dynamic> acadHistoryData = {};
       try {
         acadHistoryData = await api.getAPIData(
-            'http://134.209.150.24/api/vtop/history',
+            'https://vitask.me/api/vtop/history',
             {"token": t}).timeout(Duration(seconds: 8));
         print("History");
       } on TimeoutException catch (_) {
@@ -108,10 +109,10 @@ class _SplashScreen2State extends State<SplashScreen2> {
               timeTableData.isNotEmpty &&
               marksData.isNotEmpty &&
               acadHistoryData.isNotEmpty) &&
-          (acadHistoryData != null &&
-              marksData != null &&
-              timeTableData != null &&
-              attendanceData != null)) {
+          (acadHistoryData.isNotEmpty &&
+              marksData.isNotEmpty &&
+              timeTableData.isNotEmpty &&
+              attendanceData.isNotEmpty)) {
         Student student = Student(
             profileKey: (u + "-profile"),
             profile: widget.profileData,

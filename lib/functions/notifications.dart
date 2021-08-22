@@ -14,9 +14,8 @@ Future scheduleNotification(
       'your other channel name',
       'your other channel description',
     );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(count, c + " - " + venue,
         startTime, scheduledNotificationDateTime, platformChannelSpecifics);
   }

@@ -4,31 +4,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:vitask/Widgets/drawer_tile.dart';
 import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/Widgets/show_toast.dart';
+import 'package:vitask/api.dart';
+import 'package:vitask/constants.dart';
+import 'package:vitask/database/StudentModel.dart';
+import 'package:vitask/database/Student_DAO.dart';
 import 'package:vitask/functions/calculate_attendance.dart';
 import 'package:vitask/functions/logout.dart';
 import 'package:vitask/functions/navigate_moodle.dart';
 import 'package:vitask/functions/notifications.dart';
 import 'package:vitask/functions/test_internet.dart';
+import 'package:vitask/screens/acadhistory.dart';
 import 'package:vitask/screens/attendance.dart';
 import 'package:vitask/screens/gpa_calculator.dart';
-import 'package:vitask/screens/timetable.dart';
 import 'package:vitask/screens/marks.dart';
-import 'package:vitask/screens/acadhistory.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
-import 'package:vitask/constants.dart';
-import 'profile.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:vitask/api.dart';
-import 'package:vitask/database/StudentModel.dart';
-import 'package:vitask/database/Student_DAO.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'package:intl/intl.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:vitask/screens/timetable.dart';
+
 import 'bunk_meter.dart';
+import 'profile.dart';
 
 class MenuDashboardPage extends StatefulWidget {
   MenuDashboardPage(
@@ -67,16 +68,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   @override
   void initState() {
-    if ((widget.profileData != null &&
-            widget.acadHistoryData != null &&
-            widget.marksData != null &&
-            widget.timeTableData != null &&
-            widget.attendanceData != null) &&
-        (widget.profileData.isNotEmpty &&
-            widget.acadHistoryData.isNotEmpty &&
-            widget.marksData.isNotEmpty &&
-            widget.timeTableData.isNotEmpty &&
-            widget.attendanceData.isNotEmpty)) {
+    if ((widget.profileData.isNotEmpty &&
+        widget.acadHistoryData.isNotEmpty &&
+        widget.marksData.isNotEmpty &&
+        widget.timeTableData.isNotEmpty &&
+        widget.attendanceData.isNotEmpty)) {
       getAttendance();
       getTimeTable();
     }
@@ -86,9 +82,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     g = 1;
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOS = IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
@@ -225,7 +220,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     bool internet = await testInternet();
     if (internet) {
       showToast('Refreshing....', Colors.blue[500]);
-      String url = 'http://134.209.150.24/api/vtop/sync';
+      String url = 'https://vitask.me/api/vtop/sync';
       Map<String, dynamic> newData = {};
       try {
         newData = await api
@@ -246,12 +241,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       newAtt["attendance"] = newData["attendance"];
       Map<String, dynamic> newMarks = {};
       newMarks["marks"] = newData["marks"];
-      if (newAtt != null) {
+      if (newAtt.isNotEmpty) {
         setState(() {
           widget.attendanceData = newAtt;
         });
       }
-      if (newMarks != null) {
+      if (newMarks.isNotEmpty) {
         setState(() {
           widget.marksData = newMarks;
         });
@@ -260,7 +255,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         Map<String, dynamic> newAcad = {};
         newAcad["acadHistory"] = newData["acadHistory"]["subjects"];
         newAcad["CurriculumDetails"] = newData["acadHistory"]["summary"];
-        if (newAcad != null) {
+        if (newAcad.isNotEmpty) {
           setState(() {
             widget.acadHistoryData = newAcad;
           });
@@ -906,34 +901,37 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                   onTap: () async {
                                     showDialog(
                                       context: context,
-                                      child: AlertDialog(
-                                        backgroundColor: Colors.blue[900],
-                                        title: Texts(
-                                            'Are you sure you want to logout?',
-                                            16),
-                                        content: Texts(
-                                            'We hate to see you leave...', 14),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                            child: Texts('No', 12),
-                                          ),
-                                          FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              logoutUser(context,
-                                                  flutterLocalNotificationsPlugin);
-                                            },
-                                            child: Texts('Yes', 12),
-                                          ),
-                                        ],
-                                      ),
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.blue[900],
+                                          title: Texts(
+                                              'Are you sure you want to logout?',
+                                              16),
+                                          content: Texts(
+                                              'We hate to see you leave...',
+                                              14),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(false);
+                                              },
+                                              child: Texts('No', 12),
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                logoutUser(context,
+                                                    flutterLocalNotificationsPlugin);
+                                              },
+                                              child: Texts('Yes', 12),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   },
                                 ),
-
 //                          AboutListTile(
 //                            applicationName: "VITask",
 //                          )
