@@ -10,6 +10,7 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 <img src="screenshots/welcome_screen.jpg" width="216" height="384"> <img src="screenshots/dashboard.jpg" width="216" height="384"> <img src="screenshots/gpa_calculator.jpg" width="216" height="384">
 <img src="screenshots/attendance.jpg" width="216" height="384"> <img src="screenshots/bunk_meter.jpg" width="216" height="384"> <img src="screenshots/timetable.jpg" width="216" height="384">
 <img src="screenshots/marks.jpg" width="216" height="384"> <img src="screenshots/moodle.jpg" width="216" height="384"> <img src="screenshots/profile.jpg" width="216" height="384"> 
+
 # Installation
 
 * Download the Flutter SDK from https://flutter.dev/docs/get-started/install/windows
@@ -37,7 +38,7 @@ VITask mobile application made for the students of VIT Chennai for their VTOP lo
 * After committing your changes, make Pull Request.
 
 ## Our Team
-Mayank | Abhishek
+Mayank | Abhishek TK
 ------------- | -------------
 
 <a href="https://github.com/mayanktolani19"><img src="screenshots/mayank.png" height="250px" width="250px"> </a> <a href = "https://github.com/maa-atk"><img src="screenshots/abhishek.jpeg" height="250px" width="250px"> </a>
