@@ -6,7 +6,7 @@ import 'package:vitask/screens/welcome_screen.dart';
 void logoutUser(BuildContext context,
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs?.clear();
+  prefs.clear();
   await flutterLocalNotificationsPlugin.cancelAll();
   Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => WelcomeScreen()),

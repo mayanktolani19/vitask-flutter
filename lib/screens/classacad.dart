@@ -7,8 +7,8 @@ class Acad {
 
 
  Acad({
-    @required this.grade,
-    @required this.subject,
+    required this.grade,
+    required this.subject,
     }
     );
 }

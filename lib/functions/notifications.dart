@@ -2,11 +2,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future scheduleNotification(
     DateTime t,
-    String c,
-    String startTime,
-    String venue,
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-    int count) async {
+    String? c,
+    String? startTime,
+    String? venue,
+    FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin,
+    int? count) async {
   if (t.isAfter(DateTime.now())) {
     var scheduledNotificationDateTime = t.subtract(Duration(seconds: 350));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -16,12 +16,12 @@ Future scheduleNotification(
     );
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(count, c + " - " + venue,
+    await flutterLocalNotificationsPlugin!.schedule(count!, c! + " - " + venue!,
         startTime, scheduledNotificationDateTime, platformChannelSpecifics);
   }
 }
 
-Future onSelectNotification(String payload) async {
+Future onSelectNotification(String? payload) async {
 //    showDialog(
 //      context: context,
 //      builder: (_) {

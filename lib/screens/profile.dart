@@ -5,8 +5,8 @@ import 'package:vitask/constants.dart';
 
 class Profile extends StatefulWidget {
   Profile(this.cgpa, this.profileData);
-  final String cgpa;
-  final Map<String, dynamic> profileData;
+  final String? cgpa;
+  final Map<String, dynamic>? profileData;
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -43,7 +43,7 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        widget.profileData["Name"],
+                        widget.profileData!["Name"],
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontStyle: FontStyle.normal,
@@ -53,31 +53,31 @@ class _ProfileState extends State<Profile> {
                       SizedBox(
                         height: 10,
                       ),
-                      Texts(widget.profileData["RegNo"], 16),
+                      Texts(widget.profileData!["RegNo"], 16),
                       SizedBox(
                         height: 10,
                       ),
                       Texts(
-                          'Application Number: ' + widget.profileData["AppNo"],
+                          'Application Number: ' + widget.profileData!["AppNo"],
                           16),
                       SizedBox(
                         height: 10,
                       ),
-                      Texts(widget.profileData["Branch"], 15),
+                      Texts(widget.profileData!["Branch"], 15),
                       SizedBox(height: 10),
-                      Texts(widget.profileData["School"], 15),
+                      Texts(widget.profileData!["School"], 15),
                       SizedBox(height: 10),
-                      Texts("CGPA : " + widget.cgpa, 15),
+                      Texts("CGPA : " + widget.cgpa!, 15),
                       SizedBox(height: 5),
                       Divider(color: Colors.grey),
                       SizedBox(height: 10),
                       Texts(
-                          "Proctor Name : " + widget.profileData["ProctorName"],
+                          "Proctor Name : " + widget.profileData!["ProctorName"],
                           15),
                       SizedBox(height: 10),
                       Texts(
                           "Proctor Email : " +
-                              widget.profileData["ProctorEmail"],
+                              widget.profileData!["ProctorEmail"],
                           15),
                     ],
                   ),

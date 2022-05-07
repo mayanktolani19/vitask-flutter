@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Attendance extends StatefulWidget {
   Attendance(this.attendance);
-  final Map<String, dynamic> attendance;
+  final Map<String, dynamic>? attendance;
   @override
   _AttendanceState createState() => _AttendanceState();
 }
@@ -16,11 +16,11 @@ class _AttendanceState extends State<Attendance>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  static List<Map<String, dynamic>> attended;
-  static int len;
+  static List<Map<String, dynamic>?>? attended;
+  static int? len;
   List<IconData> i = [FontAwesomeIcons.bookOpen, FontAwesomeIcons.laptopCode];
   int icon = 0;
-  Map<String, dynamic> current;
+  Map<String, dynamic>? current;
   var attKeys;
   @override
   void initState() {
@@ -30,10 +30,10 @@ class _AttendanceState extends State<Attendance>
 
   void getAttended() {
     attended = [];
-    attKeys = widget.attendance["attendance"].keys.toList();
-    for (var i = 0; i < widget.attendance["attendance"].length; i++)
-      attended.add(widget.attendance["attendance"][attKeys[i]]);
-    len = attended.length;
+    attKeys = widget.attendance!["attendance"].keys.toList();
+    for (var i = 0; i < widget.attendance!["attendance"].length; i++)
+      attended!.add(widget.attendance!["attendance"][attKeys[i]]);
+    len = attended!.length;
   }
 
   @override
@@ -49,12 +49,12 @@ class _AttendanceState extends State<Attendance>
             backgroundColor: Colors.transparent,
           ),
           backgroundColor: Colors.transparent,
-          body: attended.isNotEmpty
+          body: attended!.isNotEmpty
               ? ListView.builder(
                   itemCount: len,
                   itemBuilder: (BuildContext context, int index) {
-                    current = attended[index];
-                    int p = current["percentage"];
+                    current = attended![index];
+                    int p = current!["percentage"];
                     var color1 = Colors.blue[800];
                     var color2 = Colors.blue[300];
                     if (p < 80 && p >= 75) {
@@ -64,10 +64,10 @@ class _AttendanceState extends State<Attendance>
                       color1 = Colors.red[900];
                       color2 = Colors.red[300];
                     }
-                    String c = current["courseName"];
-                    int a = current["attended"];
-                    int t = current["total"];
-                    String ty = current["type"];
+                    String? c = current!["courseName"];
+                    int? a = current!["attended"];
+                    int? t = current!["total"];
+                    String ty = current!["type"];
                     IconData iconUsed;
                     if (ty.contains("Theory") || ty.contains("Soft"))
                       iconUsed = i[0];
@@ -81,7 +81,7 @@ class _AttendanceState extends State<Attendance>
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         border: Border.all(
-                          color: color1,
+                          color: color1!,
                         ),
                       ),
                       child: MaterialButton(
@@ -131,7 +131,7 @@ class _AttendanceState extends State<Attendance>
                                     percent: double.parse(pie.toString()) / 100,
                                     center: Texts(p.toString() + "%", 16),
                                     progressColor: color1,
-                                    backgroundColor: color2,
+                                    backgroundColor: color2!,
                                   ),
                                   SizedBox(width: 8),
                                   Icon(Icons.navigate_next),

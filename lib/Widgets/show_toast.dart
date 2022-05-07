@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 void showToast(
   String text,
-  Color color,
+  Color? color,
 ) {
   Fluttertoast.showToast(
       msg: text,

@@ -7,10 +7,10 @@ import 'package:http/http.dart' as http;
 import 'Widgets/show_toast.dart';
 
 class API {
-  Future getAPIData(String url, Map<String, String> body) async {
+  Future getAPIData(String url, Map<String, String?> body) async {
     String msg = jsonEncode(body);
     var UriUrl = Uri.parse(url);
-    http.Response response;
+    late http.Response response;
     try {
       response = await http.post(
         UriUrl,

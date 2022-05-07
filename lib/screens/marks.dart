@@ -6,14 +6,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 class Marks extends StatefulWidget {
   Marks(this.marks);
-  final Map<String, dynamic> marks;
+  final Map<String, dynamic>? marks;
   @override
   _MarksState createState() => _MarksState();
 }
 
 class _MarksState extends State<Marks> {
-  List<String> courses;
-  List<dynamic> mark;
+  List<String>? courses;
+  List<dynamic>? mark;
 
   List<Marksheet> marele = [];
   List<Exam> exeele = [];
@@ -25,13 +25,13 @@ class _MarksState extends State<Marks> {
   }
 
   void getData() {
-    courses = widget.marks['marks'].keys.toList();
-    mark = widget.marks['marks'].values.toList();
+    courses = widget.marks!['marks'].keys.toList();
+    mark = widget.marks!['marks'].values.toList();
 
     marele = [];
     var num = 0;
-    while (num < courses.length) {
-      marele.add(Marksheet(subject: courses[num], group: mark[num]));
+    while (num < courses!.length) {
+      marele.add(Marksheet(subject: courses![num], group: mark![num]));
       num++;
     }
   }
@@ -116,7 +116,7 @@ class _MarksState extends State<Marks> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        AutoSizeText(e.exname),
+                        AutoSizeText(e.exname!),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Container(

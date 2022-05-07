@@ -61,11 +61,11 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var username = prefs.getString('regNo');
       var password = prefs.getString('password');
-      Map<String, dynamic> p;
-      Map<String, dynamic> att;
-      Map<String, dynamic> tt;
-      Map<String, dynamic> m;
-      Map<String, dynamic> ah;
+      Map<String, dynamic>? p;
+      Map<String, dynamic>? att;
+      Map<String, dynamic>? tt;
+      Map<String, dynamic>? m;
+      Map<String, dynamic>? ah;
       if (username != null && password != null) {
         p = (await StudentDao().getData(username + "-profile"));
         att = (await StudentDao().getData(username + "-attendance"));

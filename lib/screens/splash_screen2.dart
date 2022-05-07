@@ -14,8 +14,8 @@ import 'welcome_screen.dart';
 
 class SplashScreen2 extends StatefulWidget {
   SplashScreen2(this.password, this.profileData);
-  final String password;
-  final Map<String, dynamic> profileData;
+  final String? password;
+  final Map<String, dynamic>? profileData;
   @override
   _SplashScreen2State createState() => _SplashScreen2State();
 }
@@ -29,16 +29,16 @@ class _SplashScreen2State extends State<SplashScreen2> {
 
   void fetchData() async {
     API api = API();
-    String t = widget.profileData['APItoken'].toString();
-    String u = widget.profileData['RegNo'].toString();
+    String t = widget.profileData!['APItoken'].toString();
+    String u = widget.profileData!['RegNo'].toString();
     print("Start fetching");
     bool internet = await testInternet();
     if (internet) {
-      Map<String, dynamic> attendanceData = {};
+      Map<String, dynamic>? attendanceData = {};
       try {
-        attendanceData = await api.getAPIData(
+        attendanceData = await (api.getAPIData(
             'https://vitask.me/api/vtop/attendance',
-            {"token": t}).timeout(Duration(seconds: 8));
+            {"token": t}).timeout(Duration(seconds: 8)) as FutureOr<Map<String, dynamic>>);
         print("Attendance");
       } on TimeoutException catch (_) {
         showToast('Something went wrong, please try again later', Colors.red);
@@ -52,11 +52,11 @@ class _SplashScreen2State extends State<SplashScreen2> {
             MaterialPageRoute(
                 builder: (BuildContext context) => WelcomeScreen()));
       }
-      Map<String, dynamic> timeTableData = {};
+      Map<String, dynamic>? timeTableData = {};
       try {
-        timeTableData = await api.getAPIData(
+        timeTableData = await (api.getAPIData(
             'https://vitask.me/api/vtop/timetable',
-            {"token": t}).timeout(Duration(seconds: 8));
+            {"token": t}).timeout(Duration(seconds: 8)) as FutureOr<Map<String, dynamic>>);
         print("Time table");
       } on TimeoutException catch (_) {
         showToast('Something went wrong, please try again later', Colors.red);
@@ -70,10 +70,10 @@ class _SplashScreen2State extends State<SplashScreen2> {
             MaterialPageRoute(
                 builder: (BuildContext context) => WelcomeScreen()));
       }
-      Map<String, dynamic> marksData = {};
+      Map<String, dynamic>? marksData = {};
       try {
-        marksData = await api.getAPIData('https://vitask.me/api/vtop/marks',
-            {"token": t}).timeout(Duration(seconds: 8));
+        marksData = await (api.getAPIData('https://vitask.me/api/vtop/marks',
+            {"token": t}).timeout(Duration(seconds: 8)) as FutureOr<Map<String, dynamic>>);
         print("Marks");
       } on TimeoutException catch (_) {
         showToast('Something went wrong, please try again later', Colors.red);
@@ -87,11 +87,11 @@ class _SplashScreen2State extends State<SplashScreen2> {
             MaterialPageRoute(
                 builder: (BuildContext context) => WelcomeScreen()));
       }
-      Map<String, dynamic> acadHistoryData = {};
+      Map<String, dynamic>? acadHistoryData = {};
       try {
-        acadHistoryData = await api.getAPIData(
+        acadHistoryData = await (api.getAPIData(
             'https://vitask.me/api/vtop/history',
-            {"token": t}).timeout(Duration(seconds: 8));
+            {"token": t}).timeout(Duration(seconds: 8)) as FutureOr<Map<String, dynamic>>);
         print("History");
       } on TimeoutException catch (_) {
         showToast('Something went wrong, please try again later', Colors.red);
@@ -105,10 +105,10 @@ class _SplashScreen2State extends State<SplashScreen2> {
             MaterialPageRoute(
                 builder: (BuildContext context) => WelcomeScreen()));
       }
-      if ((attendanceData.isNotEmpty &&
-              timeTableData.isNotEmpty &&
-              marksData.isNotEmpty &&
-              acadHistoryData.isNotEmpty) &&
+      if ((attendanceData!.isNotEmpty &&
+              timeTableData!.isNotEmpty &&
+              marksData!.isNotEmpty &&
+              acadHistoryData!.isNotEmpty) &&
           (acadHistoryData.isNotEmpty &&
               marksData.isNotEmpty &&
               timeTableData.isNotEmpty &&

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sembast/sembast.dart';
 import 'StudentModel.dart';
 import 'database_setup.dart';
@@ -19,9 +21,9 @@ class StudentDao {
         .put(await _db, student.acadHistory);
   }
 
-  Future<Map<String, dynamic>> getData(String key) async {
-    var settings = await store.record(key).get(await _db) as Map;
-    return settings;
+  Future<Map<String, dynamic>?> getData(String? key) async {
+    var settings = await store.record(key).get(await _db) as Map?;
+    return settings as FutureOr<Map<String, dynamic>?>;
   }
 
   Future deleteStudent(Student student) async {

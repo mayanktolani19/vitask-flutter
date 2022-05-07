@@ -5,14 +5,14 @@ import 'package:vitask/constants.dart';
 
 class AcademicHistory extends StatefulWidget {
   AcademicHistory(this.acadHistory);
-  final Map<String, dynamic> acadHistory;
+  final Map<String, dynamic>? acadHistory;
   @override
   _AcademicHistoryState createState() => _AcademicHistoryState();
 }
 
 class _AcademicHistoryState extends State<AcademicHistory> {
-  Map<String, dynamic> acad;
-  Map<String, dynamic> curriculum;
+  Map<String, dynamic>? acad;
+  Map<String, dynamic>? curriculum;
   List<String> courses = [];
   List<Text> numbers = [];
   List<String> grades = [];
@@ -29,8 +29,8 @@ class _AcademicHistoryState extends State<AcademicHistory> {
   }
 
   void getData() {
-    acad = widget.acadHistory['acadHistory'];
-    curriculum = widget.acadHistory['CurriculumDetails'];
+    acad = widget.acadHistory!['acadHistory'];
+    curriculum = widget.acadHistory!['CurriculumDetails'];
   }
 
   Widget summary(Map<String, dynamic> curriculum) {
@@ -178,7 +178,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     border: Border.all(
-                      color: Colors.blue[700],
+                      color: Colors.blue[700]!,
                     ),
                   ),
                   //
@@ -206,7 +206,7 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                                 end: Alignment.bottomCenter,
                                 colors: [
                                   Colors.indigo,
-                                  Colors.blue[900],
+                                  Colors.blue[900]!,
                                 ],
                               ),
                             ),
@@ -284,13 +284,13 @@ class _AcademicHistoryState extends State<AcademicHistory> {
                               child: Texts('Your Curriculum Details', 20)),
                           Align(
                             alignment: Alignment.bottomCenter,
-                            child: summary(curriculum),
+                            child: summary(curriculum!),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  elelist(acad),
+                  elelist(acad!),
                 ],
               )),
             ),

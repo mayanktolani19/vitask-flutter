@@ -1,5 +1,5 @@
 class MoodleData {
-  String moodleKey;
+  String? moodleKey;
   Map<String, dynamic> moodleData;
   MoodleData(this.moodleKey, this.moodleData);
 }

@@ -1,8 +1,8 @@
 class Marksheet {
-  String subject;
+  String? subject;
 
   var group;
-  String exam;
+  String? exam;
 
   Marksheet({
     this.subject,
@@ -11,7 +11,7 @@ class Marksheet {
 }
 
 class Exam {
-  String exname;
+  String? exname;
   var val;
   Exam({this.exname, this.val});
 }

@@ -40,12 +40,12 @@ class MenuDashboardPage extends StatefulWidget {
     this.acadHistoryData,
     this.password,
   );
-  Map<String, dynamic> profileData;
-  Map<String, dynamic> attendanceData;
-  Map<String, dynamic> timeTableData;
-  Map<String, dynamic> marksData;
-  Map<String, dynamic> acadHistoryData;
-  String password;
+  Map<String, dynamic>? profileData;
+  Map<String, dynamic>? attendanceData;
+  Map<String, dynamic>? timeTableData;
+  Map<String, dynamic>? marksData;
+  Map<String, dynamic>? acadHistoryData;
+  String? password;
   @override
   _MenuDashboardPageState createState() => _MenuDashboardPageState();
 }
@@ -53,26 +53,26 @@ class MenuDashboardPage extends StatefulWidget {
 GlobalWidget k = GlobalWidget();
 
 class _MenuDashboardPageState extends State<MenuDashboardPage> {
-  Map<String, dynamic> nextMarks;
-  Map<String, dynamic> nextAttendance;
-  String avgAttendance, updatedText;
+  Map<String, dynamic>? nextMarks;
+  Map<String, dynamic>? nextAttendance;
+  String? avgAttendance, updatedText;
   Map<String, String> attDetails = {};
   Map<String, double> pie = {};
-  List<String> a, days, hours;
-  List<dynamic> tt, tt1, attKeys, updatedOn;
-  List<DateTime> time, timeNotifications;
+  List<String>? a, days, hours;
+  List<dynamic>? tt, tt1, attKeys, updatedOn;
+  List<DateTime>? time, timeNotifications;
   var now = DateTime.now();
-  int count, h, g, theory, labs;
+  late int count, h, g, theory, labs;
   bool refresh = false;
   var regNo, token, pass;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
   @override
   void initState() {
-    if ((widget.profileData.isNotEmpty &&
-        widget.acadHistoryData.isNotEmpty &&
-        widget.marksData.isNotEmpty &&
-        widget.timeTableData.isNotEmpty &&
-        widget.attendanceData.isNotEmpty)) {
+    if ((widget.profileData!.isNotEmpty &&
+        widget.acadHistoryData!.isNotEmpty &&
+        widget.marksData!.isNotEmpty &&
+        widget.timeTableData!.isNotEmpty &&
+        widget.attendanceData!.isNotEmpty)) {
       getAttendance();
       getTimeTable();
     }
@@ -85,24 +85,24 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    flutterLocalNotificationsPlugin!.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
     refreshData();
-    getMoodleData(widget.profileData);
+    getMoodleData(widget.profileData!);
     super.initState();
   }
 
   void getAttendance() async {
-    attKeys = widget.attendanceData["attendance"].keys.toList();
-    CalculateAttendance cal =
-        CalculateAttendance(widget.attendanceData, widget.profileData["RegNo"]);
+    attKeys = widget.attendanceData!["attendance"].keys.toList();
+    CalculateAttendance cal = CalculateAttendance(
+        widget.attendanceData, widget.profileData!["RegNo"]);
     setState(() {
       a = cal.attendanceDetails();
-      attDetails["Total"] = a[0];
-      attDetails["Attended"] = a[1];
-      attDetails["Percentage"] = a[2];
-      pie["Present"] = double.parse(a[2]);
-      pie["Absent"] = 100 - double.parse(a[2]);
+      attDetails["Total"] = a![0];
+      attDetails["Attended"] = a![1];
+      attDetails["Percentage"] = a![2];
+      pie["Present"] = double.parse(a![2]);
+      pie["Absent"] = 100 - double.parse(a![2]);
     });
   }
 
@@ -115,10 +115,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       labs = 0;
       theory = 0;
       for (var j = 0;
-          j < widget.timeTableData["timetable"][days[now.weekday - 1]].length;
+          j < widget.timeTableData!["timetable"][days![now.weekday - 1]].length;
           j++) {
-        tt1.add({"startTime": "xx"});
-        if (tt[j]["slot"].contains("L"))
+        tt1!.add({"startTime": "xx"});
+        if (tt![j]["slot"].contains("L"))
           labs++;
         else
           theory++;
@@ -142,44 +142,46 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     tt1 = [];
     timeNotifications = [];
     if (now.weekday < 6) {
-      tt = widget.timeTableData["timetable"][days[now.weekday - 1]];
-      for (var j = 0; j < tt.length; j++) {
-        tt1.add({"startTime": "xx"});
+      tt = widget.timeTableData!["timetable"][days![now.weekday - 1]];
+      for (var j = 0; j < tt!.length; j++) {
+        tt1!.add({"startTime": "xx"});
       }
-      for (var i = 0; i < tt.length; i++) {
-        if (int.parse(tt[i]["startTime"].split(':')[0]) >= 1 &&
-            int.parse(tt[i]["startTime"].split(':')[0]) < 8) {
-          tt1[i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) +
+      for (var i = 0; i < tt!.length; i++) {
+        if (int.parse(tt![i]["startTime"].split(':')[0]) >= 1 &&
+            int.parse(tt![i]["startTime"].split(':')[0]) < 8) {
+          tt1![i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) +
               " " +
-              hours[int.parse(tt[i]["startTime"].split(':')[0])] +
+              hours![int.parse(tt![i]["startTime"].split(':')[0])] +
               ":";
-          if ((int.parse(tt[i]["startTime"].split(':')[1])).toString() == "0") {
-            tt1[i]["startTime"] = tt1[i]["startTime"] + "00";
+          if ((int.parse(tt![i]["startTime"].split(':')[1])).toString() ==
+              "0") {
+            tt1![i]["startTime"] = tt1![i]["startTime"] + "00";
           } else {
-            tt1[i]["startTime"] = tt1[i]["startTime"] +
-                (int.parse(tt[i]["startTime"].split(':')[1])).toString();
+            tt1![i]["startTime"] = tt1![i]["startTime"] +
+                (int.parse(tt![i]["startTime"].split(':')[1])).toString();
           }
-          tt1[i]["startTime"] = tt1[i]["startTime"] + ":" + "00";
+          tt1![i]["startTime"] = tt1![i]["startTime"] + ":" + "00";
         } else {
-          tt1[i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) + " ";
-          if ((tt[i]["startTime"].split(':')[0]).length < 2) {
-            tt1[i]["startTime"] = tt1[i]["startTime"] +
+          tt1![i]["startTime"] = DateFormat("yyyy-MM-dd").format(now) + " ";
+          if ((tt![i]["startTime"].split(':')[0]).length < 2) {
+            tt1![i]["startTime"] = tt1![i]["startTime"] +
                 "0" +
-                tt[i]["startTime"].split(':')[0] +
+                tt![i]["startTime"].split(':')[0] +
                 ":";
           } else {
-            tt1[i]["startTime"] =
-                tt1[i]["startTime"] + tt[i]["startTime"].split(':')[0] + ":";
+            tt1![i]["startTime"] =
+                tt1![i]["startTime"] + tt![i]["startTime"].split(':')[0] + ":";
           }
-          if ((int.parse(tt[i]["startTime"].split(':')[1])).toString() == "0") {
-            tt1[i]["startTime"] = tt1[i]["startTime"] + "00";
+          if ((int.parse(tt![i]["startTime"].split(':')[1])).toString() ==
+              "0") {
+            tt1![i]["startTime"] = tt1![i]["startTime"] + "00";
           } else {
-            tt1[i]["startTime"] = tt1[i]["startTime"] +
-                (int.parse(tt[i]["startTime"].split(':')[1])).toString();
+            tt1![i]["startTime"] = tt1![i]["startTime"] +
+                (int.parse(tt![i]["startTime"].split(':')[1])).toString();
           }
-          tt1[i]["startTime"] = tt1[i]["startTime"] + ":" + "00";
+          tt1![i]["startTime"] = tt1![i]["startTime"] + ":" + "00";
         }
-        timeNotifications.add(DateTime.parse(tt1[i]["startTime"]));
+        timeNotifications!.add(DateTime.parse(tt1![i]["startTime"]));
       }
     } else {
       tt = [
@@ -204,10 +206,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           updated[4];
     });
     API api = API();
-    String t = widget.profileData['APItoken'].toString();
-    regNo = widget.profileData["RegNo"];
+    String t = widget.profileData!['APItoken'].toString();
+    regNo = widget.profileData!["RegNo"];
     pass = widget.password;
-    Map<String, String> data;
+    Map<String, String?> data;
     if (refresh) {
       data = {
         "token": t,
@@ -221,11 +223,12 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     if (internet) {
       showToast('Refreshing....', Colors.blue[500]);
       String url = 'https://vitask.me/api/vtop/sync';
-      Map<String, dynamic> newData = {};
+      Map<String, dynamic>? newData = {};
       try {
-        newData = await api
-            .getAPIData(url, data)
-            .timeout(const Duration(seconds: 10));
+        newData = await (api
+                .getAPIData(url, data)
+                .timeout(const Duration(seconds: 10))
+            as FutureOr<Map<String, dynamic>>);
       } on TimeoutException catch (_) {
         showToast('Something went wrong', Colors.red);
         setState(() {
@@ -238,7 +241,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
         });
       }
       Map<String, dynamic> newAtt = {};
-      newAtt["attendance"] = newData["attendance"];
+      newAtt["attendance"] = newData!["attendance"];
       Map<String, dynamic> newMarks = {};
       newMarks["marks"] = newData["marks"];
       if (newAtt.isNotEmpty) {
@@ -261,7 +264,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           });
         }
       }
-      String u = widget.profileData['RegNo'].toString();
+      String u = widget.profileData!['RegNo'].toString();
       Student student = Student(
           profileKey: (u + "-profile"),
           profile: widget.profileData,
@@ -334,7 +337,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
             ),
             body: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: widget.timeTableData.isNotEmpty
+              child: widget.timeTableData!.isNotEmpty
                   ? Column(
                       children: <Widget>[
                         Column(
@@ -380,13 +383,13 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         CircularStackEntry(
                                           <CircularSegmentEntry>[
                                             CircularSegmentEntry(
-                                              pie["Present"],
-                                              Colors.blue[800],
+                                              pie["Present"]!,
+                                              Colors.blue[800]!,
                                               rankKey: 'completed',
                                             ),
                                             CircularSegmentEntry(
-                                              pie["Absent"],
-                                              Colors.blue[300],
+                                              pie["Absent"]!,
+                                              Colors.blue[300]!,
                                               rankKey: 'remaining',
                                             ),
                                           ],
@@ -416,7 +419,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 1),
                               child: Texts(
-                                  days[now.weekday - 1].toString() +
+                                  days![now.weekday - 1].toString() +
                                       " - TimeTable",
                                   20),
                             ),
@@ -471,69 +474,69 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 child: Column(
                               children: <Widget>[
                                 Column(
-                                  children: tt.map((e) {
-                                    List<Map<String, dynamic>> bunk = [];
+                                  children: tt!.map((e) {
+                                    List<Map<String, dynamic>?> bunk = [];
                                     if (now.weekday < 6) {
-                                      if (count < timeNotifications.length)
+                                      if (count < timeNotifications!.length)
                                         scheduleNotification(
-                                            timeNotifications[count++],
+                                            timeNotifications![count++],
                                             e["courseName"],
                                             e["startTime"],
                                             e["class"],
                                             flutterLocalNotificationsPlugin,
                                             count);
-                                      var att = 80;
+                                      int? att = 80;
                                       for (var i = 0;
                                           i <
                                               widget
-                                                  .attendanceData["attendance"]
+                                                  .attendanceData!["attendance"]
                                                   .length;
                                           i++) {
                                         var slot = e["slot"];
                                         if (slot.contains("L")) {
-                                          if (widget.attendanceData[
+                                          if (widget.attendanceData![
                                                               "attendance"]
-                                                          [attKeys[i]]
+                                                          [attKeys![i]]
                                                       ["courseName"] ==
                                                   e["courseName"] &&
-                                              (widget.attendanceData[
+                                              (widget.attendanceData![
                                                           "attendance"]
-                                                          [attKeys[i]]["type"]
+                                                          [attKeys![i]]["type"]
                                                       .contains("Lab") ||
-                                                  widget.attendanceData[
+                                                  widget.attendanceData![
                                                           "attendance"]
-                                                          [attKeys[i]]["type"]
+                                                          [attKeys![i]]["type"]
                                                       .contains("Soft"))) {
-                                            Map<String, dynamic> bu =
-                                                widget.attendanceData[
-                                                    "attendance"][attKeys[i]];
+                                            Map<String, dynamic>? bu =
+                                                widget.attendanceData![
+                                                    "attendance"][attKeys![i]];
                                             bunk.add(bu);
-                                            att = widget.attendanceData[
-                                                    "attendance"][attKeys[i]]
+                                            att = widget.attendanceData![
+                                                    "attendance"][attKeys![i]]
                                                 ["percentage"];
                                             break;
                                           }
                                         } else {
-                                          if (widget.attendanceData["attendance"]
-                                                          [attKeys[i]]
+                                          if (widget.attendanceData!["attendance"]
+                                                          [attKeys![i]]
                                                       ["courseName"] ==
                                                   e["courseName"] &&
-                                              (widget.attendanceData["attendance"]
-                                                          [attKeys[i]]["type"]
+                                              (widget.attendanceData!["attendance"]
+                                                          [attKeys![i]]["type"]
                                                       .contains("Theory") ||
-                                                  widget.attendanceData["attendance"]
-                                                          [attKeys[i]]["type"]
+                                                  widget.attendanceData!["attendance"]
+                                                          [attKeys![i]]["type"]
                                                       .contains("Soft") ||
-                                                  !widget.attendanceData[
+                                                  !widget.attendanceData![
                                                           "attendance"]
-                                                          [attKeys[i]]["type"]
+                                                          [attKeys![i]]["type"]
                                                       .contains("Lab"))) {
-                                            Map<String, dynamic> bu =
-                                                widget.attendanceData[
-                                                    "attendance"][attKeys[i]];
+                                            Map<String, dynamic>? bu =
+                                                widget.attendanceData![
+                                                    "attendance"][attKeys![i]];
                                             bunk.add(bu);
-                                            att = widget.attendanceData[
-                                                    "attendance"][attKeys[i]]
+                                            att = widget.attendanceData![
+                                                    "attendance"][attKeys![i]]
                                                 ["percentage"];
                                             break;
                                           }
@@ -541,7 +544,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                       }
                                       var color1 = Colors.blue[800];
                                       var color2 = Colors.blue[300];
-                                      if (att < 80 && att >= 75) {
+                                      if (att! < 80 && att >= 75) {
                                         color1 = Colors.yellow[900];
                                         color2 = Colors.yellow[400];
                                       } else if (att < 75) {
@@ -565,7 +568,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: color1,
+                                              color: color1!,
                                             ),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)),
@@ -658,7 +661,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                                           att.toString() + "%",
                                                           15),
                                                       progressColor: color1,
-                                                      backgroundColor: color2,
+                                                      backgroundColor: color2!,
                                                       circularStrokeCap:
                                                           CircularStrokeCap
                                                               .round,
@@ -719,7 +722,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                 Container(
                                     margin: EdgeInsets.symmetric(vertical: 10),
                                     child: Texts(
-                                        "Last Updated On: " + updatedText, 14))
+                                        "Last Updated On: " + updatedText!, 14))
                               ],
                             )),
                           ),
@@ -753,11 +756,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                       ],
                     ),
             ),
-            drawer: widget.attendanceData.isNotEmpty &&
-                    widget.timeTableData.isNotEmpty &&
-                    widget.profileData.isNotEmpty &&
-                    widget.acadHistoryData.isNotEmpty &&
-                    widget.marksData.isNotEmpty
+            drawer: widget.attendanceData!.isNotEmpty &&
+                    widget.timeTableData!.isNotEmpty &&
+                    widget.profileData!.isNotEmpty &&
+                    widget.acadHistoryData!.isNotEmpty &&
+                    widget.marksData!.isNotEmpty
                 ? Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40),
@@ -770,7 +773,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     topRight: Radius.circular(40),
                                     bottomRight: Radius.circular(40)),
                                 border: Border.all(
-                                  color: Colors.indigo[900],
+                                  color: Colors.indigo[900]!,
                                 ),
                                 gradient: LinearGradient(
                                     end: Alignment.centerLeft,
@@ -814,8 +817,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     Icon(Icons.assessment),
                                     'Attendance'),
                                 div(),
-                                widget.timeTableData.isNotEmpty &&
-                                        widget.attendanceData.isNotEmpty
+                                widget.timeTableData!.isNotEmpty &&
+                                        widget.attendanceData!.isNotEmpty
                                     ? drawerTile(
                                         context,
                                         MaterialPageRoute(
@@ -846,16 +849,16 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     Icon(Icons.book),
                                     'Academic History'),
                                 div(),
-                                widget.timeTableData.isNotEmpty &&
-                                        widget.attendanceData.isNotEmpty
+                                widget.timeTableData!.isNotEmpty &&
+                                        widget.attendanceData!.isNotEmpty
                                     ? drawerTile(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => GPACalculator(
-                                              widget.timeTableData["courses"],
-                                              widget.acadHistoryData[
+                                              widget.timeTableData!["courses"],
+                                              widget.acadHistoryData![
                                                   "CurriculumDetails"]["CGPA"],
-                                              widget.acadHistoryData[
+                                              widget.acadHistoryData![
                                                       "CurriculumDetails"]
                                                   ["CreditsRegistered"]),
                                         ),
@@ -880,7 +883,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => Profile(
-                                          widget.acadHistoryData[
+                                          widget.acadHistoryData![
                                               "CurriculumDetails"]["CGPA"],
                                           widget.profileData),
                                     ),
@@ -922,7 +925,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
                                               onPressed: () {
                                                 Navigator.pop(context);
                                                 logoutUser(context,
-                                                    flutterLocalNotificationsPlugin);
+                                                    flutterLocalNotificationsPlugin!);
                                               },
                                               child: Texts('Yes', 12),
                                             ),

@@ -19,10 +19,10 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  String regNo;
-  String password;
-  String url;
-  String profile;
+  String? regNo;
+  String? password;
+  late String url;
+  String? profile;
   bool showSpinner = false;
   bool loginFail = false;
   bool hidePassword = true;
@@ -145,10 +145,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            if (regNo.isNotEmpty) regNo = regNo.trim();
+                            if (regNo!.isNotEmpty) regNo = regNo!.trim();
                             url = 'https://vitask.me/api/gettoken';
                             API api = API();
-                            Map<String, String> data = {
+                            Map<String, String?> data = {
                               "username": regNo,
                               "password": password
                             };
@@ -157,11 +157,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               setState(() {
                                 showSpinner = true;
                               });
-                              Map<String, dynamic> profileData = {};
+                              Map<String, dynamic>? profileData = {};
                               try {
-                                profileData = await api
+                                profileData = await (api
                                     .getAPIData(url, data)
-                                    .timeout(Duration(seconds: 12));
+                                    .timeout(Duration(seconds: 12)) as FutureOr<Map<String, dynamic>>);
                               } on TimeoutException catch (_) {
                                 showToast('Something went wrong', Colors.red);
                                 setState(() {
@@ -172,14 +172,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   showSpinner = false;
                                 });
                               }
-                              if (profileData.isNotEmpty &&
+                              if (profileData!.isNotEmpty &&
                                   profileData["error"] == null) {
                                 print(profileData);
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 await prefs.setString(
                                     "regNo", profileData["RegNo"]);
-                                await prefs.setString("password", password);
+                                await prefs.setString("password", password!);
                                 print("Login");
                                 Navigator.pushReplacement(
                                     context,

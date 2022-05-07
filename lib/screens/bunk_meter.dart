@@ -7,17 +7,17 @@ import 'package:vitask/constants.dart';
 
 class BunkMeter extends StatefulWidget {
   BunkMeter(this.current, this.i);
-  final List<Map<String, dynamic>> current;
+  final List<Map<String, dynamic>?>? current;
   final i;
   @override
   _BunkMeterState createState() => _BunkMeterState();
 }
 
 class _BunkMeterState extends State<BunkMeter> {
-  static List<Map<String, dynamic>> attended;
-  static List<int> ij;
+  static late List<Map<String, dynamic>?> attended;
+  static late List<int> ij;
   static var att, course, faculty, code;
-  static double percent;
+  static double? percent;
   static var total, a = 0, b = 0, color1, color2, type;
   @override
   void initState() {
@@ -30,22 +30,22 @@ class _BunkMeterState extends State<BunkMeter> {
     ij = [];
     ij.add(widget.i);
     attended = [];
-    for (var x = 0; x < widget.current.length; x++) {
-      attended.add(widget.current[x]);
+    for (var x = 0; x < widget.current!.length; x++) {
+      attended.add(widget.current![x]);
     }
-    att = attended[ij[0]]["attended"];
-    course = attended[ij[0]]["courseName"];
-    faculty = attended[ij[0]]["faculty"];
-    code = attended[ij[0]]["code"];
-    type = attended[ij[0]]["type"];
-    percent = double.parse(attended[ij[0]]["percentage"].toString());
-    total = attended[ij[0]]["total"];
+    att = attended[ij[0]]!["attended"];
+    course = attended[ij[0]]!["courseName"];
+    faculty = attended[ij[0]]!["faculty"];
+    code = attended[ij[0]]!["code"];
+    type = attended[ij[0]]!["type"];
+    percent = double.parse(attended[ij[0]]!["percentage"].toString());
+    total = attended[ij[0]]!["total"];
     color1 = Colors.blue[800];
     color2 = Colors.blue[300];
-    if (percent < 80 && percent >= 75) {
+    if (percent! < 80 && percent! >= 75) {
       color1 = Colors.yellow[900];
       color2 = Colors.yellow[400];
-    } else if (percent < 75) {
+    } else if (percent! < 75) {
       color1 = Colors.red[900];
       color2 = Colors.red[300];
     }
@@ -126,7 +126,7 @@ class _BunkMeterState extends State<BunkMeter> {
                             radius: 100.0,
                             lineWidth: 6.0,
                             percent: double.parse(percent.toString()) / 100,
-                            center: Texts(percent.ceil().toString() + "%", 16),
+                            center: Texts(percent!.ceil().toString() + "%", 16),
                             progressColor: color1,
                             backgroundColor: color2,
                           ),
@@ -161,14 +161,14 @@ class _BunkMeterState extends State<BunkMeter> {
                                       a++;
                                       total++;
                                       percent = att / total * 100;
-                                      if (percent.ceil() >= 80) {
+                                      if (percent!.ceil() >= 80) {
                                         color1 = Colors.blue[800];
                                         color2 = Colors.blue[300];
-                                      } else if (percent.ceil() < 80 &&
-                                          percent.ceil() >= 75) {
+                                      } else if (percent!.ceil() < 80 &&
+                                          percent!.ceil() >= 75) {
                                         color1 = Colors.yellow[900];
                                         color2 = Colors.yellow[400];
-                                      } else if (percent.ceil() < 75) {
+                                      } else if (percent!.ceil() < 75) {
                                         color1 = Colors.red[900];
                                         color2 = Colors.red[300];
                                       }
@@ -184,14 +184,14 @@ class _BunkMeterState extends State<BunkMeter> {
                                         a--;
                                         total--;
                                         percent = att / total * 100;
-                                        if (percent.ceil() >= 80) {
+                                        if (percent!.ceil() >= 80) {
                                           color1 = Colors.blue[800];
                                           color2 = Colors.blue[300];
-                                        } else if (percent.ceil() < 80 &&
-                                            percent.ceil() >= 75) {
+                                        } else if (percent!.ceil() < 80 &&
+                                            percent!.ceil() >= 75) {
                                           color1 = Colors.yellow[900];
                                           color2 = Colors.yellow[400];
-                                        } else if (percent.ceil() < 75) {
+                                        } else if (percent!.ceil() < 75) {
                                           color1 = Colors.red[900];
                                           color2 = Colors.red[300];
                                         }
@@ -224,14 +224,14 @@ class _BunkMeterState extends State<BunkMeter> {
                                       total++;
                                       b++;
                                       percent = att / total * 100;
-                                      if (percent.ceil() >= 80) {
+                                      if (percent!.ceil() >= 80) {
                                         color1 = Colors.blue[800];
                                         color2 = Colors.blue[300];
-                                      } else if (percent.ceil() < 80 &&
-                                          percent.ceil() >= 75) {
+                                      } else if (percent!.ceil() < 80 &&
+                                          percent!.ceil() >= 75) {
                                         color1 = Colors.yellow[900];
                                         color2 = Colors.yellow[400];
-                                      } else if (percent.ceil() < 75) {
+                                      } else if (percent!.ceil() < 75) {
                                         color1 = Colors.red[900];
                                         color2 = Colors.red[300];
                                       }
@@ -246,14 +246,14 @@ class _BunkMeterState extends State<BunkMeter> {
                                         b--;
                                         total--;
                                         percent = att / total * 100;
-                                        if (percent.ceil() >= 80) {
+                                        if (percent!.ceil() >= 80) {
                                           color1 = Colors.blue[800];
                                           color2 = Colors.blue[300];
-                                        } else if (percent.ceil() < 80 &&
-                                            percent.ceil() >= 75) {
+                                        } else if (percent!.ceil() < 80 &&
+                                            percent!.ceil() >= 75) {
                                           color1 = Colors.yellow[900];
                                           color2 = Colors.yellow[400];
-                                        } else if (percent.ceil() < 75) {
+                                        } else if (percent!.ceil() < 75) {
                                           color1 = Colors.red[900];
                                           color2 = Colors.red[300];
                                         }

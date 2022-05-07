@@ -66,7 +66,7 @@ TextStyle ktt = TextStyle(
 );
 
 class Texts extends StatelessWidget {
-  final String text;
+  final String? text;
   final double fontSize;
   Texts(this.text, this.fontSize);
 

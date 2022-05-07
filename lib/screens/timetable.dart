@@ -8,16 +8,16 @@ import 'tt.dart';
 
 class TimeTable extends StatefulWidget {
   TimeTable(this.timeTableData, this.attendanceData);
-  final Map<String, dynamic> timeTableData;
-  final Map<String, dynamic> attendanceData;
+  final Map<String, dynamic>? timeTableData;
+  final Map<String, dynamic>? attendanceData;
 
   @override
   _TimeTableState createState() => _TimeTableState();
 }
 
 class _TimeTableState extends State<TimeTable> {
-  List<String> days;
-  List<dynamic> daylist;
+  late List<String> days;
+  late List<dynamic> daylist;
   var attKeys;
 
   List<DayList> dayele = [];
@@ -29,11 +29,11 @@ class _TimeTableState extends State<TimeTable> {
   }
 
   void getData() {
-    attKeys = widget.attendanceData["attendance"].keys.toList();
+    attKeys = widget.attendanceData!["attendance"].keys.toList();
     daylist = [];
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
     for (var i = 0; i < days.length; i++) {
-      daylist.add(widget.timeTableData["timetable"][days[i]]);
+      daylist.add(widget.timeTableData!["timetable"][days[i]]);
     }
     print(daylist[0]);
     dayele = [];
@@ -64,30 +64,30 @@ class _TimeTableState extends State<TimeTable> {
       startTime.add(list[num]["startTime"]);
       slot.add(list[num]["slot"]);
 
-      for (var i = 0; i < widget.attendanceData["attendance"].length; i++) {
+      for (var i = 0; i < widget.attendanceData!["attendance"].length; i++) {
         var slot = list[num]["slot"];
         if (slot.contains("L")) {
-          if (widget.attendanceData["attendance"][attKeys[i]]["courseName"] ==
+          if (widget.attendanceData!["attendance"][attKeys[i]]["courseName"] ==
                   list[num]["courseName"] &&
-              (widget.attendanceData["attendance"][attKeys[i]]["type"]
+              (widget.attendanceData!["attendance"][attKeys[i]]["type"]
                       .contains("Lab") ||
-                  widget.attendanceData["attendance"][attKeys[i]]["type"]
+                  widget.attendanceData!["attendance"][attKeys[i]]["type"]
                       .contains("Soft"))) {
-            attendance.add(widget.attendanceData["attendance"][attKeys[i]]
+            attendance.add(widget.attendanceData!["attendance"][attKeys[i]]
                     ["percentage"]
                 .toString());
             break;
           }
         } else {
-          if (widget.attendanceData["attendance"][attKeys[i]]["courseName"] ==
+          if (widget.attendanceData!["attendance"][attKeys[i]]["courseName"] ==
                   list[num]["courseName"] &&
-              (widget.attendanceData["attendance"][attKeys[i]]["type"]
+              (widget.attendanceData!["attendance"][attKeys[i]]["type"]
                       .contains("Theory") ||
-                  widget.attendanceData["attendance"][attKeys[i]]["type"]
+                  widget.attendanceData!["attendance"][attKeys[i]]["type"]
                       .contains("Soft") ||
-                  !widget.attendanceData["attendance"][attKeys[i]]["type"]
+                  !widget.attendanceData!["attendance"][attKeys[i]]["type"]
                       .contains("Lab"))) {
-            attendance.add(widget.attendanceData["attendance"][attKeys[i]]
+            attendance.add(widget.attendanceData!["attendance"][attKeys[i]]
                     ["percentage"]
                 .toString());
             break;
@@ -283,27 +283,27 @@ class _TimeTableState extends State<TimeTable> {
             BottomNavigationBarItem(
               backgroundColor: Color.fromRGBO(4, 30, 53, 100),
               icon: Icon(FontAwesomeIcons.calendar),
-              title: Text('Mon'),
+              label: 'Mon',
             ),
             BottomNavigationBarItem(
               backgroundColor: Color.fromRGBO(4, 30, 53, 100),
               icon: Icon(FontAwesomeIcons.calendar),
-              title: Text('Tue'),
+              label: 'Tue',
             ),
             BottomNavigationBarItem(
               backgroundColor: Color.fromRGBO(4, 30, 53, 100),
               icon: Icon(FontAwesomeIcons.calendar),
-              title: Text('Wed'),
+              label: 'Wed',
             ),
             BottomNavigationBarItem(
               backgroundColor: Color.fromRGBO(4, 30, 53, 100),
               icon: Icon(FontAwesomeIcons.calendar),
-              title: Text('Thu'),
+              label: 'Thu',
             ),
             BottomNavigationBarItem(
               backgroundColor: Color.fromRGBO(4, 30, 53, 100),
               icon: Icon(FontAwesomeIcons.calendar),
-              title: Text('Fri'),
+              label: 'Fri',
             ),
           ],
           currentIndex: _selectedIndex,

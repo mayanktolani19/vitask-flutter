@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,14 +12,14 @@ import 'package:vitask/database/Moodle_DAO.dart';
 
 class Moodle extends StatefulWidget {
   Moodle(this.reg, this.appNo, this.moodle);
-  Map<String, dynamic> moodle;
-  final String reg, appNo;
+  Map<String, dynamic>? moodle;
+  final String? reg, appNo;
   @override
   _MoodleState createState() => _MoodleState();
 }
 
 class _MoodleState extends State<Moodle> {
-  List<dynamic> assignments;
+  late List<dynamic> assignments;
   bool refresh = false;
   var r, p, a;
   String updatedText = "";
@@ -32,9 +34,9 @@ class _MoodleState extends State<Moodle> {
 
   void getData() {
     assignments = [];
-    if (widget.moodle.isNotEmpty) {
-      for (var i = 0; i < widget.moodle["Assignments"].length; i++) {
-        assignments.add(widget.moodle["Assignments"][i]);
+    if (widget.moodle!.isNotEmpty) {
+      for (var i = 0; i < widget.moodle!["Assignments"].length; i++) {
+        assignments.add(widget.moodle!["Assignments"][i]);
       }
     }
   }
@@ -63,8 +65,8 @@ class _MoodleState extends State<Moodle> {
     a = widget.appNo;
     String url = "https://vitask.me/api/moodle/sync";
     API api = API();
-    Map<String, String> data = {"token": a};
-    Map<String, dynamic> moodleData = await api.getAPIData(url, data);
+    Map<String, String?> data = {"token": a};
+    Map<String, dynamic> moodleData = await (api.getAPIData(url, data) as FutureOr<Map<String, dynamic>>);
     if (moodleData.isNotEmpty) {
       widget.moodle = moodleData;
       MoodleData m = MoodleData(r + "-moodle", moodleData);
@@ -174,7 +176,7 @@ class _MoodleState extends State<Moodle> {
                   );
                 }).toList()),
               ),
-              widget.moodle["Assignments"].length != 0
+              widget.moodle!["Assignments"].length != 0
                   ? Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       child: Texts("Last Updated On: " + updatedText, 14))

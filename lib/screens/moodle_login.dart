@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,14 +17,14 @@ import 'moodle.dart';
 
 class MoodleLogin extends StatefulWidget {
   MoodleLogin(this.regNo, this.token);
-  final String regNo;
-  final String token;
+  final String? regNo;
+  final String? token;
   @override
   _MoodleLoginState createState() => _MoodleLoginState();
 }
 
 class _MoodleLoginState extends State<MoodleLogin> {
-  String password, url, profile;
+  String? password, url, profile;
   bool showSpinner = false, loginFail = false, hidePassword = true;
   var reg, a, c = 0;
   var passwordIcon = [FontAwesomeIcons.eyeSlash, FontAwesomeIcons.eye];
@@ -102,7 +104,7 @@ class _MoodleLoginState extends State<MoodleLogin> {
                             onPressed: () async {
                               bool internet = await testInternet();
                               if (internet) {
-                                if (password.isNotEmpty) {
+                                if (password!.isNotEmpty) {
                                   setState(() {
                                     showSpinner = true;
                                   });
@@ -110,13 +112,13 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                   a = widget.token;
                                   url = "https://vitask.me/api/moodle/login";
                                   API api = API();
-                                  Map<String, String> data = {
+                                  Map<String, String?> data = {
                                     "username": reg,
                                     "password": password,
                                     "token": a
                                   };
                                   Map<String, dynamic> moodleData =
-                                      await api.getAPIData(url, data);
+                                      await (api.getAPIData(url!, data) as FutureOr<Map<String, dynamic>>);
                                   print(moodleData);
                                   if (moodleData.isNotEmpty &&
                                       moodleData['error'] == null) {
@@ -129,7 +131,7 @@ class _MoodleLoginState extends State<MoodleLogin> {
                                     SharedPreferences prefs =
                                         await SharedPreferences.getInstance();
                                     await prefs.setString(
-                                        "moodle-password", password);
+                                        "moodle-password", password!);
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

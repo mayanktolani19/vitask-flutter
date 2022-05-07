@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sembast/sembast.dart';
 import 'MoodleModel.dart';
 import 'database_setup.dart';
@@ -11,9 +13,9 @@ class MoodleDAO {
         .put(await _db, moodleData.moodleData);
   }
 
-  Future<Map<String, dynamic>> getMoodleData(String key) async {
-    var settings = await store.record(key).get(await _db) as Map;
-    return settings;
+  Future<Map<String, dynamic>?> getMoodleData(String? key) async {
+    var settings = await store.record(key).get(await _db) as Map?;
+    return settings as FutureOr<Map<String, dynamic>?>;
   }
 
   Future deleteStudent(MoodleData moodleData) async {

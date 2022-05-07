@@ -12,8 +12,8 @@ class CalculateAttendance {
     int total = 0;
     List<String> a = [];
     for (var i = 0; i < att.length; i++) {
-      attend = attend + (att[keys[i]]["attended"]);
-      total = total + (att[keys[i]]["total"]);
+      attend = attend + (att[keys[i]]["attended"]) as int;
+      total = total + (att[keys[i]]["total"]) as int;
     }
     a.add(total.toString());
     a.add(attend.toString());

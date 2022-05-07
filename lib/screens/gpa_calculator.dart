@@ -4,7 +4,7 @@ import 'package:vitask/Widgets/linear_gradient.dart';
 import 'package:vitask/constants.dart';
 
 class GPACalculator extends StatefulWidget {
-  final Map<String, dynamic> courses;
+  final Map<String, dynamic>? courses;
   final cgpa, creditsRegistered;
   GPACalculator(this.courses, this.cgpa, this.creditsRegistered);
   @override
@@ -13,15 +13,15 @@ class GPACalculator extends StatefulWidget {
 
 class _GPACalculatorState extends State<GPACalculator> {
   var newCgpa, gpa, currentCredits;
-  List courses;
-  List credits;
-  List values;
+  late List courses;
+  late List credits;
+  late List values;
   @override
   void initState() {
     super.initState();
     gpa = 9.0;
-    courses = widget.courses.keys.toList();
-    credits = widget.courses.values.toList();
+    courses = widget.courses!.keys.toList();
+    credits = widget.courses!.values.toList();
     values = [];
     currentCredits = 0;
     for (var i = 0; i < credits.length; i++) {
