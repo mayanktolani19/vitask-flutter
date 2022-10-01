@@ -1,4 +1,4 @@
-# VITask Lite
+# VITask Lite Flutter Application
 
 ## Available on <a href="https://play.google.com/store/apps/details?id=me.vitask.vitasklite">Play Store<a>!
 
