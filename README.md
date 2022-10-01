@@ -1,4 +1,4 @@
-# VITask Lite
+# VITask Lite Flutter Application
 
 ## First Stable version launched on Play Store!
 
